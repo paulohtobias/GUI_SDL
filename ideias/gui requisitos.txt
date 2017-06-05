@@ -1,0 +1,18 @@
+TELA PRINCIPAL: Selecionar Biblioteca
+	* Criar nova Biblioteca
+		Mostrar uma nova janela pro usuario escolher uma pasta
+
+	* Editar alguma biblioteca
+		* "Mudar a página" e mostrar um menu de edição (Poder editar os mangás daqui tbm)
+			* Editar NOME, CAMINHO, CAPA, MANGÁS
+
+	* Configurações (não pensei ainda)
+		* Capa da Biblioteca (fixa no primeiro mangá ou aleatório)
+
+	* Acessar alguma Biblioteca
+		* Ter uma caixa de pesquisa (ainda tá sem ~desain~)
+		* Mostrar os mangás com um layout bacana (designed by Millas Násser)
+		* Poder alterar as informações de um mangá daqui
+			* "Mudar a página" e mostrar um menu de edição de mangá
+
+	* Caixa de Pesquisa

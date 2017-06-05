@@ -3,6 +3,10 @@
 *.ko
 *.obj
 *.elf
+obj
+
+#Dependency files
+*.d
 
 # Precompiled Headers
 *.gch
@@ -27,6 +31,13 @@
 *.i*86
 *.x86_64
 *.hex
+*.lnk
 
 # Debug files
 *.dSYM/
+
+#Project folders and files
+.vscode
+Data
+Resources
+

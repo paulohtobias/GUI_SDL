@@ -1,0 +1,32 @@
+typedef enum{
+	CNT_VBOX,
+	CNT_HBOX,
+	CNT_COUNT
+}ContainerType;
+
+struct s_Container{
+	int container_type; //Identifica qual container para poder chamar as funções certas.
+
+	WidgetList list; //Lista de widgets
+
+	/*
+	 * Possíveis atributos:
+	 *     - Bounds; //Width e Height são atualizados com a inserção e remoção de widgets. Ou podem ser fixos.
+	 *     - Variaveis para guardar maxWidgets por linha e coluna.
+	 */
+
+	//ContainerList header
+	int size;
+	int first;
+	int last;
+	Container *array;
+	
+}Container;
+
+/*
+ * Esse é um container genérico. (e por isso talvez seja bom adicionar mais atributos)
+ * Para implementar um container específico (e.g VBox), criar um modulo VBox e apenas (um typedef Container VBox ajuda)
+ * implementar as funções relativas àquele container (que eu imagino que seja só como as coisas se encaixam)
+ * "funções genéricas de container" (renderizar, processar eventos da lista de widgets, etc...)
+ * serão implementadas em container.c. Funções especificas de cada Container serão implementadas em seu módulo
+ */

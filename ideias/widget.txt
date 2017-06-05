@@ -1,0 +1,4 @@
+    * Deixar Bounds, MouseState e o que mais for comum pra todos os widgets como atributos da struct Widget.
+      As funções setBounds que fazem mais do que só chamar a função setBound serão reescritas aceitando um Bounds *src.
+      PROBLEMA: image_setBounds precisa da Texture se W e H forem < 1.
+    * Criar atributos como center(h e v), border, etc.

@@ -1,0 +1,19 @@
+LibGUI:
+	* Criar um ponteiro pra função na struct Widget. Receber como parâmetro um ponteiro pra u_Widget. Acho que 
+	* Colocar borda pra todo widget e sumir com o Frame
+	* Criar toolkit:
+		* Variaveis globais. A função de mudar toolkit muda essas varáveis globais.
+	* Criar Containers (ver container.txt):
+	* (FEITO) Criar uma função para saber o tamanho de uma imagem usando só a surface.
+	* (FEITO) Criar uma função na BasicUI para retornar a posição de modo que ela encaixe com os Bounds do objeto passado como parâmetro.
+		* (FEITO) SDL_Rect fit_widget(SDL_Rect size, Bounds pai, int maxWidth, int margin-left, int margin-bottom);
+			* (FEITO) Essa função tentará encaixar o objeto de tamanho [size] ao lado de [pai] de modo que eles não ultrapassem [maxWidth].
+			* (FEITO) Se não couber, então, ela o deixará embaixo de [pai] de modo que os dois fiquem alinhados.
+	* Ir olhando os eventos da fila enquanto forem mouse_motion
+	* Fazer a interface pro LibManager e pro LibDownloader.
+	* (FEITO) Mudar a camera pra alterar a posição do objeto e nao cirar uma posição falsa. Ou olhar a posição falsa em funções como mouseOver.
+	* (FEITO) Criar a função processBasicEvents() pra processar todos os eventos basicos.
+		* (FEITO) Redimensionamento da tela, cliques do mouse, pressionamento de teclas.
+	* Refazer o frameChapter pra ficar responsivo(?) às mudanças no tamanho...
+		* ...mudanças no tamanho da tela, orientação, e modo de exibição.
+		* se o ultimo ficar muito complicado, criar um outro objeto de exibição pra listas.
