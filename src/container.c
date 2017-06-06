@@ -20,7 +20,6 @@ Container newContainer(ContainerType type, SDL_Rect region){
     //Events and Mouse State
     container->renderer = NULL;
     container->camera = newCamera(container->region.real);
-    //container->mouseState = newMouseState();
 
     //Container Methods
     container->add_widget = container_add_widget_generic;
@@ -40,7 +39,9 @@ Container newContainer(ContainerType type, SDL_Rect region){
     return container;
 }
 void init_container(Container container, SDL_Renderer *renderer){
-    int i;
+    //resetBounds(&container->region, region);
+    //camera_updateLimit(container->camera, region);
+    container->renderer = renderer;
 }
 void freeContainer(Container container){
     if(container == NULL)
@@ -99,11 +100,18 @@ void container_add_text(Container container, Text txt){
 void container_add_button(Container container, Button btn){
     container->add_widget(container, newWidget_from_button(btn));
 }
-void container_add_frameChapter(Container container, FrameChapter frameC){
-    container->add_widget(container, newWidget_from_frameChapter(frameC));
-}
 
 void container_add_container_generic(Container container, Container widget){
+    if(container->last + 1 < MAX_CONTAINERS){
+        container->last++;
+    }else{
+        //The list is full
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Container list is full", "container_add_container_generic", NULL);
+    }
+
+    init_container(widget, container->renderer);
+    container->clist[container->last] = widget;
+    container->size++;
 }
 
 //Get
@@ -144,11 +152,19 @@ void container_update_cameraLimit(Container container, Widget widget){
 void container_process_events_generic(Container container, SDL_Event event, Mouse mouseState){
     processEvents_camera(container->camera, event);
 
-    //Call the recursive function to all the subcontainers in clist
-
     int i;
-    int first = container->wlist->first;
-    int last = container->wlist->last;
+    int first, last;
+    //Call the recursive function to all the subcontainers in clist
+    first = container->first;
+    last = container->last;
+    if(container->size > 0){
+        for(i=first; i<=last; i++){
+            container_process_events_generic(container->clist[i], event, mouseState);
+        }
+    }
+
+    first = container->wlist->first;
+    last = container->wlist->last;
     for(i=first; i<=last; i++){
         widget_processEvents(event, mouseState, container->wlist->array[i]);
         //Checking if the object position is "out of bounds" so the camera can reach it too.
@@ -159,12 +175,19 @@ void container_process_events_generic(Container container, SDL_Event event, Mous
     }
 }
 void container_draw_generic(Container container, SDL_Renderer *renderer){
-    //Call the recursive function to all the subcontainers in clist
-
     int i;
-    int first = container->wlist->first;
-    int last = container->wlist->last;
-
+    int first, last;
+    //Call the recursive function to all the subcontainers in clist
+    first = container->first;
+    last = container->last;
+    if(container->size > 0){
+        for(i=first; i<=last; i++){
+            container_draw_generic(container->clist[i], renderer);
+        }
+    }
+    
+    first = container->wlist->first;
+    last = container->wlist->last;
     for(i=first; i<=last; i++){
         widget_render(container->wlist->array[i], renderer, container->camera);
     }

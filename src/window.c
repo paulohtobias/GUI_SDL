@@ -38,25 +38,16 @@ Window *newWindow(char *title, SDL_Rect size, Uint32 flags, int layers){
 		window->containers[i] = NULL;
 	}
 
-	window->widgets = malloc(window->layers * sizeof(WidgetList));
-	for(i=0; i<window->layers; i++){
-		window->widgets[i] = newWidgetList();
-	}
-
     return window;
 }
 void freeWindow(Window *window){
-	int i;
-
 	free(window->title);
 	SDL_DestroyRenderer(window->renderer);
 	SDL_DestroyWindow(window->sdlwindow);
 	freeCamera(window->camera);
 
 	//This should be replaced with window_emptyList
-	for(i=0; i<window->layers; i++){
-		freeList(window->widgets[i]);
-	}
+	window_emptyList(window);
 
 	free(window);
 }
@@ -85,12 +76,6 @@ void window_emptyList(Window *window){
 		window->containers[i] = NULL;
 		//window->containers[i] = newContainer(CNT_FIXED, window_getBounds(window));
 	}
-	/*
-    for(i=0; i<window->layers; i++){
-        freeList(window->widgets[i]);
-		window->widgets[i] = NULL;
-        window->widgets[i] = newWidgetList();
-    }*/
 	window->camera->limit = window_getBounds(window);
 }
 
@@ -109,72 +94,6 @@ void window_add_container(Window *window, Container container, int layer){
 	}else{
 		//Overwrite or print a warning?
 	}
-}
-
-void window_add(Window *window, WidgetType type, u_Widget *data, int layer){
-	//Fixing the layer if necessary.
-	if(layer < LAYER_BOTTOM)
-		layer = LAYER_BOTTOM;
-	else if(layer > LAYER_TOP)
-		layer = LAYER_TOP;
-
-	window->containers[layer]->add_widget(window->containers[layer], newWidget(data, type));
-
-	/*Widget obj = malloc(sizeof(struct Widget_));
-
-
-	//Setting the object attributes and adding it to the list.
-	obj->layer = layer;
-	obj->obj_type = type;
-	obj->obj_data = data;
-
-	list_add_last(window->widgets[layer], obj);
-
-	//Checking if the object position is "out of bounds" so the camera can reach it too.
-	if(region_reachX(widget_getBounds(obj)) > window->camera->limit.w ){
-		window->camera->limit.w = region_reachX(widget_getBounds(obj));
-	}
-	if(region_reachY(widget_getBounds(obj)) > window->camera->limit.h ){
-		window->camera->limit.h = region_reachY(widget_getBounds(obj));
-	}*/
-}
-void window_add_square(Window *window, Square sqr, int layer){
-	u_Widget *data = malloc(sizeof(u_Widget));
-	data->sqr = sqr;
-	window_add(window, WGT_SQUARE, data, layer);
-}
-void window_add_frame(Window *window, Frame frame, int layer){
-	u_Widget *data = malloc(sizeof(u_Widget));
-	data->frame = frame;
-	window_add(window, WGT_FRAME, data, layer);
-}
-void window_add_image(Window *window, Image img, int layer){
-	init_image(img, window->renderer);
-
-	u_Widget *data = malloc(sizeof(u_Widget));
-	data->img = img;
-	window_add(window, WGT_IMAGE, data, layer);
-}
-void window_add_text(Window *window, Text txt, int layer){
-	init_text(txt, window->renderer);
-
-	u_Widget *data = malloc(sizeof(u_Widget));
-	data->txt = txt;
-	window_add(window, WGT_TEXT, data, layer);
-}
-void window_add_button(Window *window, Button btn, int layer){
-	init_button(btn, window->renderer);
-
-	u_Widget *data = malloc(sizeof(u_Widget));
-	data->btn = btn;
-	window_add(window, WGT_BUTTON, data, layer);
-}
-void window_add_frameChapter(Window *window, FrameChapter frameC, int layer){
-    init_frameChapter(frameC, window->renderer);
-
-    u_Widget *data = malloc(sizeof(u_Widget));
-	data->frameC = frameC;
-	window_add(window, WGT_FRAMECHAPTER, data, layer);
 }
 
 void window_processEvents(Window *window){
@@ -211,8 +130,6 @@ void window_processEvents(Window *window){
 	}
 
 	for(i=0; i<window->layers; i++){
-        int j;
-		int f, l;
 		if(window->containers[i] != NULL){
 			if(window->event.type == SDL_WINDOWEVENT && window->event.window.event == SDL_WINDOWEVENT_RESIZED){
 				camera_updateSize(window->sdlwindow, window->containers[i]->camera);
@@ -234,18 +151,9 @@ void window_draw(Window *window){
 
 	int i;
 	for(i=0; i<window->layers; i++){
-		int j;
 		if(window->containers[i] != NULL){
 			window->containers[i]->draw(window->containers[i], window->renderer);
 		}
-		/*if(window->widgets[i] != NULL){
-            int f = window->widgets[i]->first;
-            int l = window->widgets[i]->last;
-
-			for(j=f; j<=l; j++){
-                widget_render(window->widgets[i]->array[j], window->renderer, window->camera);
-			}
-		}*/
 	}
 
 	SDL_RenderPresent(window->renderer);

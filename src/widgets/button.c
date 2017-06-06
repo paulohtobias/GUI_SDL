@@ -8,7 +8,7 @@
 
 #include "widgets/button.h"
 
-Button newButton(char *text, char *img_path, SDL_Rect bounds){
+Button newButton(char *text, char *img_path, SDL_Rect size){
 	Button btn = malloc(sizeof(struct Button_));
 
 	btn->txt = NULL;
@@ -29,16 +29,16 @@ Button newButton(char *text, char *img_path, SDL_Rect bounds){
 
 	btn->frame = newFrame(default_button_frameColor_idle,
 						default_button_borderColor_idle,
-						default_button_borderSize, bounds);
+						default_button_borderSize, size);
 
 	if(img_path != NULL){
-		btn->img = newImage(img_path, bounds);
+		btn->img = newImage(img_path, size);
 	}
 	if(text != NULL){
-		btn->txt = newText(text, region_position(bounds.x, bounds.y));
+		btn->txt = newText(text, region_position(size.x, size.y));
 		text_setWrap(btn->txt, true);
 	}
-	resetBounds(&btn->region, bounds);
+	resetBounds(&btn->region, size);
 	btn->state = newWidgetState();
 
 	button_Idle(btn);
@@ -74,11 +74,13 @@ SDL_Rect button_getBounds(Button btn){
 //Set and Update
 void button_setBorderSize(Button btn, int borderSize){
 	frame_setBorderSize(btn->frame, borderSize);
+
+	button_setBounds(btn, btn->frame->region.real);
 }
 void button_setBounds(Button btn, SDL_Rect region){
-	setBounds(&btn->region, region);
-
 	frame_setBounds(btn->frame, region);
+
+	resetBounds(&btn->region, btn->frame->region.real);
 
 	if (btn->img != NULL) {
 		image_setBounds(btn->img, button_getBounds(btn));

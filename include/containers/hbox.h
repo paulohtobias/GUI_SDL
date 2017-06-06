@@ -5,7 +5,7 @@
 
 typedef Container HBox;
 
-HBox newVBox(SDL_Rect region);
+HBox newHBox(SDL_Rect region);
 
 void hbox_add_widget(HBox hbox, Widget widget);
 

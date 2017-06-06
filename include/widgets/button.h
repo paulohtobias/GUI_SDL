@@ -54,7 +54,7 @@ struct Button_{
 };
 typedef struct Button_* Button;
 
-Button newButton(char *text, char *img_path, SDL_Rect bounds);
+Button newButton(char *text, char *img_path, SDL_Rect size);
 void init_button(Button btn, SDL_Renderer *renderer);
 void freeButton(Button btn);
 

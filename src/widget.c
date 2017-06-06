@@ -40,12 +40,6 @@ Widget newWidget_from_button(Button btn){
 
 	return newWidget(data, WGT_BUTTON);
 }
-Widget newWidget_from_frameChapter(FrameChapter frameC){
-	u_Widget *data = malloc(sizeof(u_Widget));
-	data->frameC = frameC;
-
-	return newWidget(data, WGT_FRAMECHAPTER);
-}
 void init_widget(Widget widget, SDL_Renderer *renderer){
     if(widget == NULL){
         return;
@@ -61,9 +55,6 @@ void init_widget(Widget widget, SDL_Renderer *renderer){
 		case WGT_BUTTON:
 			init_button(widget->obj_data->btn, renderer);
 			break;
-        case WGT_FRAMECHAPTER:
-            init_frameChapter(widget->obj_data->frameC, renderer);
-            break;
         default:
             break;
 	}
@@ -88,9 +79,6 @@ void freeWidget(Widget obj){
 		case WGT_BUTTON:
 			freeButton(obj->obj_data->btn);
 			break;
-        case WGT_FRAMECHAPTER:
-            freeFrameChapter(obj->obj_data->frameC);
-            break;
 	}
 	free(obj->obj_data);
 	free(obj);
@@ -112,8 +100,6 @@ SDL_Rect widget_getBounds(Widget obj){
 			return text_getBounds(obj->obj_data->txt);
 		case WGT_BUTTON:
 			return button_getBounds(obj->obj_data->btn);
-        case WGT_FRAMECHAPTER:
-            return frameChapter_getBounds(obj->obj_data->frameC);
 		default:
 			return region_area(0,0,0,0);
 	}
@@ -133,8 +119,6 @@ SDL_Rect widget_getRealBounds(Widget obj){
 			return obj->obj_data->txt->region.real;
 		case WGT_BUTTON:
 			return obj->obj_data->btn->region.real;
-        case WGT_FRAMECHAPTER:
-            return obj->obj_data->frameC->region.real;
 		default:
 			return region_area(0,0,0,0);
 	}
@@ -159,9 +143,6 @@ void widget_setBounds(Widget widget, SDL_Rect region){
 		case WGT_BUTTON:
 			button_setBounds(widget->obj_data->btn, region);
 			break;
-        case WGT_FRAMECHAPTER:
-            frameChapter_setBounds(widget->obj_data->frameC, region);
-			break;
 	}
 }
 void widget_updateBounds(Widget widget, SDL_Rect region){
@@ -183,9 +164,6 @@ void widget_updateBounds(Widget widget, SDL_Rect region){
 			break;
 		case WGT_BUTTON:
 			button_updateBounds(widget->obj_data->btn, region);
-			break;
-        case WGT_FRAMECHAPTER:
-            frameChapter_updateBounds(widget->obj_data->frameC, region);
 			break;
 	}
 }
@@ -210,9 +188,6 @@ void widget_processEvents(SDL_Event event, Mouse mouseState, Widget obj){
             break;
         case WGT_BUTTON:
             button_processEvents(event, mouseState, obj->obj_data->btn);
-            break;
-        case WGT_FRAMECHAPTER:
-            frameChapter_processEvents(event, mouseState, obj->obj_data->frameC);
             break;
     }
 }
@@ -240,9 +215,6 @@ void widget_drag(Widget obj, Mouse mouseState){
 		case WGT_BUTTON:
 			button_updateBounds(obj->obj_data->btn, newPos);
 			break;
-        case WGT_FRAMECHAPTER:
-            frameChapter_updateBounds(obj->obj_data->frameC, newPos);
-            break;
 	}
 }
 void widget_render(Widget obj, SDL_Renderer *renderer, Camera camera){
@@ -264,9 +236,6 @@ void widget_render(Widget obj, SDL_Renderer *renderer, Camera camera){
             break;
         case WGT_BUTTON:
             renderButton(obj->obj_data->btn, renderer, camera);
-            break;
-        case WGT_FRAMECHAPTER:
-            renderFrameChapter(obj->obj_data->frameC, renderer, camera);
             break;
     }
 }

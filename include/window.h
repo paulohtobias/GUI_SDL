@@ -25,12 +25,10 @@ typedef struct{
 	Camera camera;
 	//ScrollBar
 
-	int layers;
 	//Containers
+	int layers;
 	Container *containers;
 
-	//Widgets
-	WidgetList *widgets;
 }Window;
 
 Window *newWindow(char *title, SDL_Rect size, Uint32 flags, int layers);
@@ -39,17 +37,8 @@ SDL_Renderer *newRenderer(SDL_Window *window);
 SDL_Rect window_getBounds(Window *window);
 void window_emptyList(Window *window);
 
-///===================----WINDOW WIDGETS----===================///
-//Add Container
+///===================----WINDOW CONTAINERS----===================///
 void window_add_container(Window *window, Container container, int layer);
-//Add Widget
-void window_add(Window *window, WidgetType type, u_Widget *data, int layer);
-void window_add_square(Window *window, Square sqr, int layer);
-void window_add_frame(Window *window, Frame frame, int layer);
-void window_add_image(Window *window, Image img, int layer);
-void window_add_text(Window *window, Text txt, int layer);
-void window_add_button(Window *window, Button btn, int layer);
-void window_add_frameChapter(Window *window, FrameChapter frameC, int layer);
 
 void window_processEvents(Window *window);
 

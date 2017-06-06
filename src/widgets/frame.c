@@ -8,17 +8,17 @@
 
 #include "widgets/frame.h"
 
-Frame newFrame(SDL_Color frameColor, SDL_Color borderColor, int borderSize, SDL_Rect bounds){
+Frame newFrame(SDL_Color frameColor, SDL_Color borderColor, int borderSize, SDL_Rect size){
 	Frame frame = malloc(sizeof(struct Frame_));
 
-	frame->frame = newSquare(frameColor, bounds);
-	frame->border = newSquare(borderColor, bounds);
+	frame->frame = newSquare(frameColor, size);
+	frame->border = newSquare(borderColor, size);
 
 	frame_setColor(frame, frameColor);
 	frame_setBorderColor(frame, borderColor);
-	resetBounds(&frame->region, bounds);
+	resetBounds(&frame->region, size);
 	frame_setBorderSize(frame, borderSize);
-	frame_setBounds(frame, bounds);
+	frame_setBounds(frame, size);
 	frame->state = newWidgetState();
 
 	return frame;
@@ -49,23 +49,27 @@ void frame_setBorderColor(Frame frame, SDL_Color color){
 }
 void frame_setBorderSize(Frame frame, int borderSize){
 	if(borderSize < 1)
-		frame->borderSize = 1;
-	else
-		frame->borderSize = borderSize;
-
-	SDL_Rect borderBounds;
+		borderSize = 1;
+		
+	frame->borderSize = borderSize;
+	
 	SDL_Rect frameBounds = frame_getBounds(frame);
-	borderBounds = region_area(frameBounds.x - borderSize,
-							   frameBounds.y - borderSize,
-						   	   frameBounds.w + (borderSize*2),
-						   	   frameBounds.h + (borderSize*2));
-	square_setBounds(frame->border, borderBounds);
+
+	SDL_Rect inner, border;
+	inner = region_area(frameBounds.x + borderSize,
+						frameBounds.y + borderSize,
+						frameBounds.w, frameBounds.h);
+	square_setBounds(frame->frame, inner);
+
+	border = region_area(frameBounds.x, frameBounds.y,
+						 frameBounds.w + (borderSize * 2),
+						 frameBounds.h + (borderSize * 2));
+	square_setBounds(frame->border, border);
+
+	resetBounds(&frame->region, border);
 }
 void frame_setBounds(Frame frame, SDL_Rect region){
 	setBounds(&frame->region, region);
-
-	//Setting the inner frame position
-	square_setBounds(frame->frame, region);
 
 	//Setting the border position
 	frame_setBorderSize(frame, frame->borderSize);

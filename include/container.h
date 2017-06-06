@@ -49,6 +49,7 @@ typedef struct Container_* Container;
 
 //New and free
 Container newContainer(ContainerType type, SDL_Rect region);
+void init_container(Container container, SDL_Renderer *renderer);
 void freeContainer(Container container);
 
 //Get
@@ -67,12 +68,14 @@ void container_add_frame(Container container, Frame frame);
 void container_add_image(Container container, Image img);
 void container_add_text(Container container, Text txt);
 void container_add_button(Container container, Button btn);
-void container_add_frameChapter(Container container, FrameChapter frameC);
 void container_add_container_generic(Container container, Container widget);
 
 //Generic functions to process events and render
 void container_process_events_generic(Container container, SDL_Event event, Mouse mouseState);
 void container_draw_generic(Container container, SDL_Renderer *renderer);
 
+//Include of all Containers here
+#include "containers/vbox.h"
+#include "containers/hbox.h"
 
 #endif // CONTAINER_H

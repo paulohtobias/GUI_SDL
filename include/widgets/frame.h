@@ -22,7 +22,7 @@ struct Frame_{
 };
 typedef struct Frame_* Frame;
 
-Frame newFrame(SDL_Color frameColor, SDL_Color borderColor, int borderSize, SDL_Rect bounds);
+Frame newFrame(SDL_Color frameColor, SDL_Color borderColor, int borderSize, SDL_Rect size);
 void freeFrame(Frame frame);
 
 //Get

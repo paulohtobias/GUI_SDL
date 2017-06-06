@@ -56,7 +56,6 @@ SDL_Rect image_getBounds(Image  img){
 void image_setSrc(Image  img, char* file){
 	if(file != NULL){
     	strcpy(img->file, file);
-        strcpy(img->file, "./Resources/Images/default_cover.png");
         img->state.wasChanged = true;
 	}
 }

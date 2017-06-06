@@ -7,7 +7,6 @@
 #include "widgets/image.h"
 #include "widgets/text.h"
 #include "widgets/button.h"
-#include "widgets/frameChapter.h"
 
 typedef enum{
 	WGT_SQUARE,
@@ -16,7 +15,6 @@ typedef enum{
 	WGT_TEXT,
 	WGT_TEXTFIELD,
 	WGT_BUTTON,
-	WGT_FRAMECHAPTER,
 	WGT_COUNT
 }WidgetType;
 
@@ -26,7 +24,6 @@ typedef union{
 	Image img;
 	Text txt;
 	Button btn;
-	FrameChapter frameC;
 }u_Widget;
 
 struct Widget_{
@@ -43,7 +40,6 @@ Widget newWidget_from_image(Image img);
 Widget newWidget_from_text(Text txt);
 //Widget newWidget_from_text_field(TextField txt_field);
 Widget newWidget_from_button(Button btn);
-Widget newWidget_from_frameChapter(FrameChapter frameC);
 void init_widget(Widget widget, SDL_Renderer *renderer);
 void freeWidget(Widget obj);
 

@@ -240,7 +240,6 @@ bool mouseOver(Bounds region){
 
 ///===================----EVENTS----===================///
 void basic_widget_processEvents(SDL_Event event, Mouse mouseState, WidgetState *state, Bounds region){
-	//(*state) = newWidgetState();
 	state->isFocused = false;
 	state->mouseButton = mouse_idle;
 	state->isPressed = false;
