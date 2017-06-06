@@ -89,7 +89,7 @@ void window_add_container(Window *window, Container container, int layer){
 		layer = LAYER_TOP;
 
 	if(window->containers[layer] == NULL){
-		init_container(container, window->renderer);
+		init_container(container, window_getBounds(window), window->renderer);
 		window->containers[layer] = container;
 	}else{
 		//Overwrite or print a warning?

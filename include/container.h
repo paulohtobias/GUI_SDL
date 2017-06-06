@@ -48,8 +48,8 @@ struct Container_{
 typedef struct Container_* Container;
 
 //New and free
-Container newContainer(ContainerType type, SDL_Rect region);
-void init_container(Container container, SDL_Renderer *renderer);
+Container newContainer(ContainerType type);
+void init_container(Container container, SDL_Rect region, SDL_Renderer *renderer);
 void freeContainer(Container container);
 
 //Get

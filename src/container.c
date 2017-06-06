@@ -1,7 +1,7 @@
 #include "container.h"
 
 //New and free
-Container newContainer(ContainerType type, SDL_Rect region){
+Container newContainer(ContainerType type){
     Container container = malloc(sizeof(struct Container_));
 
     int i;
@@ -13,7 +13,7 @@ Container newContainer(ContainerType type, SDL_Rect region){
 
     //Container Attributes
     container->color = default_bg_color;
-    resetBounds(&container->region, region);
+    resetBounds(&container->region, region_position(0, 0));
     container->max_widgets_vertical = MAX_WIDGETS;
     container->max_widgets_horizontal = MAX_WIDGETS;
 
@@ -38,9 +38,9 @@ Container newContainer(ContainerType type, SDL_Rect region){
 
     return container;
 }
-void init_container(Container container, SDL_Renderer *renderer){
-    //resetBounds(&container->region, region);
-    //camera_updateLimit(container->camera, region);
+void init_container(Container container, SDL_Rect region, SDL_Renderer *renderer){
+    resetBounds(&container->region, region);
+    camera_updateLimit(container->camera, region);
     container->renderer = renderer;
 }
 void freeContainer(Container container){
@@ -109,7 +109,7 @@ void container_add_container_generic(Container container, Container widget){
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Container list is full", "container_add_container_generic", NULL);
     }
 
-    init_container(widget, container->renderer);
+    init_container(widget, container_getBounds(widget), container->renderer);
     container->clist[container->last] = widget;
     container->size++;
 }
