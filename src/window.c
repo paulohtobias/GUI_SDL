@@ -89,6 +89,7 @@ void window_add_container(Window *window, Container container, int layer){
 		layer = LAYER_TOP;
 
 	if(window->containers[layer] == NULL){
+		container->scrollable = true;
 		init_container(container, window_getBounds(window), window->renderer);
 		window->containers[layer] = container;
 	}else{

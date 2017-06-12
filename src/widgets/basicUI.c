@@ -288,9 +288,15 @@ void freeCamera(Camera camera){
 }
 
 void camera_updateSize(SDL_Window *window, Camera camera){
+    if(camera == NULL){
+        return;
+    }
     SDL_GetWindowSize(window, &camera->region.w, &camera->region.h);
 }
 void camera_updateLimit(Camera camera, SDL_Rect widget_region){
+    if(camera == NULL){
+        return;
+    }
     //Checking if the object position is "out of bounds" so the camera can reach it too.
     if(region_reachX(widget_region) + camera_offset > region_reachX(camera->limit) ){
         camera->limit.w = region_reachX(widget_region) + camera_offset;
@@ -301,6 +307,9 @@ void camera_updateLimit(Camera camera, SDL_Rect widget_region){
     }
 }
 void camera_move(Camera camera){
+    if(camera == NULL){
+        return;
+    }
     updateRegion(&camera->region, region_position(camera->movX, camera->movY));
 
     if(camera->region.x < camera->limit.x){
@@ -320,11 +329,12 @@ void camera_move(Camera camera){
 }
 
 void camera_updateWidgetPosition(Camera camera, Bounds *widget){
-    if(camera != NULL){
-        setRegion(&widget->relative,
-                  region_position(widget->real.x - camera->region.x,
-                                  widget->real.y - camera->region.y));
+    if(camera == NULL){
+        return;
     }
+    setRegion(&widget->relative,
+              region_position(widget->real.x - camera->region.x,
+                              widget->real.y - camera->region.y));
 }
 bool camera_widget_is_off(Camera camera, SDL_Rect region){
     if(camera == NULL){
@@ -350,6 +360,9 @@ bool camera_widget_is_off(Camera camera, SDL_Rect region){
 }
 
 void processEvents_camera(Camera camera, SDL_Event event){
+    if(camera == NULL){
+        return;
+    }
     switch(event.type){
         case SDL_MOUSEWHEEL:
             camera->movY-=event.wheel.y*camera->movSpeed;

@@ -13,6 +13,8 @@ Container newContainer(ContainerType type){
 
     //Container Attributes
     container->color = default_bg_color;
+    container->padding = region_area(0,0,0,0);
+    container->scrollable = false;
     resetBounds(&container->region, region_position(0, 0));
     container->max_widgets_vertical = MAX_WIDGETS;
     container->max_widgets_horizontal = MAX_WIDGETS;
@@ -30,7 +32,7 @@ Container newContainer(ContainerType type){
     //Container List
     container->size = 0;
     container->first = 0;
-    container->last = 0;
+    container->last = -1;
     container->clist = malloc(MAX_CONTAINERS * sizeof(Container));
     for(i=0; i<MAX_CONTAINERS; i++){
         container->clist[i] = NULL;
@@ -130,6 +132,8 @@ void container_setBounds(Container container, SDL_Rect region){
     diff.h = 0;
 
     setBounds(&container->region, region);
+    //container->camera->limit.x = region.x;
+    //container->camera->limit.y = region.y;
 
     if(!list_isEmpty(container->wlist)){
         int i;
@@ -145,6 +149,9 @@ void container_setBounds(Container container, SDL_Rect region){
 //Camera
 void container_update_cameraLimit(Container container, Widget widget){
     camera_updateLimit(container->camera, widget_getRealBounds(widget));
+    if(container->scrollable == false){
+        resetBounds(&container->region, container->camera->limit);
+    }
 }
 
 

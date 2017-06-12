@@ -22,7 +22,8 @@ struct Container_{
 
     //Container Attributes
     SDL_Color color;
-    //padding
+    SDL_Rect padding;
+    bool scrollable;
     Bounds region;
     int max_widgets_vertical;
     int max_widgets_horizontal;
