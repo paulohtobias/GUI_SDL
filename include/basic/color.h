@@ -9,18 +9,8 @@
 #ifndef COLOR_H
 #define COLOR_H
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-
-#ifndef TYPE_BOOL
-#define TYPE_BOOL
-	typedef int bool;
-	#define false 0
-	#define true 1
-#endif //TYPE_BOOL
 
 //Create a new Color using RGB.
 SDL_Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue);
@@ -39,6 +29,6 @@ SDL_Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue);
 #define COLOR_PURPLE COLOR_RGB(128,0,255)
 #define COLOR_PINK COLOR_RGB(255,132,255)
 
-void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color);
+void set_renderer_draw_color(SDL_Renderer *renderer, SDL_Color color);
 
 #endif //COLOR_H

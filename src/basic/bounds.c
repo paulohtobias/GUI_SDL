@@ -141,3 +141,50 @@ void update_bounds(Bounds *bounds_dst, SDL_Rect bounds_src){
     update_position(bounds_dst, new_Position(bounds_src.x, bounds_src.y));
     update_size(bounds_dst, new_Size(bounds_src.w, bounds_src.h));
 }
+
+
+///Reach
+//Returns the end point of bounds in X plus camera offset.
+int bounds_reach_x_camera(Bounds bounds){
+    return bounds.camera.x + bounds.size.w;
+}
+//Returns the end point of bounds in Y plus camera offset.
+int bounds_reach_y_camera(Bounds bounds){
+    return bounds.camera.y + bounds.size.h;
+}
+
+//Returns the end point of bounds in X.
+int bounds_reach_x_origin(Bounds bounds){
+    return bounds.origin.x + bounds.size.w;
+}
+//Returns the end point of bounds in Y.
+int bounds_reach_y_origin(Bounds bounds){
+    return bounds.origin.y + bounds.size.h;
+}
+
+//Returns the end point of SDL_Rect in X.
+int rect_reach_x(SDL_Rect rect){
+    return rect.x + rect.w;
+}
+//Returns the end point of SDL_Rect in Y.
+int rect_reach_y(SDL_Rect rect){
+    return rect.y + rect.h;
+}
+
+//Check if position is inside the area covered by bounds using camera offset.
+bool position_is_inside_bounds_camera(Position position, Bounds bounds){
+    return (position.x >= bounds.camera.x && position.x <= bounds_reach_x_camera(bounds) && //camera.x <= pos.x <= reach_x_camera
+            position.y >= bounds.camera.y && position.y <= bounds_reach_y_camera(bounds));  //camera.y <= pos.y <= reach_y_camera
+}
+
+//Check if position is inside the area covered by bounds using parent's origin.
+bool position_is_inside_bounds_origin(Position position, Bounds bounds){
+    return (position.x >= bounds.origin.x && position.x <= bounds_reach_x_origin(bounds) && //origin.x <= pos.x <= reach_x_origin
+            position.y >= bounds.origin.y && position.y <= bounds_reach_y_origin(bounds));  //origin.y <= pos.y <= reach_y_origin
+}
+
+//Check if position is inside the area covered by SDL_Rect.s
+bool position_is_inside_rect(Position position, SDL_Rect rect){
+    return (position.x >= rect.x && position.x <= rect_reach_x(rect) && //rect.x <= pos.x <= rect_reach_x
+            position.y >= rect.y && position.y <= rect_reach_y(rect));  //rect.y <= pos.y <= rect_reach_y
+}

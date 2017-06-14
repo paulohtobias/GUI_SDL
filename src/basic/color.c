@@ -11,6 +11,6 @@ SDL_Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue){
 
 	return color;
 }
-void SetRenderDrawColor(SDL_Renderer *renderer, SDL_Color color){
+void set_renderer_draw_color(SDL_Renderer *renderer, SDL_Color color){
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }

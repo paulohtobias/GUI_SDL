@@ -9,18 +9,15 @@
 #ifndef BOUNDS_H
 #define BOUNDS_H
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 #ifndef TYPE_BOOL
 #define TYPE_BOOL
 	typedef int bool;
 	#define false 0
 	#define true 1
-#endif //TYPE_BOOL
+#endif //MOUSE_BOOL
 
 typedef struct Position_{
     int x;
@@ -33,8 +30,8 @@ typedef struct Size_{
 }Size;
 
 typedef struct Bounds_{
-    Position origin;    //Position relative to parent's origin.
-    Position camera;    //Position relative to parent's camera (this will be the used in most cases).
+    Position origin;    //Position relative to parent's origin. (Use when calculating position relative to other widgets)
+    Position camera;    //Position relative to parent's camera. (this will be the used in most cases)
     Size size;
 }Bounds;
 
@@ -84,5 +81,34 @@ void update_size(Bounds *bounds, Size size);
 
 //Update Position and Size.
 void update_bounds(Bounds *bounds_dst, SDL_Rect bounds_src);
+
+
+///Reach
+//Returns the end point of bounds in X plus camera offset.
+int bounds_reach_x_camera(Bounds bounds);
+//Returns the end point of bounds in Y plus camera offset.
+int bounds_reach_y_camera(Bounds bounds);
+#define bounds_reach_x bounds_reach_x_camera
+#define bounds_reach_y bounds_reach_y_camera
+
+//Returns the end point of bounds in X.
+int bounds_reach_x_origin(Bounds bounds);
+//Returns the end point of bounds in Y.
+int bounds_reach_y_origin(Bounds bounds);
+
+//Returns the end point of SDL_Rect in X.
+int rect_reach_x(SDL_Rect rect);
+//Returns the end point of SDL_Rect in Y.
+int rect_reach_y(SDL_Rect rect);
+
+//Check if position is inside the area covered by bounds using camera offset.
+bool position_is_inside_bounds_camera(Position position, Bounds bounds);
+#define position_is_inside_bounds position_is_inside_bounds_camera
+
+//Check if position is inside the area covered by bounds using parent's origin.
+bool position_is_inside_bounds_origin(Position position, Bounds bounds);
+
+//Check if position is inside the area covered by SDL_Rect.s
+bool position_is_inside_rect(Position position, SDL_Rect rect);
 
 #endif //BOUNDS_H
