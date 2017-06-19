@@ -25,7 +25,7 @@ typedef struct Point_{
 }Point;
 
 typedef Point Position;
-typedef Point Vector;
+typedef Point Vector2;
 
 typedef struct Size_{
     int w;  //Width
