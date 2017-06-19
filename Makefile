@@ -2,6 +2,8 @@
 CC = gcc
 CFLAGS = -g -Wall -MMD
 
+DLL= #-lm -fPIC
+
 #Binary
 ifeq ($(OS),Windows_NT)
     BIN = main.exe
@@ -46,11 +48,14 @@ DEPS = $(SRCS:$(SDIR)/%.c=$(ODIR)/%.d)
 all: $(OBJS)
 	$(COMPILE) $(OBJS) main.c -o $(BIN) $(LIBRARIES)
 
+dll: $(OBJS)
+	$(COMPILE) -shared -o libguisdl.so $(OBJS) $(LIBRARIES) $(DLL)
+
 # Include all .d files
 -include $(DEPS)
 
 $(ODIR)/%.o: $(SDIR)/%.c
-	$(COMPILE) -MMD -c $< -o $@ $(LIBRARIES)
+	$(COMPILE) -MMD -c $< -o $@ $(LIBRARIES) $(DLL)
 
 .PHONY : clean
 clean :
