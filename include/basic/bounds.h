@@ -1,10 +1,10 @@
-/**
-  * Paulo Henrique Tobias
-  * Manga Library
-  *
-  * Bounds
-  * Basic functions and definitions for Position and Size.
-  */
+/*
+ * Paulo Henrique Tobias
+ * Manga Library
+ *
+ * Bounds
+ * Basic functions and definitions for Position and Size.
+ */
 
 #ifndef BOUNDS_H
 #define BOUNDS_H
@@ -19,10 +19,13 @@
 	#define true 1
 #endif //MOUSE_BOOL
 
-typedef struct Position_{
+typedef struct Point_{
     int x;
     int y;
-}Position;
+}Point;
+
+typedef Point Position;
+typedef Point Vector;
 
 typedef struct Size_{
     int w;  //Width

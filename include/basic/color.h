@@ -1,10 +1,10 @@
-/**
-  * Paulo Henrique Tobias
-  * Manga Library
-  *
-  * Color
-  * Basic functions and definitions for color.
-  */
+/*
+ * Paulo Henrique Tobias
+ * Manga Library
+ *
+ * Color
+ * Basic functions and definitions for color.
+ */
 
 #ifndef COLOR_H
 #define COLOR_H

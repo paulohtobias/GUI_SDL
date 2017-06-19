@@ -1,10 +1,10 @@
-/**
-  * Paulo Henrique Tobias
-  * Manga Library
-  *
-  * Mouse
-  * Basic functions and definitions for mouse.
-  */
+/*
+ * Paulo Henrique Tobias
+ * Manga Library
+ *
+ * Mouse
+ * Basic functions and definitions for mouse.
+ */
 
 #ifndef MOUSE_H
 #define MOUSE_H
