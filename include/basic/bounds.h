@@ -23,7 +23,6 @@ typedef struct Point_{
     int x;
     int y;
 }Point;
-
 typedef Point Position;
 typedef Point Vector2;
 
@@ -40,6 +39,9 @@ typedef struct Bounds_{
 
 ///Constructor
 Position new_Position(int x, int y);
+#define new_Point new_Position
+#define new_Vector2 new_Position
+
 Size new_Size(int width, int height);
 Bounds new_Bounds(Position position, Size size);
 Bounds new_Bounds_integer(int x, int y, int w, int h);
@@ -84,6 +86,9 @@ void update_size(Bounds *bounds, Size size);
 
 //Update Position and Size.
 void update_bounds(Bounds *bounds_dst, SDL_Rect bounds_src);
+
+//Update the SDL_Rect.
+void update_rect(SDL_Rect *src, SDL_Rect dst);
 
 
 ///Reach

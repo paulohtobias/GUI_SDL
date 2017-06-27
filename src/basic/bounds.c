@@ -142,6 +142,14 @@ void update_bounds(Bounds *bounds_dst, SDL_Rect bounds_src){
     update_size(bounds_dst, new_Size(bounds_src.w, bounds_src.h));
 }
 
+//Update the SDL_Rect.
+void update_rect(SDL_Rect *src, SDL_Rect dst){
+    src->x += dst.x;
+    src->y += dst.y;
+    src->w += dst.w;
+    src->h += dst.h;
+}
+
 
 ///Reach
 //Returns the end point of bounds in X plus camera offset.
