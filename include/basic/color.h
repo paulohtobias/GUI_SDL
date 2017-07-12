@@ -12,8 +12,7 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 
-//Create a new Color using RGB.
-SDL_Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue);
+typedef SDL_Color Color;
 
 #define COLOR_BLACK COLOR_RGB(0,0,0)
 #define COLOR_GREY(value) COLOR_RGB(value, value, value)
@@ -29,6 +28,12 @@ SDL_Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue);
 #define COLOR_PURPLE COLOR_RGB(128,0,255)
 #define COLOR_PINK COLOR_RGB(255,132,255)
 
-void set_renderer_draw_color(SDL_Renderer *renderer, SDL_Color color);
+//Create a new Color using RGBA.
+Color COLOR_RGBA(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
+
+//Create a new Color using RGB.
+Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue);
+
+void set_renderer_draw_color(SDL_Renderer *renderer, Color color);
 
 #endif //COLOR_H
