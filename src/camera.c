@@ -4,7 +4,7 @@
 Camera *new_Camera(SDL_Rect limit){
     Camera *camera = malloc(sizeof(Camera));
     
-    camera->bounds = camera->limit = 0;
+    camera->bounds = camera->limit = new_rect(0, 0, 0, 0);
     camera->mov_speed = default_camera_speed;
     camera->speed = new_Vector2(0, 0);
     
