@@ -10,7 +10,7 @@ Position mouse_get_position(){
 //Check if the mouse is pressed. If the mouse is indeed pressed, then return which button.
 //Returns 0 (mouse_idle) otherwise.
 MouseButtonState mouse_is_pressed(Mouse mouse){
-    if(mouse.button_state >= mouse_left_pressed && mouse.button_state <= mouse_middle_pressed){
+    if(mouse.button_state >= MOUSE_LEFT_PRESSED && mouse.button_state <= MOUSE_MIDDLE_PRESSED){
         return mouse.button_state;
     }else{
         return 0;
@@ -20,7 +20,7 @@ MouseButtonState mouse_is_pressed(Mouse mouse){
 //Check if the mouse is released. If the mouse is indeed pressed, then return which button.
 //Returns 0 (mouse_idle) otherwise.
 MouseButtonState mouse_is_released(Mouse mouse){
-    if(mouse.button_state >= mouse_left_released && mouse.button_state <= mouse_middle_released){
+    if(mouse.button_state >= MOUSE_LEFT_RELEASED && mouse.button_state <= MOUSE_MIDDLE_RELEASED){
         return mouse.button_state;
     }else{
         return 0;

@@ -13,25 +13,25 @@
 
 #ifndef TYPE_BOOL
 #define TYPE_BOOL
-	typedef int bool;
-	#define false 0
-	#define true 1
+typedef int bool;
+#define false 0
+#define true 1
 #endif //MOUSE_BOOL
 
 typedef enum MouseButtonState_{
-	mouse_idle,
-	mouse_left_pressed,
-	mouse_right_pressed,
-    mouse_middle_pressed,
-	mouse_left_released,
-	mouse_right_released,
-    mouse_middle_released
+    MOUSE_IDLE,
+    MOUSE_LEFT_PRESSED,
+    MOUSE_RIGHT_PRESSED,
+    MOUSE_MIDDLE_PRESSED,
+    MOUSE_LEFT_RELEASED,
+    MOUSE_RIGHT_RELEASED,
+    MOUSE_MIDDLE_RELEASED
 }MouseButtonState;
 
 typedef struct Mouse_{
-	int button_state;
-	Position position;
-	Position drag_offset;
+    MouseButtonState button_state;
+    Position position;
+    Position drag_offset;
 }Mouse;
 
 //Return the mouse position on the screen.

@@ -16,6 +16,14 @@ void free_Camera(Camera *camera){
     free(camera);
 }
 
+//Returns the distance of camera's position to its limit position.
+Position camera_get_position(Camera *camera){
+    Position position;
+    position.x = camera->bounds.x - camera->limit.x;
+    position.y = camera->bounds.y - camera->limit.y;
+    return position;
+}
+
 //Sets a new position and size for the camera.
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
     //Setting the X position.

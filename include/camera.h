@@ -48,6 +48,18 @@ Camera *new_Camera(SDL_Rect limit);
 void free_Camera(Camera *camera);
 
 /**
+ * Returns the distance of <code>camera</code>'s position to its
+ * <code>limit</code> position. Use this function instead of acessing the
+ * <code>bounds</code> attribute directly because <code>limit</code> position
+ * can be diferent from (0,0).
+ * 
+ * @param camera a <code>Camera</code>
+ * @return a <code>Position</code> with the actual distance of the camera to its
+ * limit position
+ */
+Position camera_get_position(Camera *camera);
+
+/**
  * Sets a new position and size for the camera.
  * 
  * If the new bounds is greater than camera limit, then it will also be updated

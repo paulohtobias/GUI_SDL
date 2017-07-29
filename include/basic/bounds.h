@@ -153,6 +153,26 @@ Bounds new_Bounds_from_SDL_Rect(SDL_Rect rect);
 SDL_Rect new_rect(int x, int y, int w, int h);
 
 
+///Extra
+/**
+ * Adds <code>p1</code> to <code>p2</code> and returns the result.
+ * 
+ * @param p1 a <code>Position</code>
+ * @param p2 a <code>Position</code>
+ * @return a new <code>Position</code> with the added values.
+ */
+Position position_add(Position p1, Position p2);
+
+/**
+ * Subtracts <code>p2</code> from <code>p1</code> and returns the result.
+ * 
+ * @param p1 a <code>Position</code>
+ * @param p2 a <code>Position</code>
+ * @return a new <code>Position</code> with the subtracted values.
+ */
+Position position_subtract(Position p1, Position p2);
+
+
 ///Get
 /**
  * Get the position relative to parent's origin.

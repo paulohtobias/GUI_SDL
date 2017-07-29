@@ -67,6 +67,25 @@ SDL_Rect new_rect(int x, int y, int w, int h){
     return rect;
 }
 
+
+///Extra
+//Adds <code>p1</code> to <code>p2</code> and returns the result.
+Position position_add(Position p1, Position p2){
+    Position p3;
+    p3.x = p1.x + p2.x;
+    p3.y = p1.y + p2.y;
+    return p3;
+}
+
+//Subtracts <code>p2</code> from <code>p1</code> and returns the result.
+Position position_subtract(Position p1, Position p2){
+    Position p3;
+    p3.x = p1.x - p2.x;
+    p3.y = p1.y - p2.y;
+    return p3;
+}
+
+
 ///Get
 //Get the position relative to parent's origin.
 Position get_position_origin(Bounds bounds){
