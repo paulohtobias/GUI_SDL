@@ -24,6 +24,7 @@ Widget *new_Widget(Bounds bounds, Color color){
     widget->background_color = color;
     widget->foreground_color = color;
     
+    widget->init = generic_widget_init;
     widget->free = generic_widget_free;
     
     widget->set_bounds = generic_widget_set_bounds;
@@ -47,6 +48,11 @@ Widget *cast_Widget(void *object){
     return (*widget);
 }
 
+void generic_widget_init(void *widget, SDL_Renderer *renderer){
+    //Only used for widgets with a SDL_Texture.
+    return;
+}
+
 void generic_widget_free(void *widget){
     Widget *widget_ = cast_Widget(widget);
     
@@ -54,6 +60,7 @@ void generic_widget_free(void *widget){
     widget_->set_bounds = NULL;
     widget_->process_events = NULL;
     widget_->draw = NULL;
+    widget_->init = NULL;
     widget_->free = NULL;
     
     free(widget_);

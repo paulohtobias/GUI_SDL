@@ -51,6 +51,7 @@ typedef struct Widget_{
     void (*process_events)(void *, SDL_Event, Mouse);
     void (*draw)(void *, SDL_Renderer *, Camera *);
     
+    void (*init)(void *, SDL_Renderer *);
     void (*free)();
 }Widget;
 
@@ -59,6 +60,8 @@ WidgetSate new_WidgetState();
 Widget *new_Widget(Bounds bounds, Color color);
 
 Widget *cast_Widget(void *object);
+
+void generic_widget_init(void *widget, SDL_Renderer *renderer);
 
 void generic_widget_free(void *widget);
 
