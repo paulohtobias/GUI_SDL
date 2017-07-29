@@ -24,7 +24,7 @@ Widget *new_Widget(Bounds bounds, Color color){
     widget->background_color = color;
     widget->foreground_color = color;
     
-    widget->free = NULL;
+    widget->free = generic_widget_free;
     
     widget->set_bounds = generic_widget_set_bounds;
     widget->get_bounds_with_border = NULL;
@@ -45,6 +45,18 @@ Widget *cast_Widget(void *object){
     }
     
     return (*widget);
+}
+
+void generic_widget_free(void *widget){
+    Widget *widget_ = cast_Widget(widget);
+    
+    widget_->get_bounds_with_border = NULL;
+    widget_->set_bounds = NULL;
+    widget_->process_events = NULL;
+    widget_->draw = NULL;
+    widget_->free = NULL;
+    
+    free(widget_);
 }
 
 void generic_widget_set_bounds(void *widget, Bounds bounds){
