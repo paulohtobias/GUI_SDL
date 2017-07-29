@@ -15,23 +15,21 @@ endif
 IDIR = ./include
 SDIR = ./src
 
-#Paths
-INCLUDE_PATHS = -I/usr/local/include -I$(IDIR)
-LIBRARY_PATHS = -L/usr/local/lib
-
 ifeq ($(OS),Windows_NT)
-    LIBRARIES = -lmingw32
 	ODIR = ./obj/windows
 	CFLAGS+= -mno-ms-bitfields
 else
 	ODIR = ./obj/linux
 endif
 
+#Paths
+INCLUDE_PATHS = -I$(IDIR) `pkg-config --cflags SDL2_image SDL2_ttf`
+
 #Libraries
-LIBRARIES+= -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+LIBRARIES+= `pkg-config --libs SDL2_image SDL2_ttf`
 
 #Compilation line
-COMPILE = $(CC) $(CFLAGS) $(INCLUDE_PATHS) $(LIBRARY_PATHS)
+COMPILE = $(CC) $(CFLAGS) $(INCLUDE_PATHS)
 
 #FILEs
 #---------------Include---------------#
@@ -55,7 +53,7 @@ dll: $(OBJS)
 -include $(DEPS)
 
 $(ODIR)/%.o: $(SDIR)/%.c
-	$(COMPILE) -MMD -c $< -o $@ $(LIBRARIES) $(DLL)
+	$(COMPILE) -MMD -c $< -o $@ $(LIBRARIES) $(LIBRARIES) $(DLL)
 
 .PHONY : clean
 clean :
