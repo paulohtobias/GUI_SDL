@@ -388,4 +388,63 @@ bool position_is_inside_bounds_camera(Point point, Bounds bounds);
  */
 bool position_is_inside_rect(Point point, SDL_Rect rect);
 
+/**
+ * Checks if the area covered by <code>rect1</code> is inside the area covered
+ * by <code>rect2</code>.
+ * 
+ * @param rect1 an <code>SDL_Rect</code> that may be inside <code>rect2</code>
+ * @param rect1 an an SDL_Rect struct containing x, y, width and height
+ * @return <code>true</code> if <code>rect1</code> is inside
+ *         <code>rect2</code> and <code>false</code> otherwise
+ */
+bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2);
+
+/**
+ * Checks if the area covered by <code>bounds1</code> using <b>origin</b>
+ * position is inside the area covered by <code>bounds2</code> using
+ * <b>origin</b> position.
+ * 
+ * @param bounds1 a Bounds that may be inside <code>bounds2</code>
+ * @param bounds2 a Bounds containing origin and camera Position and Size
+ * @return <code>true</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>false</code> otherwise
+ */
+bool bounds_origin_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
+
+/**
+ * Checks if the area covered by <code>bounds1</code> using <b>origin</b>
+ * position is inside the area covered by <code>bounds2</code> using
+ * <b>camera</b> position.
+ * 
+ * @param bounds1 a Bounds that may be inside <code>bounds2</code>
+ * @param bounds2 a Bounds containing origin and camera Position and Size
+ * @return <code>true</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>false</code> otherwise
+ */
+bool bounds_origin_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2);
+
+/**
+ * Checks if the area covered by <code>bounds1</code> using <b>camera</b>
+ * position is inside the area covered by <code>bounds2</code> using
+ * <b>origin</b> position.
+ * 
+ * @param bounds1 a Bounds that may be inside <code>bounds2</code>
+ * @param bounds2 a Bounds containing origin and camera Position and Size
+ * @return <code>true</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>false</code> otherwise
+ */
+bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
+
+/**
+ * Checks if the area covered by <code>bounds1</code> using <b>camera</b>
+ * position is inside the area covered by <code>bounds2</code> using
+ * <b>camera</b> position.
+ * 
+ * @param bounds1 a Bounds that may be inside <code>bounds2</code>
+ * @param bounds2 a Bounds containing origin and camera Position and Size
+ * @return <code>true</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>false</code> otherwise
+ */
+bool bounds_camera_is_inside_bounds_caemera(Bounds bounds1, Bounds bounds2);
+
 #endif //BOUNDS_H

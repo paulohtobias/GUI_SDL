@@ -248,3 +248,33 @@ bool position_is_inside_rect(Point point, SDL_Rect rect){
     return (point.x >= rect.x && point.x <= rect_reach_x(rect) && //rect.x <= pos.x <= rect_reach_x
             point.y >= rect.y && point.y <= rect_reach_y(rect));  //rect.y <= pos.y <= rect_reach_y
 }
+
+//Checks if the area covered by rect1 is inside the area covered by rect2.
+bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2){
+    return (rect1.x >= rect2.x && rect1.y >= rect2.y &&
+            rect_reach_x(rect1) < rect_reach_x(rect2) && rect_reach_y(rect1) < rect_reach_y(rect2));
+}
+
+//Checks if the area covered by bounds1 using origin position is inside the area
+//covered by bounds2 using origin position.
+bool bounds_origin_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2){
+    return (rect_is_inside_rect(get_bounds_origin(bounds1), get_bounds_origin(bounds2)));
+}
+
+//Checks if the area covered by bounds1 using origin position is inside the area
+//covered by bounds2 using camera position.
+bool bounds_origin_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2){
+    return (rect_is_inside_rect(get_bounds_origin(bounds1), get_bounds_camera(bounds2)));
+}
+
+//Checks if the area covered by bounds1 using camera position is inside the area
+//covered by bounds2 using origin position.
+bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2){
+    return (rect_is_inside_rect(get_bounds_camera(bounds1), get_bounds_camera(bounds2)));
+}
+
+//Checks if the area covered by bounds1 using camera position is inside the area
+//covered by bounds2 using camera position.
+bool bounds_camera_is_inside_bounds_caemera(Bounds bounds1, Bounds bounds2){
+    return (rect_is_inside_rect(get_bounds_camera(bounds1), get_bounds_camera(bounds2)));
+}
