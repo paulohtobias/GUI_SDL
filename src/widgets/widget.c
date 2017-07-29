@@ -1,16 +1,13 @@
-#include <widget.h>
-
-#include "camera.h"
+#include "widgets/widget.h"
 
 char *_error_widget_message;
-#define pass generic_widget_pass
 
 WidgetSate new_WidgetState(){
     WidgetSate state;
     
     state.focus = false;
     state.fixed = true;
-    state.dragged false;
+    state.dragged = false;
     state.mouse_over = false;
     state.mouse_state = MOUSE_IDLE;
     state.entered_camera = true;
@@ -27,10 +24,10 @@ Widget *new_Widget(Bounds bounds, Color color){
     widget->background_color = color;
     widget->foreground_color = color;
     
-    widget->free = pass;
+    widget->free = NULL;
     
     widget->set_bounds = generic_widget_set_bounds;
-    widget->get_bounds_with_border = pass;
+    widget->get_bounds_with_border = NULL;
     
     widget->process_events = generic_widget_process_events;
     widget->draw = generic_widget_draw;
@@ -85,7 +82,7 @@ void widget_update_camera_position(Widget *widget, Camera *camera){
     if(camera != NULL){
         set_position_camera(
             &widget->bounds,
-            position_subtract(widget->bounds, camera_get_position(camera))
+            position_subtract(get_position_origin(widget->bounds), camera_get_position(camera))
         );
     }
 }
@@ -106,7 +103,8 @@ void widget_draw_border(void *widget, SDL_Renderer *renderer){
     SDL_RenderFillRect(renderer, &bounds);
     
     set_renderer_draw_color(renderer, COLOR_YELLOW/*widget_->foreground_color*/);
-    SDL_RenderFillRect(renderer, &widget_->bounds);
+    bounds = get_bounds_camera(widget_->bounds);
+    SDL_RenderFillRect(renderer, &bounds);
 }
 
 void generic_widget_draw(void *widget, SDL_Renderer *renderer, Camera *camera){
@@ -117,8 +115,4 @@ void generic_widget_draw(void *widget, SDL_Renderer *renderer, Camera *camera){
     if(rect_is_inside_rect(get_bounds_camera(widget_->bounds), camera->bounds)){
         widget_draw_border(widget_, renderer);
     }
-}
-
-void generic_widget_pass(){
-    _error_widget_message = "function not created yet.";
 }

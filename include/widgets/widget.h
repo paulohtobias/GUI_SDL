@@ -12,6 +12,7 @@
 #include <basic/bounds.h>
 #include <basic/mouse.h>
 #include <basic/color.h>
+#include "camera.h"
 
 typedef struct WidgetSate_{
     ///The widget has focus.
@@ -44,13 +45,13 @@ typedef struct Widget_{
     Color background_color;
     
     //Functions
-    void (set_bounds)(void *, Bounds);
-    Bounds (get_bounds_with_border)(void *);
+    void (*set_bounds)(void *, Bounds);
+    Bounds (*get_bounds_with_border)(void *);
     
-    void (process_events)(void *, SDL_Event, Mouse);
-    void (draw)(void *, SDL_Renderer *, Camera *);
+    void (*process_events)(void *, SDL_Event, Mouse);
+    void (*draw)(void *, SDL_Renderer *, Camera *);
     
-    void (free)();
+    void (*free)();
 }Widget;
 
 WidgetSate new_WidgetState();
@@ -65,7 +66,7 @@ void generic_widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
 void widget_update_camera_position(Widget *widget, Camera *camera);
 
-void widget_draw_border(void *widget);
+void widget_draw_border(void *widget, SDL_Renderer *renderer);
 
 void generic_widget_draw(void *widget, SDL_Renderer *renderer, Camera *camera);
 
