@@ -9,29 +9,17 @@
 #ifndef BOUNDS_H
 #define BOUNDS_H
 
-#include <stdlib.h>
+#include "utils/utils.h"
 #include <SDL2/SDL.h>
 
-#ifndef TYPE_BOOL
-#define TYPE_BOOL
-	typedef int bool;
-	#define false 0
-	#define true 1
-#endif //MOUSE_BOOL
-
 /**
  * Struct used to represent a 2D point. Origin is set at the upper-left corner
  * of the screen.
  */
-struct Point_{
+typedef struct Point{
     int x; //X position.
     int y; //Y position.
-};
-/**
- * Struct used to represent a 2D point. Origin is set at the upper-left corner
- * of the screen.
- */
-typedef struct Point_ Point;
+}Point;
 
 /**
  * A better name than Point to representa Widget's position.
@@ -48,22 +36,16 @@ typedef Point Vector2;
  * Representation of the size of a 2D object with <code>width</code> and
  * <code>height</code>.
  */
-struct Size_{
+typedef struct Size{
     int w;  //Width.
     int h;  //Height.
-};
-/**
- * Representation of the size of a 2D object with <code>width</code> and
- * <code>height</code>.
- */
-typedef struct Size_ Size;
-
+}Size;
 
 /**
  * Representation of a Widget in a 2D space with information about position and
  * size.
  */
-struct Bounds_{
+typedef struct Bounds{
     /**
      * Position relative to parent's origin. Use when calculating position
      * relative to other widgets
@@ -80,12 +62,7 @@ struct Bounds_{
      * Size of the Widget containing width and height.
      */
     Size size;
-};
-/**
- * Representation of a Widget in a 2D space with information about position and
- * size.
- */
-typedef struct Bounds_ Bounds;
+}Bounds;
 
 ///Constructor
 /**

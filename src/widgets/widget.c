@@ -1,3 +1,11 @@
+/*
+ * Paulo Henrique Tobias
+ * Manga Library
+ *
+ * Widget
+ * Basic Widget module. Structs and functions basic to all GUI widgets.
+ */
+
 #include "widgets/widget.h"
 
 char *_error_widget_message;

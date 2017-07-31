@@ -11,13 +11,6 @@
 
 #include "basic/bounds.h"
 
-#ifndef TYPE_BOOL
-#define TYPE_BOOL
-typedef int bool;
-#define false 0
-#define true 1
-#endif //MOUSE_BOOL
-
 typedef enum MouseButtonState_{
     MOUSE_IDLE,
     MOUSE_LEFT_PRESSED,
