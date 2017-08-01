@@ -22,13 +22,13 @@ WidgetSate new_WidgetState(){
     return state;
 }
 
-Widget new_Widget(Bounds bounds, Color color){
+Widget new_Widget(){
     Widget widget;
     
     widget.state = new_WidgetState();
-    widget.bounds = bounds;
-    widget.background_color = color;
-    widget.foreground_color = color;
+    widget.bounds = new_Bounds_from_integer(0, 0, 1, 1);
+    widget.background_color = COLOR_ORANGE;
+    widget.foreground_color = COLOR_GREEN;
     
     widget.init = generic_widget_init;
     widget.free = generic_widget_free;
@@ -49,7 +49,6 @@ void generic_widget_init(void *raw_widget, SDL_Renderer *renderer){
 void generic_widget_free(void *raw_widget){
     Widget *widget = raw_widget;
     
-    widget->get_bounds_with_border = NULL;
     widget->set_bounds = NULL;
     widget->process_events = NULL;
     widget->draw = NULL;

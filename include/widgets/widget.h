@@ -56,7 +56,7 @@ typedef struct Widget{
 
 WidgetSate new_WidgetState();
 
-Widget new_Widget(Bounds bounds, Color color);
+Widget new_Widget();
 
 void generic_widget_init(void *raw_widget, SDL_Renderer *renderer);
 
