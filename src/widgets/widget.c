@@ -8,8 +8,6 @@
 
 #include "widgets/widget.h"
 
-char *_error_widget_message;
-
 WidgetSate new_WidgetState(){
     WidgetSate state;
     
@@ -24,88 +22,100 @@ WidgetSate new_WidgetState(){
     return state;
 }
 
-Widget *new_Widget(Bounds bounds, Color color){
-    Widget *widget = malloc(sizeof(Widget));
+Widget new_Widget(Bounds bounds, Color color){
+    Widget widget;
     
-    widget->state = new_WidgetState();
-    widget->bounds = bounds;
-    widget->background_color = color;
-    widget->foreground_color = color;
+    widget.state = new_WidgetState();
+    widget.bounds = bounds;
+    widget.background_color = color;
+    widget.foreground_color = color;
     
-    widget->init = generic_widget_init;
-    widget->free = generic_widget_free;
+    widget.init = generic_widget_init;
+    widget.free = generic_widget_free;
     
-    widget->set_bounds = generic_widget_set_bounds;
-    widget->get_bounds_with_border = NULL;
+    widget.set_bounds = generic_widget_set_bounds;
     
-    widget->process_events = generic_widget_process_events;
-    widget->draw = generic_widget_draw;
+    widget.process_events = generic_widget_process_events;
+    widget.draw = generic_widget_draw;
     
     return widget;
 }
 
-Widget *cast_Widget(void *object){
-    Widget **widget = malloc(sizeof(Widget*));
-    memcpy(widget, object, sizeof(Widget*));
-    
-    //If object were already a Widget*
-    if((*widget)->free == NULL){
-        (*widget) = object;
-    }
-    
-    return (*widget);
-}
-
-void generic_widget_init(void *widget, SDL_Renderer *renderer){
+void generic_widget_init(void *raw_widget, SDL_Renderer *renderer){
     //Only used for widgets with a SDL_Texture.
     return;
 }
 
-void generic_widget_free(void *widget){
-    Widget *widget_ = cast_Widget(widget);
+void generic_widget_free(void *raw_widget){
+    Widget *widget = raw_widget;
     
-    widget_->get_bounds_with_border = NULL;
-    widget_->set_bounds = NULL;
-    widget_->process_events = NULL;
-    widget_->draw = NULL;
-    widget_->init = NULL;
-    widget_->free = NULL;
-    
-    free(widget_);
+    widget->get_bounds_with_border = NULL;
+    widget->set_bounds = NULL;
+    widget->process_events = NULL;
+    widget->draw = NULL;
+    widget->init = NULL;
+    widget->free = NULL;
 }
 
-void generic_widget_set_bounds(void *widget, Bounds bounds){
-    Widget *widget_ = cast_Widget(widget);
+void generic_widget_set_bounds(void *raw_widget, Bounds bounds){
+    Widget *widget = raw_widget;
     
-    widget_->bounds = bounds;
+    widget->bounds = bounds;
 }
 
-void generic_widget_process_events(void *widget, SDL_Event event, Mouse mouse){
-    Widget *widget_ = cast_Widget(widget);
+void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse){
+    Widget *widget = raw_widget;
     
-    widget_->state.mouse_over = false;
-    widget_->state.mouse_state = MOUSE_IDLE;
-    widget_->state.dragged = false;
+    widget->state.mouse_over = false;
+    widget->state.mouse_state = MOUSE_IDLE;
+    widget->state.dragged = false;
     
-    if(mouse_over(widget_->bounds)){
-        widget_->state.mouse_over = true;
-        widget_->state.mouse_state = mouse.button_state;
+    if(mouse_over(widget->bounds)){
+        widget->state.mouse_over = true;
+        widget->state.mouse_state = mouse.button_state;
         
         if(mouse_is_pressed(mouse)){
-            widget_->state.focus = true;
+            widget->state.focus = true;
             
             //Checking if widget is being dragged.
-            if(widget_->state.fixed == false &&
+            if(widget->state.fixed == false &&
                mouse.button_state == MOUSE_LEFT_PRESSED &&
                event.type == SDL_MOUSEMOTION){
 
-                widget_->state.dragged = true;
+                widget->state.dragged = true;
             }
         }
     }
 }
 
-void widget_update_camera_position(Widget *widget, Camera *camera){
+void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
+    Widget *widget = raw_widget;
+    
+    if(widget_is_inside_camera(raw_widget, camera)){
+        widget_draw_border(widget, renderer);
+    }
+}
+
+
+void widget_init(void *widget, SDL_Renderer *renderer){
+    ((Widget *)widget)->init(widget, renderer);
+}
+
+void widget_free(void *widget){
+    ((Widget *)widget)->free(widget);
+}
+
+void widget_set_bounds(void *widget, Bounds bounds){
+    ((Widget *)widget)->set_bounds(widget, bounds);
+}
+
+void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
+    ((Widget *)widget)->process_events(widget, event, mouse);
+}
+
+void widget_update_camera_position(void *raw_widget, Camera *camera){
+    Widget *widget = raw_widget;
+    
     if(camera != NULL){
         set_position_camera(
             &widget->bounds,
@@ -114,13 +124,20 @@ void widget_update_camera_position(Widget *widget, Camera *camera){
     }
 }
 
-void widget_draw_border(void *widget, SDL_Renderer *renderer){
-    Widget *widget_ = cast_Widget(widget);
+bool widget_is_inside_camera(void *raw_widget, Camera *camera){
+    Widget *widget = raw_widget;
+    SDL_Rect widget_bounds_camera = get_bounds_camera(widget->bounds);
+    
+    return rect_is_inside_rect(widget_bounds_camera, camera->bounds);
+}
+
+void widget_draw_border(void *raw_widget, SDL_Renderer *renderer){
+    Widget *widget = raw_widget;
     
     //TO-DO: Replace all this with a proper border later. This one is a
     //temporary just for testing.
     int size = 5;
-    SDL_Rect bounds = get_bounds_camera(widget_->bounds);
+    SDL_Rect bounds = get_bounds_camera(widget->bounds);
     bounds.x -= size;
     bounds.y -= size;
     bounds.w += (2 * size);
@@ -129,17 +146,14 @@ void widget_draw_border(void *widget, SDL_Renderer *renderer){
     set_renderer_draw_color(renderer, COLOR_BLUE);
     SDL_RenderFillRect(renderer, &bounds);
     
-    set_renderer_draw_color(renderer, COLOR_YELLOW/*widget_->foreground_color*/);
-    bounds = get_bounds_camera(widget_->bounds);
+    set_renderer_draw_color(renderer, COLOR_YELLOW/*widget->foreground_color*/);
+    bounds = get_bounds_camera(widget->bounds);
     SDL_RenderFillRect(renderer, &bounds);
 }
 
-void generic_widget_draw(void *widget, SDL_Renderer *renderer, Camera *camera){
-    Widget *widget_ = cast_Widget(widget);
+void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
+    widget_update_camera_position(raw_widget, camera);
     
-    widget_update_camera_position(widget_, camera);
-    
-    if(rect_is_inside_rect(get_bounds_camera(widget_->bounds), camera->bounds)){
-        widget_draw_border(widget_, renderer);
-    }
+    Widget *widget = raw_widget;
+    widget->draw(raw_widget, renderer, camera);
 }

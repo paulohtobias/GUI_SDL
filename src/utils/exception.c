@@ -29,3 +29,7 @@ void exception_set_message(Exception *e, char *message, ...){
     e->message = string_format(message, arg);
     va_end(arg);
 }
+
+void *__do_nothing(){
+    return NULL;
+}

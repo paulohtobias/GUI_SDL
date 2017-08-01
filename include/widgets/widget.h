@@ -14,7 +14,7 @@
 #include <basic/color.h>
 #include "camera.h"
 
-typedef struct WidgetSate_{
+typedef struct WidgetSate{
     ///The widget has focus.
     bool focus;
     
@@ -37,7 +37,7 @@ typedef struct WidgetSate_{
     bool changed;
 }WidgetSate;
 
-typedef struct Widget_{
+typedef struct Widget{
     WidgetSate state;
     Bounds bounds;
     
@@ -45,7 +45,6 @@ typedef struct Widget_{
     Color background_color;
     
     //Functions
-    Bounds (*get_bounds_with_border)(void *);
     void (*set_bounds)(void *, Bounds);
     
     void (*process_events)(void *, SDL_Event, Mouse);
@@ -57,24 +56,33 @@ typedef struct Widget_{
 
 WidgetSate new_WidgetState();
 
-Widget *new_Widget(Bounds bounds, Color color);
+Widget new_Widget(Bounds bounds, Color color);
 
-Widget *cast_Widget(void *object);
+void generic_widget_init(void *raw_widget, SDL_Renderer *renderer);
 
-void generic_widget_init(void *widget, SDL_Renderer *renderer);
+void generic_widget_free(void *raw_widget);
 
-void generic_widget_free(void *widget);
+void generic_widget_set_bounds(void *raw_widget, Bounds bounds);
 
-void generic_widget_set_bounds(void *widget, Bounds bounds);
+void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse);
 
-void generic_widget_process_events(void *widget, SDL_Event event, Mouse mouse);
+void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
 
-void widget_update_camera_position(Widget *widget, Camera *camera);
 
-void widget_draw_border(void *widget, SDL_Renderer *renderer);
+void widget_init(void *widget, SDL_Renderer *renderer);
 
-void generic_widget_draw(void *widget, SDL_Renderer *renderer, Camera *camera);
+void widget_free(void *widget);
 
-void generic_widget_pass();
+void widget_set_bounds(void *widget, Bounds bounds);
+
+void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
+
+void widget_update_camera_position(void *raw_widget, Camera *camera);
+
+bool widget_is_inside_camera(void *raw_widget, Camera *camera);
+
+void widget_draw_border(void *raw_widget, SDL_Renderer *renderer);
+
+void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
 
 #endif //WIDGET_H

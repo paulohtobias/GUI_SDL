@@ -9,8 +9,3 @@ char *string_format(const char *format, ...){
     va_end(arg);
     return string;
 }
-
-void *_cast(size_t size, void *super_object){
-    void *obj = malloc(size);
-    return memcpy(obj, super_object, size);
-}

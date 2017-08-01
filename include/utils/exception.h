@@ -14,4 +14,6 @@ Exception new_Exception_data(void *data, char *message, ...);
 
 void exception_set_message(Exception *e, char *message, ...);
 
+void *__do_nothing();
+
 #endif //EXCEPTION_H
