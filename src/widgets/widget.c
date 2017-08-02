@@ -56,10 +56,10 @@ void generic_widget_free(void *raw_widget){
     widget->free = NULL;
 }
 
-void generic_widget_set_bounds(void *raw_widget, Bounds bounds){
+void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds){
     Widget *widget = raw_widget;
     
-    widget->bounds = bounds;
+    set_bounds_from_SDL_Rect(&widget->bounds, bounds);
 }
 
 void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse){
@@ -104,7 +104,7 @@ void widget_free(void *widget){
     ((Widget *)widget)->free(widget);
 }
 
-void widget_set_bounds(void *widget, Bounds bounds){
+void widget_set_bounds(void *widget, SDL_Rect bounds){
     ((Widget *)widget)->set_bounds(widget, bounds);
 }
 

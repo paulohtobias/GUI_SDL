@@ -45,7 +45,7 @@ typedef struct Widget{
     Color background_color;
     
     //Functions
-    void (*set_bounds)(void *, Bounds);
+    void (*set_bounds)(void *, SDL_Rect);
     
     void (*process_events)(void *, SDL_Event, Mouse);
     void (*draw)(void *, SDL_Renderer *, Camera *);
@@ -62,7 +62,7 @@ void generic_widget_init(void *raw_widget, SDL_Renderer *renderer);
 
 void generic_widget_free(void *raw_widget);
 
-void generic_widget_set_bounds(void *raw_widget, Bounds bounds);
+void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds);
 
 void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse);
 
@@ -73,7 +73,7 @@ void widget_init(void *widget, SDL_Renderer *renderer);
 
 void widget_free(void *widget);
 
-void widget_set_bounds(void *widget, Bounds bounds);
+void widget_set_bounds(void *widget, SDL_Rect bounds);
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
