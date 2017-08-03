@@ -21,8 +21,9 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
     
     image.t_widget = new_TextureWidget();
     
+    image.file = NULL;
     image_set_file(&image, file);
-    set_bounds_from_SDL_Rect((void *)&image, bounds);
+    widget_set_bounds((void *)&image, bounds);
     
     image.t_widget.widget.init = generic_image_init;
     image.t_widget.set_changed = generic_image_set_changed;
@@ -33,6 +34,8 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
 
 void generic_image_init(void *raw_image, SDL_Renderer *renderer){
     Image *image = raw_image;
+    
+    printf("image <%s> init\n", image->file);
     
     Size size = image->t_widget.widget.bounds.size;
     if(size.w > 0 && size.h > 0){
@@ -46,6 +49,8 @@ void generic_image_init(void *raw_image, SDL_Renderer *renderer){
     }
     size.w = temp->w;
     size.h = temp->h;
+    
+    printf("image init: %d x %d\n", size.w, size.h);
 
     SDL_FreeSurface(temp);
     temp = NULL;

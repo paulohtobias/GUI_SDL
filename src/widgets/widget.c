@@ -26,7 +26,7 @@ Widget new_Widget(){
     Widget widget;
     
     widget.state = new_WidgetState();
-    widget.bounds = new_Bounds_from_integer(0, 0, 1, 1);
+    widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
     widget.background_color = COLOR_ORANGE;
     widget.foreground_color = COLOR_GREEN;
     
@@ -124,6 +124,9 @@ void widget_update_camera_position(void *raw_widget, Camera *camera){
 }
 
 bool widget_is_inside_camera(void *raw_widget, Camera *camera){
+    if(camera == NULL){
+        return true;
+    }
     Widget *widget = raw_widget;
     SDL_Rect widget_bounds_camera = get_bounds_camera(widget->bounds);
     

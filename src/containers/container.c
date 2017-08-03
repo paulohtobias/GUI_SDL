@@ -17,6 +17,41 @@ Container new_Container(){
     return container;
 }
 
+void container_init(void *container, SDL_Renderer *renderer){
+    widget_init(container, renderer);
+}
+
+void container_free(void *container){
+    ((Container *)container)->widget.free(container);
+}
+
+void container_set_bounds(void *container, SDL_Rect bounds){
+    ((Container *)container)->widget.set_bounds(container, bounds);
+}
+
+void container_process_events(void *container, SDL_Event event, Mouse mouse){
+    ((Container *)container)->widget.process_events(container, event, mouse);
+}
+
+void container_draw(void *container, SDL_Renderer *renderer, Camera *camera){
+    ((Container *)container)->widget.draw(container, renderer, camera);
+}
+
+void container_add_widget(void *container, void *widget){
+    ((Container *)container)->add_widget(container, widget);
+}
+
+void *container_remove_widget(void *container){
+    return ((Container *)container)->remove_widget(container);
+}
+
+void container_empty(void *container){
+    Container *container_ = container;
+    free_ArrayList(container_->widget_list, widget_free);
+    container_->widget_list = new_ArrayList();
+}
+
+
 void generic_container_init(void *raw_container, SDL_Renderer *renderer){
     Container *container = raw_container;
     

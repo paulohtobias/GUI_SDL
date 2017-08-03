@@ -68,25 +68,27 @@ void list_insert_first(ArrayList *list, Data data){
                 list->data[j+1] = list->data[j];
             }
         }
+        list->first--;
     }
 
-    list->first--;
 	list->data[list->first] = data;
 	list->size++;
 }
 
 void list_insert_last(ArrayList *list, Data data){
-    if(list->last + 1 == list->array_current_size){
-		if(list->array_current_size < LIST_MAX_SIZE){
-            list->array_current_size++;
-            list->data = realloc(list->data, list->array_current_size);
-        }else{
-            printf("ArrayLista cheia!!!!\n");
-            exit(1);
+    if(!list_is_empty(list)){
+        if(list->last + 1 == list->array_current_size){
+            if(list->array_current_size < LIST_MAX_SIZE){
+                list->array_current_size++;
+                list->data = realloc(list->data, list->array_current_size);
+            }else{
+                printf("ArrayList cheia!!!!\n");
+                exit(1);
+            }
         }
-	}
+        list->last++;
+    }
     
-    list->last++;
 	list->data[list->last] = data;
 	list->size++;
 }
@@ -116,7 +118,7 @@ Data list_remove_last(ArrayList *list){
 }
 
 Data list_get_index(ArrayList *list, int index){
-    if(list_is_empty(list) || index >= list->size){
+    if(list_is_empty(list) || index > list->size){
         return NULL;
     }
     

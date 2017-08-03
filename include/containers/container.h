@@ -15,6 +15,23 @@ typedef struct Container{
 
 Container new_Container();
 
+void container_init(void *container, SDL_Renderer *renderer);
+
+void container_free(void *raw_container);
+
+void container_set_bounds(void *raw_container, SDL_Rect bounds);
+
+void container_process_events(void *raw_container, SDL_Event event, Mouse mouse);
+
+void container_draw(void *raw_container, SDL_Renderer *renderer, Camera *camera);
+
+void container_add_widget(void *raw_container, void *widget);
+
+void *container_remove_widget(void *raw_container);
+
+void container_empty(void *container);
+
+
 void generic_container_init(void *raw_container, SDL_Renderer *renderer);
 
 void generic_container_free(void *raw_container);
