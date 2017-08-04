@@ -24,6 +24,11 @@ Position camera_get_position(Camera *camera){
     return position;
 }
 
+//Returns the position and size of camera.
+SDL_Rect camera_get_bounds(Camera *camera){
+    return camera->bounds;
+}
+
 //Sets a new position and size for the camera.
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
     //Setting the X position.
@@ -45,21 +50,19 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds){
     //Setting the width.
     if(bounds.w > 0){
         camera->bounds.w = bounds.w;
-        
-        //Checking if the new bounds is greater than the limit.
-        if(camera->bounds.w > camera->limit.w){
-            camera->limit.w = camera->bounds.w;
-        }
+    }
+    //Checking if the new bounds is greater than the limit.
+    if(rect_reach_x(camera->bounds) > rect_reach_x(camera->limit)){
+        camera->limit.w = rect_reach_x(camera->bounds);
     }
     
     //Setting the height.
     if(bounds.h > 0){
         camera->bounds.h = bounds.h;
-        
-        //Checking if the new bounds is greater than the limit.
-        if(camera->bounds.h > camera->limit.h){
-            camera->limit.h = camera->bounds.h;
-        }
+    }
+    //Checking if the new bounds is greater than the limit.
+    if(rect_reach_y(camera->bounds) > rect_reach_y(camera->limit)){
+        camera->limit.h = rect_reach_y(camera->bounds);
     }
 }
 
@@ -82,21 +85,19 @@ void camera_set_limit(Camera *camera, SDL_Rect limit){
     //Setting the width.
     if(limit.w > 0){
         camera->limit.w = limit.w;
-        
-        //Checking if the new limit is smaller than the bounds.
-        if(camera->limit.w < camera->bounds.w){
-            camera->bounds.w = camera->limit.w;
-        }
+    }
+    //Checking if the new limit is smaller than the bounds.
+    if(rect_reach_x(camera->limit) < rect_reach_x(camera->bounds)){
+        camera->bounds.w = camera->limit.w - camera->bounds.x;
     }
     
     //Setting the height.
     if(limit.h > 0){
         camera->limit.h = limit.h;
-        
-        //Checking if the new limit is smaller than the bounds.
-        if(camera->limit.h < camera->bounds.h){
-            camera->bounds.h = limit.h;
-        }
+    }
+    //Checking if the new limit is smaller than the bounds.
+    if(rect_reach_x(camera->limit) < rect_reach_x(camera->bounds)){
+        camera->bounds.h = camera->limit.h - camera->bounds.y;
     }
 }
 

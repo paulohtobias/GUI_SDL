@@ -47,8 +47,6 @@ void generic_image_init(void *raw_image, SDL_Renderer *renderer){
     }
     size.w = temp->w;
     size.h = temp->h;
-    
-    printf("image init: %d x %d\n", size.w, size.h);
 
     SDL_FreeSurface(temp);
     temp = NULL;

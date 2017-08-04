@@ -130,7 +130,8 @@ bool widget_is_inside_camera(void *raw_widget, Camera *camera){
     Widget *widget = raw_widget;
     SDL_Rect widget_bounds_camera = get_bounds_camera(widget->bounds);
     
-    return rect_is_inside_rect(widget_bounds_camera, camera->bounds);
+    //return rect_is_inside_rect(widget_bounds_camera, camera_get_bounds(camera));
+    return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
 }
 
 void widget_draw_border(void *raw_widget, SDL_Renderer *renderer){

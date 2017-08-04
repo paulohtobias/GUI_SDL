@@ -60,6 +60,13 @@ void free_Camera(Camera *camera);
 Position camera_get_position(Camera *camera);
 
 /**
+ * Returns the position and size of <code>camera</code>.
+ * @param camera a <code>Camera</code>
+ * @return an <code>SDL_Rect</code> with the camera position and size.
+ */
+SDL_Rect camera_get_bounds(Camera *camera);
+
+/**
  * Sets a new position and size for the camera.
  * 
  * If the new bounds is greater than camera limit, then it will also be updated

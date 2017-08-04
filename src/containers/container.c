@@ -61,10 +61,6 @@ void generic_container_init(void *raw_container, SDL_Renderer *renderer){
     
     int i;
     for(i=0; i<container->widget_list->size; i++){
-        printf("generic_container_init %d\n", i);
-        if(i==7){
-            int b = 3;
-        }
         widget_init(list_get_index(container->widget_list, i), renderer);
     }
 }
