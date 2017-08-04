@@ -3,45 +3,40 @@
 
 #include "utils/utils.h"
 
-typedef void* Data;
-
-#ifndef LIST_MIN_SIZE
-    #define LIST_MIN_SIZE 50
-#endif
-
-#ifndef LIST_MAX_SIZE
-    #define LIST_MAX_SIZE 300
+#ifndef LIST_DEFAULT_MAX_SIZE
+    #define LIST_DEFAULT_MAX_SIZE 300
 #endif
 
 typedef struct ArrayList{
     int first;
     int last;
     int size;
-    Data *data;
+    void **data;
     
-    bool unlimited;
-    int array_current_size;
+    int max_size;
 }ArrayList;
 
 ArrayList *new_ArrayList();
+
+ArrayList *new_ArrayList_max_size(int max);
 
 void free_ArrayList(ArrayList *list, void (*free_data)(void *));
 
 bool list_is_empty(ArrayList *list);
 
-void list_insert_first(ArrayList *list, Data data);
+void list_insert_first(ArrayList *list, void *data);
 
-void list_insert_last(ArrayList *list, Data data);
+void list_insert_last(ArrayList *list, void *data);
 
-Data list_remove_first(ArrayList *list);
+void *list_remove_first(ArrayList *list);
 
-Data list_remove_last(ArrayList *list);
+void *list_remove_last(ArrayList *list);
 
-Data list_get_index(ArrayList *list, int index);
+void *list_get_index(ArrayList *list, int index);
 
-Data list_get_first(ArrayList *list);
+void *list_get_first(ArrayList *list);
 
-Data list_get_last(ArrayList *list);
+void *list_get_last(ArrayList *list);
 
 #endif //ARRAY_LIST_H
 

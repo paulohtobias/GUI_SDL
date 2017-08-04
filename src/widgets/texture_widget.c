@@ -6,6 +6,7 @@ TextureWidget new_TextureWidget(){
     
     t_widget.widget = new_Widget();
     
+    t_widget.texture = NULL;
     t_widget.set_changed = NULL;
     t_widget.update = NULL;
     t_widget.widget.draw = generic_texture_widget_draw;

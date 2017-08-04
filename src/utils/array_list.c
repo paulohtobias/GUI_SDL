@@ -3,19 +3,22 @@
 #include "utils/array_list.h"
 
 ArrayList *new_ArrayList(){
+    return new_ArrayList_max_size(LIST_DEFAULT_MAX_SIZE);
+}
+
+ArrayList *new_ArrayList_max_size(int max){
     ArrayList *list = malloc(sizeof(ArrayList));
     
     list->size = 0;
     list->first = 0;
     list->last = 0;
-    list->data = malloc(LIST_MIN_SIZE * sizeof(Data));
+    list->data = malloc(max * sizeof(void *));
     
     int i;
-    for(i=0; i<LIST_MIN_SIZE; i++){
+    for(i=0; i<max; i++){
         list->data[i] = NULL;
     }
-    list->unlimited = false;
-    list->array_current_size = LIST_MIN_SIZE;
+    list->max_size = max;
     
     return list;
 }
@@ -45,22 +48,17 @@ bool list_is_empty(ArrayList *list){
     return (list->size == 0);
 }
 
-void list_insert_first(ArrayList *list, Data data){
+void list_insert_first(ArrayList *list, void *data){
     //This whole if-else section consists in finding where to put the object
 	if(!list_is_empty(list)){
         if(list->first == 0){
             int i;
             //Looking for a free space.
-            for(i = list->first + 1; i < list->array_current_size && list->data[i] != NULL; i++){}
+            for(i = list->first + 1; i < list->max_size && list->data[i] != NULL; i++){}
             
-            if(i == list->array_current_size){
-                if(list->array_current_size < LIST_MAX_SIZE){
-                    list->array_current_size++;
-                    list->data = realloc(list->data, list->array_current_size);
-                }else{
-                    printf("ArrayLista cheia!!!!\n");
-                    exit(1);
-                }
+            if(i == list->max_size){
+                printf("ArrayLista cheia!!!!\n");
+                exit(1);
             }
             
             int j;
@@ -75,16 +73,11 @@ void list_insert_first(ArrayList *list, Data data){
 	list->size++;
 }
 
-void list_insert_last(ArrayList *list, Data data){
+void list_insert_last(ArrayList *list, void *data){
     if(!list_is_empty(list)){
-        if(list->last + 1 == list->array_current_size){
-            if(list->array_current_size < LIST_MAX_SIZE){
-                list->array_current_size++;
-                list->data = realloc(list->data, list->array_current_size);
-            }else{
-                printf("ArrayList cheia!!!!\n");
-                exit(1);
-            }
+        if(list->last + 1 == list->max_size){
+            printf("ArrayList cheia!!!!\n");
+            exit(1);
         }
         list->last++;
     }
@@ -93,8 +86,8 @@ void list_insert_last(ArrayList *list, Data data){
 	list->size++;
 }
 
-Data list_remove_first(ArrayList *list){
-    Data data = NULL;
+void *list_remove_first(ArrayList *list){
+    void *data = NULL;
 
 	if(!list_is_empty(list)){
 		data = list->data[list->first];
@@ -105,8 +98,8 @@ Data list_remove_first(ArrayList *list){
 	return data;
 }
 
-Data list_remove_last(ArrayList *list){
-    Data data = NULL;
+void *list_remove_last(ArrayList *list){
+    void *data = NULL;
 
 	if(!list_is_empty(list)){
 		data = list->data[list->last];
@@ -117,7 +110,7 @@ Data list_remove_last(ArrayList *list){
 	return data;
 }
 
-Data list_get_index(ArrayList *list, int index){
+void *list_get_index(ArrayList *list, int index){
     if(list_is_empty(list) || index > list->size){
         return NULL;
     }
@@ -134,7 +127,7 @@ Data list_get_index(ArrayList *list, int index){
     return list->data[i];
 }
 
-Data list_get_first(ArrayList *list){
+void *list_get_first(ArrayList *list){
     if(!list_is_empty(list)){
         return list->data[list->first];
     }else{
@@ -142,7 +135,7 @@ Data list_get_first(ArrayList *list){
     }
 }
 
-Data list_get_last(ArrayList *list){
+void *list_get_last(ArrayList *list){
     if(!list_is_empty(list)){
         return list->data[list->last];
     }else{

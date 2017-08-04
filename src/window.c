@@ -107,7 +107,6 @@ void window_add_container_layer(Window *window, void *container, int layer){
     }
 
 	if(window->container[layer] == NULL){
-        window->container[layer] = malloc(sizeof(void));
 		container_init(container, window->renderer);
 		window->container[layer] = container;
 	}else{

@@ -4,6 +4,8 @@
 #include "widgets/widget.h"
 #include "utils/array_list.h"
 
+#define CONTAINER_MAX_WIDGETS LIST_DEFAULT_MAX_SIZE
+
 typedef struct Container{
     Widget widget;
     
@@ -14,6 +16,8 @@ typedef struct Container{
 }Container;
 
 Container new_Container();
+
+Container new_Container_max_widgets(int max);
 
 void container_init(void *container, SDL_Renderer *renderer);
 

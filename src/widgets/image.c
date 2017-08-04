@@ -35,8 +35,6 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
 void generic_image_init(void *raw_image, SDL_Renderer *renderer){
     Image *image = raw_image;
     
-    printf("image <%s> init\n", image->file);
-    
     Size size = image->t_widget.widget.bounds.size;
     if(size.w > 0 && size.h > 0){
         return;
@@ -107,6 +105,7 @@ void generic_image_update(void *raw_image, SDL_Renderer *renderer){
 void image_set_file(Image *image, char *file){
     if(image->file != NULL){
         free(image->file);
+        image->file = NULL;
     }
     image->file = malloc(sizeof(file));
     strcpy(image->file, file);
