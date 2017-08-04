@@ -1,5 +1,7 @@
 #include "window.h"
 
+extern void gui_init();
+
 Window *new_Window(char *title, SDL_Rect size, Uint32 flags){
     return new_Window_layers(title, size, flags, 1);
 }
@@ -9,6 +11,8 @@ Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
 
 	window->title = malloc(sizeof(title));
     strcpy(window->title, title);
+    
+    gui_init();
 
 	if((SDL_WINDOW_MAXIMIZED & flags) == SDL_WINDOW_MAXIMIZED){
 		printf("MAXI\n");
