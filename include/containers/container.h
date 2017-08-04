@@ -19,8 +19,6 @@ Container new_Container();
 
 Container new_Container_max_widgets(int max);
 
-void container_init(void *container, SDL_Renderer *renderer);
-
 void container_free(void *raw_container);
 
 SDL_Rect container_get_bounds_origin(void *container);
@@ -39,8 +37,6 @@ void *container_remove_widget(void *raw_container);
 
 void container_empty(void *container);
 
-
-void generic_container_init(void *raw_container, SDL_Renderer *renderer);
 
 void generic_container_free(void *raw_container);
 

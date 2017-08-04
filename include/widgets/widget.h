@@ -45,20 +45,16 @@ typedef struct Widget{
     Color background_color;
     
     //Functions
+    void (*free)();
     void (*set_bounds)(void *, SDL_Rect);
     
     void (*process_events)(void *, SDL_Event, Mouse);
     void (*draw)(void *, SDL_Renderer *, Camera *);
-    
-    void (*init)(void *, SDL_Renderer *);
-    void (*free)();
 }Widget;
 
 WidgetSate new_WidgetState();
 
 Widget new_Widget();
-
-void widget_init(void *widget, SDL_Renderer *renderer);
 
 void widget_free(void *widget);
 

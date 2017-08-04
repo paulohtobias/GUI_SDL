@@ -107,7 +107,6 @@ void window_add_container_layer(Window *window, void *container, int layer){
     }
 
 	if(window->container[layer] == NULL){
-		container_init(container, window->renderer);
 		window->container[layer] = container;
 	}else{
 		//Overwrite or print a warning?

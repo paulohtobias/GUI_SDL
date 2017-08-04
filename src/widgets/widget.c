@@ -30,7 +30,6 @@ Widget new_Widget(){
     widget.background_color = COLOR_ORANGE;
     widget.foreground_color = COLOR_GREEN;
     
-    widget.init = generic_widget_init;
     widget.free = generic_widget_free;
     
     widget.set_bounds = generic_widget_set_bounds;
@@ -39,10 +38,6 @@ Widget new_Widget(){
     widget.draw = generic_widget_draw;
     
     return widget;
-}
-
-void widget_init(void *widget, SDL_Renderer *renderer){
-    ((Widget *)widget)->init(widget, renderer);
 }
 
 void widget_free(void *widget){
@@ -80,9 +75,6 @@ bool widget_is_inside_camera(void *raw_widget, Camera *camera){
         return true;
     }
     Widget *widget = raw_widget;
-    SDL_Rect widget_bounds_camera = get_bounds_camera(widget->bounds);
-    
-    //return rect_is_inside_rect(widget_bounds_camera, camera_get_bounds(camera));
     return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
 }
 
@@ -114,18 +106,12 @@ void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
 }
 
 
-void generic_widget_init(void *raw_widget, SDL_Renderer *renderer){
-    //Only used for widgets with a SDL_Texture.
-    return;
-}
-
 void generic_widget_free(void *raw_widget){
     Widget *widget = raw_widget;
     
     widget->set_bounds = NULL;
     widget->process_events = NULL;
     widget->draw = NULL;
-    widget->init = NULL;
     widget->free = NULL;
 }
 

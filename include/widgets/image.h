@@ -24,7 +24,7 @@ Image new_Image_with_position(char *file, Position position);
 
 Image new_Image_with_bounds(char *file, SDL_Rect bounds);
 
-void generic_image_init(void *raw_image, SDL_Renderer *renderer);
+void image_set_surface_size(Image *image);
 
 void generic_image_set_changed(void *raw_image, bool changed);
 

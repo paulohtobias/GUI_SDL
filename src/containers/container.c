@@ -10,7 +10,6 @@ Container new_Container_max_widgets(int max){
     container.widget = new_Widget();
     container.widget_list = new_ArrayList_max_size(max);
     
-    container.widget.init = generic_container_init;
     container.widget.free = generic_container_free;
     container.widget.set_bounds = generic_container_set_bounds;
     container.widget.process_events = generic_container_process_events;
@@ -21,9 +20,6 @@ Container new_Container_max_widgets(int max){
     return container;
 }
 
-void container_init(void *container, SDL_Renderer *renderer){
-    widget_init(container, renderer);
-}
 
 void container_free(void *container){
     widget_free(container);
@@ -63,15 +59,6 @@ void container_empty(void *container){
     container_->widget_list = new_ArrayList();
 }
 
-
-void generic_container_init(void *raw_container, SDL_Renderer *renderer){
-    Container *container = raw_container;
-    
-    int i;
-    for(i=0; i<container->widget_list->size; i++){
-        widget_init(list_get_index(container->widget_list, i), renderer);
-    }
-}
 
 void generic_container_free(void *raw_container){
     Container *container = raw_container;

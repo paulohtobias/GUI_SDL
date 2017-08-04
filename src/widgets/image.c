@@ -20,25 +20,22 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
     Image image;
     
     image.t_widget = new_TextureWidget();
-    
+    image.t_widget.set_changed = generic_image_set_changed;
+    image.t_widget.update = generic_image_update;
+        
     image.file = NULL;
     image_set_file(&image, file);
     widget_set_bounds((void *)&image, bounds);
-    
-    image.t_widget.widget.init = generic_image_init;
-    image.t_widget.set_changed = generic_image_set_changed;
-    image.t_widget.update = generic_image_update;
+    Size size = image.t_widget.widget.bounds.size;
+    if(size.w == 0 && size.h == 0){
+        image_set_surface_size(&image);
+    }
     
     return image;
 }
 
-void generic_image_init(void *raw_image, SDL_Renderer *renderer){
-    Image *image = raw_image;
-    
+void image_set_surface_size(Image *image){
     Size size = image->t_widget.widget.bounds.size;
-    if(size.w > 0 && size.h > 0){
-        return;
-    }
     SDL_Surface *temp = IMG_Load(image->file);
     if(temp == NULL){
         printf("init_image: Error Opening Image <%s>: %s\n", image->file, IMG_GetError());
@@ -52,7 +49,7 @@ void generic_image_init(void *raw_image, SDL_Renderer *renderer){
     temp = NULL;
 
     set_size(&image->t_widget.widget.bounds, size);
-    image->t_widget.set_changed(raw_image, true);
+    image->t_widget.set_changed((void *)image, true);
 }
 
 void generic_image_set_changed(void *raw_image, bool changed){
