@@ -26,19 +26,27 @@ void container_init(void *container, SDL_Renderer *renderer){
 }
 
 void container_free(void *container){
-    ((Container *)container)->widget.free(container);
+    widget_free(container);
+}
+
+SDL_Rect container_get_bounds_origin(void *container){
+    return widget_get_bounds_origin(container);
+}
+
+SDL_Rect container_get_bounds_camera(void *container){
+    return widget_get_bounds_camera(container);
 }
 
 void container_set_bounds(void *container, SDL_Rect bounds){
-    ((Container *)container)->widget.set_bounds(container, bounds);
+    widget_set_bounds(container, bounds);
 }
 
 void container_process_events(void *container, SDL_Event event, Mouse mouse){
-    ((Container *)container)->widget.process_events(container, event, mouse);
+    widget_process_events(container, event, mouse);
 }
 
 void container_draw(void *container, SDL_Renderer *renderer, Camera *camera){
-    ((Container *)container)->widget.draw(container, renderer, camera);
+    widget_draw(container, renderer, camera);
 }
 
 void container_add_widget(void *container, void *widget){

@@ -58,20 +58,13 @@ WidgetSate new_WidgetState();
 
 Widget new_Widget();
 
-void generic_widget_init(void *raw_widget, SDL_Renderer *renderer);
-
-void generic_widget_free(void *raw_widget);
-
-void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds);
-
-void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse);
-
-void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
-
-
 void widget_init(void *widget, SDL_Renderer *renderer);
 
 void widget_free(void *widget);
+
+SDL_Rect widget_get_bounds_origin(void *widget);
+
+SDL_Rect widget_get_bounds_camera(void *widget);
 
 void widget_set_bounds(void *widget, SDL_Rect bounds);
 
@@ -84,5 +77,16 @@ bool widget_is_inside_camera(void *raw_widget, Camera *camera);
 void widget_draw_border(void *raw_widget, SDL_Renderer *renderer);
 
 void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
+
+
+void generic_widget_init(void *raw_widget, SDL_Renderer *renderer);
+
+void generic_widget_free(void *raw_widget);
+
+void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds);
+
+void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse);
+
+void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
 
 #endif //WIDGET_H

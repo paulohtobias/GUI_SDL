@@ -23,6 +23,10 @@ void container_init(void *container, SDL_Renderer *renderer);
 
 void container_free(void *raw_container);
 
+SDL_Rect container_get_bounds_origin(void *container);
+
+SDL_Rect container_get_bounds_camera(void *container);
+
 void container_set_bounds(void *raw_container, SDL_Rect bounds);
 
 void container_process_events(void *raw_container, SDL_Event event, Mouse mouse);

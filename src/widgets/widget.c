@@ -41,6 +41,79 @@ Widget new_Widget(){
     return widget;
 }
 
+void widget_init(void *widget, SDL_Renderer *renderer){
+    ((Widget *)widget)->init(widget, renderer);
+}
+
+void widget_free(void *widget){
+    ((Widget *)widget)->free(widget);
+}
+
+SDL_Rect widget_get_bounds_origin(void *widget){
+    return get_bounds_origin(((Widget *)widget)->bounds);
+}
+
+SDL_Rect widget_get_bounds_camera(void *widget){
+    return get_bounds_camera(((Widget *)widget)->bounds);
+}
+
+void widget_set_bounds(void *widget, SDL_Rect bounds){
+    ((Widget *)widget)->set_bounds(widget, bounds);
+}
+
+void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
+    ((Widget *)widget)->process_events(widget, event, mouse);
+}
+
+void widget_update_camera_position(void *raw_widget, Camera *camera){
+    if(camera != NULL){
+        Widget *widget = raw_widget;
+        set_position_camera(
+            &widget->bounds,
+            position_subtract(get_position_origin(widget->bounds), camera_get_position(camera))
+        );
+    }
+}
+
+bool widget_is_inside_camera(void *raw_widget, Camera *camera){
+    if(camera == NULL){
+        return true;
+    }
+    Widget *widget = raw_widget;
+    SDL_Rect widget_bounds_camera = get_bounds_camera(widget->bounds);
+    
+    //return rect_is_inside_rect(widget_bounds_camera, camera_get_bounds(camera));
+    return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
+}
+
+void widget_draw_border(void *raw_widget, SDL_Renderer *renderer){
+    Widget *widget = raw_widget;
+    
+    //TO-DO: Replace all this with a proper border later. This one is a
+    //temporary just for testing.
+    int size = 5;
+    SDL_Rect bounds = get_bounds_camera(widget->bounds);
+    bounds.x -= size;
+    bounds.y -= size;
+    bounds.w += (2 * size);
+    bounds.h += (2 * size);
+    
+    set_renderer_draw_color(renderer, COLOR_BLUE);
+    SDL_RenderFillRect(renderer, &bounds);
+    
+    set_renderer_draw_color(renderer, COLOR_YELLOW/*widget->foreground_color*/);
+    bounds = get_bounds_camera(widget->bounds);
+    SDL_RenderFillRect(renderer, &bounds);
+}
+
+void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
+    widget_update_camera_position(raw_widget, camera);
+    
+    Widget *widget = raw_widget;
+    widget->draw(raw_widget, renderer, camera);
+}
+
+
 void generic_widget_init(void *raw_widget, SDL_Renderer *renderer){
     //Only used for widgets with a SDL_Texture.
     return;
@@ -93,70 +166,4 @@ void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camer
     if(widget_is_inside_camera(raw_widget, camera)){
         widget_draw_border(widget, renderer);
     }
-}
-
-
-void widget_init(void *widget, SDL_Renderer *renderer){
-    ((Widget *)widget)->init(widget, renderer);
-}
-
-void widget_free(void *widget){
-    ((Widget *)widget)->free(widget);
-}
-
-void widget_set_bounds(void *widget, SDL_Rect bounds){
-    ((Widget *)widget)->set_bounds(widget, bounds);
-}
-
-void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
-    ((Widget *)widget)->process_events(widget, event, mouse);
-}
-
-void widget_update_camera_position(void *raw_widget, Camera *camera){
-    Widget *widget = raw_widget;
-    
-    if(camera != NULL){
-        set_position_camera(
-            &widget->bounds,
-            position_subtract(get_position_origin(widget->bounds), camera_get_position(camera))
-        );
-    }
-}
-
-bool widget_is_inside_camera(void *raw_widget, Camera *camera){
-    if(camera == NULL){
-        return true;
-    }
-    Widget *widget = raw_widget;
-    SDL_Rect widget_bounds_camera = get_bounds_camera(widget->bounds);
-    
-    //return rect_is_inside_rect(widget_bounds_camera, camera_get_bounds(camera));
-    return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
-}
-
-void widget_draw_border(void *raw_widget, SDL_Renderer *renderer){
-    Widget *widget = raw_widget;
-    
-    //TO-DO: Replace all this with a proper border later. This one is a
-    //temporary just for testing.
-    int size = 5;
-    SDL_Rect bounds = get_bounds_camera(widget->bounds);
-    bounds.x -= size;
-    bounds.y -= size;
-    bounds.w += (2 * size);
-    bounds.h += (2 * size);
-    
-    set_renderer_draw_color(renderer, COLOR_BLUE);
-    SDL_RenderFillRect(renderer, &bounds);
-    
-    set_renderer_draw_color(renderer, COLOR_YELLOW/*widget->foreground_color*/);
-    bounds = get_bounds_camera(widget->bounds);
-    SDL_RenderFillRect(renderer, &bounds);
-}
-
-void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
-    widget_update_camera_position(raw_widget, camera);
-    
-    Widget *widget = raw_widget;
-    widget->draw(raw_widget, renderer, camera);
 }
