@@ -10,6 +10,7 @@ typedef struct Container{
     Widget widget;
     
     ArrayList *widget_list;
+    Camera *camera;
     
     void (*add_widget)(void *, void *);
     void *(*remove_widget)(void *);

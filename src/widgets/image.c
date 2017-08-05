@@ -27,6 +27,7 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
     image_set_file(&image, file);
     widget_set_bounds((void *)&image, bounds);
     Size size = image.t_widget.widget.bounds.size;
+    image.t_widget.set_changed((void *)&image, true);
     if(size.w == 0 && size.h == 0){
         image_set_surface_size(&image);
     }
