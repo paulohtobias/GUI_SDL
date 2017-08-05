@@ -79,9 +79,12 @@ void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
     Container *container = raw_container;
     
     set_bounds_from_SDL_Rect(&container->widget.bounds, bounds);
+    camera_set_bounds(container->camera, container_get_bounds_origin(container));
+    
     int i;
     for(i=0; i<container->widget_list->size; i++){
-        widget_set_bounds(list_get_index(container->widget_list, i), bounds);
+        SDL_Rect c_bounds = container_get_bounds_origin(container);
+        widget_set_bounds(list_get_index(container->widget_list, i), new_rect(c_bounds.x, c_bounds.y, 0, 0));
     }
 }
 
@@ -100,7 +103,7 @@ void generic_container_draw(void *raw_container, SDL_Renderer *renderer, Camera 
     
     int i;
     for(i=0; i<container->widget_list->size; i++){
-        widget_draw(list_get_index(container->widget_list, i), renderer, camera);
+        widget_draw(list_get_index(container->widget_list, i), renderer, container->camera);
     }
 }
 
