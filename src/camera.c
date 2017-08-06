@@ -33,7 +33,6 @@ SDL_Rect camera_get_bounds(Camera *camera){
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
     //Setting the X position.
     camera->bounds.x = bounds.x;
-
     //Checking if the new bounds is greater than the limit.
     if(camera->bounds.x > camera->limit.x){
         camera->limit.x = camera->bounds.x;
@@ -41,7 +40,6 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds){
     
     //Setting the Y position.
     camera->bounds.y = bounds.y;
-
     //Checking if the new bounds is greater than the limit.
     if(camera->bounds.y > camera->limit.y){
         camera->limit.y = camera->bounds.y;

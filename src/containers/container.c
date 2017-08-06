@@ -105,6 +105,7 @@ void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
 void generic_container_process_events(void *raw_container, SDL_Event event, Mouse mouse){
     Container *container = raw_container;
     
+    camera_process_events(container->camera, event);
     generic_widget_process_events(container, event, mouse);
     int i;
     for(i=0; i<container->widget_list->size; i++){

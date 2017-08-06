@@ -15,7 +15,6 @@ Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
     gui_init();
 
 	if((SDL_WINDOW_MAXIMIZED & flags) == SDL_WINDOW_MAXIMIZED){
-		printf("MAXI\n");
 		SDL_GetDisplayBounds(0, &size);
 	}
 
@@ -42,7 +41,6 @@ Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
 	window->mouse.button_state = MOUSE_IDLE;
 	window->mouse.position = mouse_get_position();
 	window->mouse.drag_offset = mouse_get_position();
-	window->camera = new_Camera(window->bounds);
 
 	int i;
 	window->layers = layers;
@@ -63,7 +61,6 @@ void free_Window(Window *window){
 	free(window->title);
 	SDL_DestroyRenderer(window->renderer);
 	SDL_DestroyWindow(window->sdlwindow);
-	free_Camera(window->camera);
 
 	//This should be replaced with window_emptyList
 	for(i=0; i<window->layers; i++){
@@ -121,7 +118,6 @@ void window_process_events(Window *window){
 	}
 
 	if(window->event.type == SDL_WINDOWEVENT && window->event.window.event == SDL_WINDOWEVENT_RESIZED){
-        //scrollbar_updatePosition(sb, camera);
     }
     
     //int i;
@@ -134,7 +130,7 @@ void window_draw(Window *window){
 	int i;
 	for(i=0; i<window->layers; i++){
 		if(window->container[i] != NULL){
-			container_draw(window->container[i], window->renderer, window->camera);
+			container_draw(window->container[i], window->renderer, NULL);
 		}
 	}
 

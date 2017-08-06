@@ -21,10 +21,6 @@ typedef struct{
     //Mouse
     Mouse mouse;
 
-    //Camera and Scrollbar
-    Camera *camera;
-    //ScrollBar
-
     int layers;
     //Container layers.
     void **container;
