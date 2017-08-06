@@ -78,13 +78,27 @@ void generic_container_free(void *raw_container){
 void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
     Container *container = raw_container;
     
+    SDL_Rect container_bounds_old = container_get_bounds_origin(container);
     set_bounds_from_SDL_Rect(&container->widget.bounds, bounds);
-    camera_set_bounds(container->camera, container_get_bounds_origin(container));
+    SDL_Rect container_bounds_new = container_get_bounds_origin(container);
+    
+    camera_set_bounds(container->camera, container_bounds_new);
+    
+    Position container_offset;
+    container_offset = new_Position(
+        container_bounds_new.x - container_bounds_old.x,
+        container_bounds_new.y - container_bounds_old.y
+    );
     
     int i;
     for(i=0; i<container->widget_list->size; i++){
-        SDL_Rect c_bounds = container_get_bounds_origin(container);
-        widget_set_bounds(list_get_index(container->widget_list, i), new_rect(c_bounds.x, c_bounds.y, 0, 0));
+        void *widget = list_get_index(container->widget_list, i);
+        
+        SDL_Rect widget_bounds = widget_get_bounds_origin(widget);
+        widget_bounds.x += container_offset.x;
+        widget_bounds.y += container_offset.y;
+        
+        widget_set_bounds(widget, widget_bounds);
     }
 }
 

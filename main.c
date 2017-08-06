@@ -14,9 +14,13 @@ int main(int argc, char *argv[]){
     c2 = new_Container_max_widgets(5);
     
     container_add_widget(&c1, &i1);
+    container_add_widget(&c2, &i2);
+    container_set_bounds(&c2, new_rect(0, 413, 300, 450));
+    container_add_widget(&c1, &c2);
     
     window_add_container(window, &c1);
     
+    int px = 0;
     while(!window->quit_requested){
         if(SDL_PollEvent(&window->event)){
             window_process_events(window);
@@ -25,7 +29,8 @@ int main(int argc, char *argv[]){
                 case SDL_KEYDOWN:
                     switch(window->event.key.keysym.sym){
                         case SDLK_RIGHT:
-                            update_position_origin(&i1.t_widget.widget.bounds, new_Position(1, 0));
+                            container_set_bounds(&c1, new_rect(++px, 0, -1, -1));
+                            //update_position_origin(&i1.t_widget.widget.bounds, new_Position(1, 0));
                             break;
                     }
             }
