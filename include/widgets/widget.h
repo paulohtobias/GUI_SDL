@@ -30,6 +30,9 @@ typedef struct WidgetSate{
     ///Mouse button information.
     MouseButtonState mouse_state;
     
+    ///Widget size is defined automatically.
+    bool auto_size;
+    
     ///Widget entered camera bounds.
     bool entered_camera;
     

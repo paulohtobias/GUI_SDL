@@ -9,7 +9,7 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "widgets/texture_widget.h"
+#include "texture_widget.h"
 #include <SDL2/SDL_image.h>
 
 typedef struct Image{
@@ -25,6 +25,9 @@ Image new_Image_with_position(char *file, Position position);
 Image new_Image_with_bounds(char *file, SDL_Rect bounds);
 
 void image_set_surface_size(Image *image);
+
+
+void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
 
 void generic_image_set_changed(void *raw_image, bool changed);
 

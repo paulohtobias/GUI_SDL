@@ -17,6 +17,7 @@ WidgetSate new_WidgetState(){
     state.mouse_over = false;
     state.mouse_state = MOUSE_IDLE;
     state.entered_camera = true;
+    state.auto_size = true;
     state.changed = false;
     
     return state;
@@ -118,6 +119,9 @@ void generic_widget_free(void *raw_widget){
 void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds){
     Widget *widget = raw_widget;
     
+    if(bounds.w > 0 && bounds.h >0){
+        widget->state.auto_size = false;
+    }
     set_bounds_from_SDL_Rect(&widget->bounds, bounds);
 }
 

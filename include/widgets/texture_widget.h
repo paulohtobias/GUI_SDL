@@ -10,7 +10,7 @@
 #ifndef TEXTUREWIDGET_H
 #define TEXTUREWIDGET_H
 
-#include "widgets/widget.h"
+#include "widget.h"
 
 typedef struct TextureWidget{
     Widget widget;

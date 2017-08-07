@@ -22,26 +22,24 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
     image.t_widget = new_TextureWidget();
     image.t_widget.set_changed = generic_image_set_changed;
     image.t_widget.update = generic_image_update;
+    image.t_widget.widget.set_bounds = generic_image_set_bounds;
         
     image.file = NULL;
     image_set_file(&image, file);
-    widget_set_bounds((void *)&image, bounds);
-    Size size = image.t_widget.widget.bounds.size;
-    image.t_widget.set_changed((void *)&image, true);
-    if(size.w == 0 && size.h == 0){
-        image_set_surface_size(&image);
-    }
+    widget_set_bounds(&image, bounds);
     
     return image;
 }
 
-void image_set_surface_size(Image *image){
-    Size size = image->t_widget.widget.bounds.size;
-    SDL_Surface *temp = IMG_Load(image->file);
+Size image_get_original_size(Image image){
+    Size size = image.t_widget.widget.bounds.size;
+    
+    SDL_Surface *temp = IMG_Load(image.file);
     if(temp == NULL){
-        printf("init_image: Error Opening Image <%s>: %s\n", image->file, IMG_GetError());
-        image_set_file(image, "./Resources/Images/default_image.png");
-        temp = IMG_Load(image->file);
+        printf("image_get_original_size: %s\n", IMG_GetError());
+        size.w = 0;
+        size.h = 0;
+        return size;
     }
     size.w = temp->w;
     size.h = temp->h;
@@ -49,8 +47,26 @@ void image_set_surface_size(Image *image){
     SDL_FreeSurface(temp);
     temp = NULL;
 
-    set_size(&image->t_widget.widget.bounds, size);
-    image->t_widget.set_changed((void *)image, true);
+    return size;
+}
+
+
+void generic_image_set_bounds(void *raw_image, SDL_Rect bounds){
+    Image *image = raw_image;
+    
+    if(bounds.w > 0 && bounds.h > 0){
+        image->t_widget.widget.state.auto_size = false;
+        image->t_widget.set_changed(raw_image, true);
+    }
+    
+    if(image->t_widget.widget.state.auto_size == true){
+        Size size = image_get_original_size(*image);
+        bounds.w = size.w;
+        bounds.h = size.h;
+        image->t_widget.set_changed(raw_image, true);
+    }
+    
+    set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
 }
 
 void generic_image_set_changed(void *raw_image, bool changed){
