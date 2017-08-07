@@ -17,8 +17,6 @@ Container new_Container_max_widgets(int max){
     container.add_widget = generic_container_add_widget;
     container.remove_widget = generic_container_remove_widget;
     
-    container.camera = new_Camera(container_get_bounds_origin(&container));
-    
     return container;
 }
 
@@ -68,9 +66,7 @@ void generic_container_free(void *raw_container){
     Container *container = raw_container;
     
     free_ArrayList(container->widget_list, widget_free);
-    free_Camera(container->camera);
     container->widget_list = NULL;
-    container->camera = NULL;
     container->add_widget = NULL;
     container->remove_widget = NULL;
 }
@@ -81,8 +77,6 @@ void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
     SDL_Rect container_bounds_old = container_get_bounds_origin(container);
     set_bounds_from_SDL_Rect(&container->widget.bounds, bounds);
     SDL_Rect container_bounds_new = container_get_bounds_origin(container);
-    
-    camera_set_bounds(container->camera, container_bounds_new);
     
     Position container_offset;
     container_offset = new_Position(
@@ -105,7 +99,6 @@ void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
 void generic_container_process_events(void *raw_container, SDL_Event event, Mouse mouse){
     Container *container = raw_container;
     
-    camera_process_events(container->camera, event);
     generic_widget_process_events(container, event, mouse);
     int i;
     for(i=0; i<container->widget_list->size; i++){
@@ -118,7 +111,7 @@ void generic_container_draw(void *raw_container, SDL_Renderer *renderer, Camera 
     
     int i;
     for(i=0; i<container->widget_list->size; i++){
-        widget_draw(list_get_index(container->widget_list, i), renderer, container->camera);
+        widget_draw(list_get_index(container->widget_list, i), renderer, camera);
     }
 }
 
