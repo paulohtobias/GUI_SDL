@@ -31,8 +31,6 @@ void image_set_file(Image *image, char *file);
 
 void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
 
-void generic_image_set_changed(void *raw_image, int changed);
-
 void generic_image_update(void *raw_image, SDL_Renderer *renderer);
 
 #endif //IMAGE_H

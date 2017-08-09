@@ -4,6 +4,7 @@
 #include "window.h"
 #include "widgets/image.h"
 #include "widgets/label.h"
+#include "widgets/rectangle.h"
 
 void gui_init();
 

@@ -7,7 +7,7 @@ TextureWidget new_TextureWidget(){
     t_widget.widget = new_Widget();
     
     t_widget.texture = NULL;
-    t_widget.set_changed = NULL;
+    t_widget.set_changed = generic_texture_widget_set_changed;
     t_widget.update = NULL;
     t_widget.render_copy = generic_texture_widget_render_copy;
     t_widget.widget.draw = generic_texture_widget_draw;
@@ -26,6 +26,10 @@ void generic_texture_widget_free(void *raw_texture_widget){
     t_widget->set_changed = NULL;
     t_widget->render_copy = NULL;
     t_widget->update = NULL;
+}
+
+void generic_texture_widget_set_changed(void *raw_texture_widget, int changed){
+    ((TextureWidget *)raw_texture_widget)->changed = changed;
 }
 
 void generic_texture_widget_render_copy(void *raw_widget, SDL_Renderer *renderer){

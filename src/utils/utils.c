@@ -12,7 +12,7 @@ char *string_format(const char *format, ...){
 
 void string_change(char **dst, const char *src){
     if(*dst != NULL){
-        free(*dst);
+        free(dst);
         *dst = NULL;
     }
     

@@ -20,7 +20,6 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
     Image image;
     
     image.t_widget = new_TextureWidget();
-    image.t_widget.set_changed = generic_image_set_changed;
     image.t_widget.update = generic_image_update;
     image.t_widget.widget.set_bounds = generic_image_set_bounds;
         
@@ -71,10 +70,6 @@ void generic_image_set_bounds(void *raw_image, SDL_Rect bounds){
     }
     
     set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
-}
-
-void generic_image_set_changed(void *raw_image, int changed){
-    ((Image *)raw_image)->t_widget.changed = changed;
 }
 
 void generic_image_update(void *raw_image, SDL_Renderer *renderer){

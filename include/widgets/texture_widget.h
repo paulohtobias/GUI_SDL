@@ -28,6 +28,8 @@ TextureWidget new_TextureWidget();
 
 void generic_texture_widget_free(void *t_widget);
 
+void generic_texture_widget_set_changed(void *raw_texture_widget, int changed);
+
 void generic_texture_widget_render_copy(void *raw_widget, SDL_Renderer *renderer);
 
 void generic_texture_widget_draw(void *t_widget, SDL_Renderer *renderer, Camera *camera);
