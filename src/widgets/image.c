@@ -73,7 +73,7 @@ void generic_image_set_bounds(void *raw_image, SDL_Rect bounds){
     set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
 }
 
-void generic_image_set_changed(void *raw_image, bool changed){
+void generic_image_set_changed(void *raw_image, int changed){
     ((Image *)raw_image)->t_widget.changed = changed;
 }
 
