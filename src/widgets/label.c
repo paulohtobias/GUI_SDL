@@ -17,14 +17,14 @@ Label new_Label_with_bounds(const char *text, SDL_Rect bounds){
     label.t_widget.render_copy = generic_label_render_copy;
     label.t_widget.update = generic_label_update;
     label.t_widget.widget.set_bounds = generic_label_set_bounds;
-        
+
     label.text = NULL;
-    label_set_text(&label, text);
-    label.style = &label_default_style;
-    widget_set_bounds(&label, bounds);
     label.size_table = NULL;
+    label.style = &label_default_style;
+    
+    label_set_text(&label, text);
+    widget_set_bounds(&label, bounds);
     label_update_size_table(&label);
-    label.t_widget.set_changed(&label, LABEL_STATE_CHANGED);
     
     return label;
 }
@@ -32,7 +32,6 @@ Label new_Label_with_bounds(const char *text, SDL_Rect bounds){
 void label_update_size_table(Label *label){
     int i, len = strlen(label->text);
     TTF_Font *font = TTF_OpenFont(label->style->font, label->style->size);
-    
     
     if(label->size_table == NULL){
         label->size_table = malloc(len * sizeof(Size));
@@ -56,6 +55,7 @@ Size label_get_original_size(Label label, int index){
 
 void label_set_text(Label *label, const char *text){
     string_change(&label->text, text);
+    label_update_size_table(label);
 }
 
 void label_set_color(Label *label, Color color){

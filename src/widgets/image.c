@@ -20,10 +20,12 @@ Image new_Image_with_bounds(char *file, SDL_Rect bounds){
     Image image;
     
     image.t_widget = new_TextureWidget();
+    
     image.t_widget.update = generic_image_update;
     image.t_widget.widget.set_bounds = generic_image_set_bounds;
         
     image.file = NULL;
+    
     image_set_file(&image, file);
     widget_set_bounds(&image, bounds);
     

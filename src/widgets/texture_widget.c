@@ -6,12 +6,15 @@ TextureWidget new_TextureWidget(){
     
     t_widget.widget = new_Widget();
     
-    t_widget.texture = NULL;
     t_widget.set_changed = generic_texture_widget_set_changed;
     t_widget.update = NULL;
     t_widget.render_copy = generic_texture_widget_render_copy;
     t_widget.widget.draw = generic_texture_widget_draw;
     t_widget.widget.free = generic_texture_widget_free;
+    
+    t_widget.texture = NULL;
+    
+    t_widget.set_changed(&t_widget, true);
     
     return t_widget;
 }
@@ -34,6 +37,11 @@ void generic_texture_widget_set_changed(void *raw_texture_widget, int changed){
 
 void generic_texture_widget_render_copy(void *raw_widget, SDL_Renderer *renderer){
     TextureWidget *t_widget = raw_widget;
+    
+    if(t_widget->texture == NULL){
+        return;
+    }
+    
     SDL_Rect bounds = get_bounds_camera(t_widget->widget.bounds);
     SDL_RenderCopy(renderer, t_widget->texture, NULL, &bounds);
 }
