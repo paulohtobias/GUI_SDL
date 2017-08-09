@@ -10,7 +10,7 @@ int main(int argc, char *argv[]){
     i1 = new_Image("img.png");
     i2 = new_Image("palheta2.png");
     
-    Label l1 = new_Label_with_bounds("Paulo Henrique Tobias", new_rect(304, 0, 300, 50));
+    Label l1 = new_Label_with_position("Paulo Henrique Tobias", new_Position(304, 0));
     
     c1 = new_Container_max_widgets(5);
     c2 = new_Container_max_widgets(5);

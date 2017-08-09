@@ -21,6 +21,7 @@ typedef struct LabelStyle{
 #define label_default_color COLOR_BLACK
 #define label_default_font "arial"
 #define label_default_size 14
+#define label_default_reach_table_cache_max_size 1024
 
 LabelStyle label_default_style;
 
@@ -28,7 +29,7 @@ typedef struct Label{
     TextureWidget t_widget;
     
     char *text;
-    Size real_size;
+    Size *size_table;
     LabelStyle *style;
 }Label;
 
@@ -38,7 +39,9 @@ Label new_Label_with_position(const char *text, Position position);
 
 Label new_Label_with_bounds(const char *text, SDL_Rect bounds);
 
-Size label_get_original_size(Label label);
+void label_update_size_table(Label *label);
+
+Size label_get_original_size(Label label, int index);
 
 void label_set_text(Label *label, const char *text);
 

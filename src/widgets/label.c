@@ -22,45 +22,36 @@ Label new_Label_with_bounds(const char *text, SDL_Rect bounds){
     label_set_text(&label, text);
     label.style = &label_default_style;
     widget_set_bounds(&label, bounds);
-    label.real_size = label_get_original_size(label);
+    label.size_table = NULL;
+    label_update_size_table(&label);
     label.t_widget.set_changed(&label, LABEL_STATE_CHANGED);
     
     return label;
 }
 
-Size label_get_original_size(Label label){
-    //Getting the width and height that the text will have.
-	TTF_Font *ttf_font = TTF_OpenFont(label.style->font, label.style->size);   
-    if(ttf_font == NULL){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error", TTF_GetError(), NULL);
-        exit(1);
-    }
-    SDL_Surface *surface = NULL;
-    if(!label.style->wrap){
-        surface = TTF_RenderUTF8_Blended(ttf_font, label.text, label.style->color);
-    }else{
-        int max_width = widget_get_bounds_origin(&label).w;
-        surface = TTF_RenderUTF8_Blended_Wrapped(ttf_font, label.text, label.style->color, max_width);
-    }
-    if(surface == NULL){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Surface Error", TTF_GetError(), NULL);
-
-        TTF_Quit();
-        SDL_Quit();
-
-        exit(1);
-    }
-    TTF_CloseFont(ttf_font);
-    ttf_font = NULL;
-
-	Size size;
-    size.w = surface->w;
-    size.h = surface->h;
-
-	SDL_FreeSurface(surface);
-	surface = NULL;
+void label_update_size_table(Label *label){
+    int i, len = strlen(label->text);
+    TTF_Font *font = TTF_OpenFont(label->style->font, label->style->size);
     
-    return size;
+    
+    if(label->size_table == NULL){
+        label->size_table = malloc(len * sizeof(Size));
+    }
+    for(i=0; i<len-1; i++){
+        char c = label->text[i+1];
+        label->text[i+1] = '\0';
+        TTF_SizeUTF8(font, label->text, &label->size_table[i].w, &label->size_table[i].h);
+        label->text[i+1] = c;
+    }
+    TTF_SizeUTF8(font, label->text, &label->size_table[i].w, &label->size_table[i].h);
+}
+
+Size label_get_original_size(Label label, int index){
+    int len = strlen(label.text);
+    if(index >= len){
+        return new_Size(-1, -1);
+    }
+    return label.size_table[index];
 }
 
 void label_set_text(Label *label, const char *text){
@@ -104,7 +95,7 @@ void generic_label_set_bounds(void *raw_label, SDL_Rect bounds){
     
     if(label->t_widget.widget.state.auto_size == true){
         //Size size = label_get_original_size(*label);
-        Size size = label->real_size;
+        Size size = label_get_original_size(*label, strlen(label->text) - 1);
         bounds.w = size.w;
         bounds.h = size.h;
         label->t_widget.set_changed(raw_label, LABEL_STATE_CHANGED);
@@ -138,10 +129,11 @@ void generic_label_set_changed(void *raw_label, int changed){
 void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer){
     Label *label = raw_label;
     SDL_Rect bounds = get_bounds_camera(label->t_widget.widget.bounds);
+    Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
     SDL_Rect limit;
     limit.x = limit.y = 0;
-    limit.w = MIN(label->real_size.w, bounds.w);
-    limit.h = MIN(label->real_size.h, bounds.h);
+    limit.w = MIN(real_size.w, bounds.w);
+    limit.h = MIN(real_size.h, bounds.h);
     
     bounds.w = limit.w;
     bounds.h = limit.h;
