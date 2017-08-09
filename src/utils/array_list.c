@@ -8,11 +8,19 @@ ArrayList *new_ArrayList(){
 
 ArrayList *new_ArrayList_max_size(int max){
     ArrayList *list = malloc(sizeof(ArrayList));
+    if(list == NULL){
+        printf("ArrayList *list = malloc(sizeof(ArrayList));\n");
+        exit(1);
+    }
     
     list->size = 0;
     list->first = 0;
     list->last = 0;
     list->data = malloc(max * sizeof(void *));
+    if(list->data == NULL){
+        printf("list->data = malloc(max * sizeof(void *));\n");
+        exit(1);
+    }
     
     int i;
     for(i=0; i<max; i++){

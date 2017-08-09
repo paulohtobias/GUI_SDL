@@ -17,13 +17,18 @@ typedef struct TextureWidget{
     
     SDL_Texture *texture;
     
-    void (*set_changed)(void *, bool);
+    int changed;
+    
+    void (*set_changed)(void *, int);
+    void (*render_copy)(void *, SDL_Renderer *);
     void (*update)(void *, SDL_Renderer *);
 }TextureWidget;
 
 TextureWidget new_TextureWidget();
 
 void generic_texture_widget_free(void *t_widget);
+
+void generic_texture_widget_render_copy(void *raw_widget, SDL_Renderer *renderer);
 
 void generic_texture_widget_draw(void *t_widget, SDL_Renderer *renderer, Camera *camera);
 

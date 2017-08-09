@@ -35,16 +35,12 @@ typedef struct WidgetSate{
     
     ///Widget entered camera bounds.
     bool entered_camera;
-    
-    ///Widget attribute was changed. Used in internal functions only.
-    bool changed;
 }WidgetSate;
 
 typedef struct Widget{
     WidgetSate state;
     Bounds bounds;
     
-    Color foreground_color;
     Color background_color;
     
     //Functions

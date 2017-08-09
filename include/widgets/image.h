@@ -24,16 +24,16 @@ Image new_Image_with_position(char *file, Position position);
 
 Image new_Image_with_bounds(char *file, SDL_Rect bounds);
 
-void image_set_surface_size(Image *image);
+Size image_get_original_size(Image image);
+
+void image_set_file(Image *image, char *file);
 
 
 void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
 
-void generic_image_set_changed(void *raw_image, bool changed);
+void generic_image_set_changed(void *raw_image, int changed);
 
 void generic_image_update(void *raw_image, SDL_Renderer *renderer);
-
-void image_set_file(Image *image, char *file);
 
 #endif //IMAGE_H
 

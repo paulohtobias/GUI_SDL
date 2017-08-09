@@ -18,7 +18,6 @@ WidgetSate new_WidgetState(){
     state.mouse_state = MOUSE_IDLE;
     state.entered_camera = true;
     state.auto_size = true;
-    state.changed = false;
     
     return state;
 }
@@ -29,7 +28,6 @@ Widget new_Widget(){
     widget.state = new_WidgetState();
     widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
     widget.background_color = COLOR_ORANGE;
-    widget.foreground_color = COLOR_GREEN;
     
     widget.free = generic_widget_free;
     

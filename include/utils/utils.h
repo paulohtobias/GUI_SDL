@@ -14,7 +14,12 @@
     #define true 1
 #endif //MOUSE_BOOL
 
+#define MIN(x, y) (x<y)?x:y
+#define MAX(x, y) (x>y)?x:y
+
 char *string_format(const char *format, ...);
+
+void string_change(char **dst, const char *src);
 
 #endif //UTILS_H
 

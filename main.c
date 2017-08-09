@@ -10,16 +10,20 @@ int main(int argc, char *argv[]){
     i1 = new_Image("img.png");
     i2 = new_Image("palheta2.png");
     
+    Label l1 = new_Label_with_bounds("Paulo Henrique Tobias", new_rect(304, 0, 300, 50));
+    
     c1 = new_Container_max_widgets(5);
     c2 = new_Container_max_widgets(5);
     
     container_add_widget(&c1, &i1);
-    container_add_widget(&c2, &i2);
-    container_set_bounds(&c2, new_rect(0, 413, 300, 450));
-    container_add_widget(&c1, &c2);
+    container_add_widget(&c1, &l1);
+    /*container_add_widget(&c2, &i2);
+    container_set_bounds(&c2, new_rect(0, 0, 300, 450));
+    container_add_widget(&c1, &c2);*/
     
     window_add_container(window, &c1);
     
+    int sdas = 0;
     int px = 0;
     while(!window->quit_requested){
         if(SDL_PollEvent(&window->event)){

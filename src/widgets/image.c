@@ -50,6 +50,10 @@ Size image_get_original_size(Image image){
     return size;
 }
 
+void image_set_file(Image *image, char *file){
+    string_change(&image->file, file);
+}
+
 
 void generic_image_set_bounds(void *raw_image, SDL_Rect bounds){
     Image *image = raw_image;
@@ -70,13 +74,13 @@ void generic_image_set_bounds(void *raw_image, SDL_Rect bounds){
 }
 
 void generic_image_set_changed(void *raw_image, bool changed){
-    ((Image *)raw_image)->t_widget.widget.state.changed = changed;
+    ((Image *)raw_image)->t_widget.changed = changed;
 }
 
 void generic_image_update(void *raw_image, SDL_Renderer *renderer){
     Image *image = raw_image;
     
-    if(image->t_widget.widget.state.changed == false){
+    if(!image->t_widget.changed){
         return;
     }
     
@@ -112,13 +116,4 @@ void generic_image_update(void *raw_image, SDL_Renderer *renderer){
     }
     //image_setBounds(img, image_getBounds(img));
     image->t_widget.set_changed(raw_image, false);
-}
-
-void image_set_file(Image *image, char *file){
-    if(image->file != NULL){
-        free(image->file);
-        image->file = NULL;
-    }
-    image->file = malloc(sizeof(file));
-    strcpy(image->file, file);
 }

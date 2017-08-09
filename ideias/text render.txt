@@ -1,0 +1,13 @@
+limite
+tamanho real (ignorar?)
+
+
+cria uma nova função no texture widget: render copy.
+
+
+SDL_RenderCopy(renderer, t_widget->texture, &limit, &limit); //crop; renderizar texto
+text update:
+	criou a fonte, calcula o width. se for maior que o limite, passa o texto com a "..." pra transformar na textura.
+		possivelmente ter que criar função que acha o tamanho de qualquer parte do texto.
+
+talvez criar um set_align, que bota o label na esquerda, centro ou direita.

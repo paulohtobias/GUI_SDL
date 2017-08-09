@@ -15,7 +15,6 @@ SDIR = ./src
 
 ifeq ($(OS),Windows_NT)
 	ODIR = ./obj/windows
-	CFLAGS+= -mno-ms-bitfields
 else
 	ODIR = ./obj/linux
 endif

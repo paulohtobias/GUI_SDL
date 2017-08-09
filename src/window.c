@@ -9,8 +9,8 @@ Window *new_Window(char *title, SDL_Rect size, Uint32 flags){
 Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
     Window *window = malloc(sizeof(Window));
 
-	window->title = malloc(sizeof(title));
-    strcpy(window->title, title);
+    window->title = NULL;
+	string_change(&window->title, title);
     
     gui_init();
 
@@ -48,6 +48,10 @@ Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
 		window->layers = 1;
 
 	window->container = malloc(window->layers * sizeof(void *));
+    if(window->container == NULL){
+        printf("window->container = malloc(window->layers * sizeof(void *));\n");
+        exit(1);
+    }
 	for(i=0; i<window->layers; i++){
 		window->container[i] = NULL;
 	}

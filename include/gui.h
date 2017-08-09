@@ -3,6 +3,7 @@
 
 #include "window.h"
 #include "widgets/image.h"
+#include "widgets/label.h"
 
 void gui_init();
 
