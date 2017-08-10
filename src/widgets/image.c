@@ -8,15 +8,15 @@
 
 #include "widgets/image.h"
 
-Image new_Image(char *file){
+Image new_Image(const char *file){
     return new_Image_with_bounds(file, new_rect(0, 0, 0, 0));
 }
 
-Image new_Image_with_position(char *file, Position position){
+Image new_Image_with_position(const char *file, Position position){
     return new_Image_with_bounds(file, new_rect(position.x, position.y, 0, 0));
 }
 
-Image new_Image_with_bounds(char *file, SDL_Rect bounds){
+Image new_Image_with_bounds(const char *file, SDL_Rect bounds){
     Image image;
     
     image.t_widget = new_TextureWidget();
@@ -51,7 +51,7 @@ Size image_get_original_size(Image image){
     return size;
 }
 
-void image_set_file(Image *image, char *file){
+void image_set_file(Image *image, const char *file){
     string_change(&image->file, file);
 }
 

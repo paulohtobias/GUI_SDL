@@ -18,15 +18,15 @@ typedef struct Image{
     char *file;
 }Image;
 
-Image new_Image(char *file);
+Image new_Image(const char *file);
 
-Image new_Image_with_position(char *file, Position position);
+Image new_Image_with_position(const char *file, Position position);
 
-Image new_Image_with_bounds(char *file, SDL_Rect bounds);
+Image new_Image_with_bounds(const char *file, SDL_Rect bounds);
 
 Size image_get_original_size(Image image);
 
-void image_set_file(Image *image, char *file);
+void image_set_file(Image *image, const char *file);
 
 
 void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
