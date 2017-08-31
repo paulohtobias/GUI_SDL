@@ -1,0 +1,2 @@
+	* estilos individuais pra cada widget
+	* posição em relação ao container pai
