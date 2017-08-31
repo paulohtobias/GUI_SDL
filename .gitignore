@@ -38,7 +38,12 @@ obj
 
 #Project folders and files
 nbproject
+tests
 .vscode
 Data
 Resources
 main
+
+*.png
+*.jpg
+*.zip

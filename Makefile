@@ -8,30 +8,27 @@ DLL= #-lm -fPIC
 ifeq ($(OS),Windows_NT)
     BIN = main.exe
 else
-	BIN = main
+    BIN = main
 endif
 
 #Directories
 IDIR = ./include
 SDIR = ./src
 
-#Paths
-INCLUDE_PATHS = -I/usr/local/include -I$(IDIR)
-LIBRARY_PATHS = -L/usr/local/lib
-
 ifeq ($(OS),Windows_NT)
-    LIBRARIES = -lmingw32
 	ODIR = ./obj/windows
-	CFLAGS+= -mno-ms-bitfields
 else
 	ODIR = ./obj/linux
 endif
 
+#Paths
+INCLUDE_PATHS = -I$(IDIR) `pkg-config --cflags SDL2_image SDL2_ttf`
+
 #Libraries
-LIBRARIES+= -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+LIBRARIES+= `pkg-config --libs SDL2_image SDL2_ttf`
 
 #Compilation line
-COMPILE = $(CC) $(CFLAGS) $(INCLUDE_PATHS) $(LIBRARY_PATHS)
+COMPILE = $(CC) $(CFLAGS) $(INCLUDE_PATHS)
 
 #FILEs
 #---------------Include---------------#
@@ -48,8 +45,9 @@ DEPS = $(SRCS:$(SDIR)/%.c=$(ODIR)/%.d)
 all: $(OBJS)
 	$(COMPILE) $(OBJS) main.c -o $(BIN) $(LIBRARIES)
 
+dll: LIBRARIES+= -lm -fPIC
 dll: $(OBJS)
-	$(COMPILE) -shared -o libguisdl.so $(OBJS) $(LIBRARIES) $(DLL)
+	$(COMPILE) -shared -o libguisdl.so $(OBJS) $(LIBRARIES)
 
 # Include all .d files
 -include $(DEPS)

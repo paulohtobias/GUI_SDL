@@ -1,41 +1,24 @@
-#include "window.h"
+#include "gui.h"
 
-int main(){
-    init();
+int main(int argc, char *argv[]) {
+	Window *window = new_Window("Caralhou!", new_Size(800, 600), WINDOW_DEFAULT_FLAGS);
 
-    //Janela
-    Window *window = newWindow("Janela Teste", region_size(800, 600), WINDOW_DEFAULT_FLAGS, 1);
+	Container c = new_Container();
+	window_add_container(window, &c);
 
-    int i, n = 5;
-    
-    //Container
-    Container hbox = newHBox(window_getBounds(window));
-    window_add_container(window, hbox, 0);
-    
-    Container vbox[n];
-    for(i=0; i<n; i++){
-        //vbox[i] = newVBox()
-    }
+	int i, n = 200;
+	Image img[n];
+	for(i=0; i<n; i++){
+		img[i] = new_Image_with_position("./Resources/Images/img.png", new_Position(300*i, 0));
+		container_add_widget(&c, &img[i]);
+	}
 
-    //Widgets
-    Image img = newImage("Resources/Images/test/img.png", region_size(0,0));
-    Button btn = newButton("Me clique", NULL, region_size(100, 50));
-    //Image imgs[n];
-    //Button btns[n];
-
-    //for(i=0)
-
-    //Adicionando os widgets no container
-    container_add_image(hbox, img);
-    container_add_button(hbox, btn);
-
-    //Loop principal
-    while(!window->quit_requested){
-        if(SDL_PollEvent(&window->event)){
-            window_processEvents(window);
-            window_draw(window);
-        }
-    }
-
-    return 0;
+	while (!window->quit_requested) {
+		if (SDL_PollEvent(&window->event)) {
+			window_process_events(window);
+            
+			window_draw(window);
+		}
+	}
+	return 0;
 }

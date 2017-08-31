@@ -10,43 +10,30 @@
 #define IMAGE_H
 
 #include <SDL2/SDL_image.h>
-#include <string.h>
+#include "texture_widget.h"
 
-#include "widgets/basicUI.h"
+typedef struct Image{
+    TextureWidget t_widget;
+    
+    char *file;
+}Image;
 
-#define file_size 500
+Image new_Image(const char *file);
 
-struct Image_{
-    char* file;
+Image new_Image_with_position(const char *file, Position position);
 
-    Bounds region;
-	WidgetState state;
+Image new_Image_with_bounds(const char *file, SDL_Rect bounds);
 
-    SDL_Texture *texture;
-};
-typedef struct Image_* Image;
+Size image_get_original_size(Image image);
 
-Image  newImage(char *path, SDL_Rect bounds);
-void init_image(Image img, SDL_Renderer *renderer);
-void freeImage(Image img);
+void image_set_file(Image *image, const char *file);
 
-//Get
-SDL_Rect image_getBounds(Image img);
 
-//Set and Update
-void image_setSrc(Image img, char *file);
-void image_update(Image img, SDL_Renderer *renderer);
-void image_setBounds(Image img, SDL_Rect region);
-void image_updateBounds(Image img, SDL_Rect region);
+void generic_image_free(void *raw_image);
 
-//Events
-void image_processEvents(SDL_Event event, Mouse mouseState, Image img);
-bool image_isFocused(Image img);
-bool image_isPressed(Image img);
-bool image_isDragged(Image img);
-bool image_isReleased(Image img);
+void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
 
-//Render
-void renderImage(Image img, SDL_Renderer *renderer, Camera camera);
+void generic_image_update(void *raw_image, SDL_Renderer *renderer);
 
-#endif // IMAGE_H
+#endif //IMAGE_H
+

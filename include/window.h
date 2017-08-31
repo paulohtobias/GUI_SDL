@@ -1,46 +1,46 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "container.h"
+#include "containers/container.h"
 
 #define WINDOW_DEFAULT_FLAGS (SDL_WINDOW_MAXIMIZED | SDL_WINDOW_RESIZABLE)
 #define LAYER_BOTTOM 0
 #define LAYER_TOP window->layers - 1
 
 typedef struct{
-	//Window info
-	char *title;
-	SDL_Window *sdlwindow;
-	SDL_Renderer *renderer;
-	SDL_Color backgroundColor;
-	SDL_Rect bounds;
+    //Window info
+    char *title;
+    SDL_Window *sdlwindow;
+    SDL_Renderer *renderer;
+    SDL_Color background_color;
+    SDL_Rect bounds;
 
-	SDL_Event event;
-	int quit_requested;
+    SDL_Event event;
+    bool quit_requested;
 
-	//Mouse
-	Mouse mouseState;
+    //Mouse
+    Mouse mouse;
 
-	//Camera and Scrollbar
-	Camera camera;
-	//ScrollBar
-
-	//Containers
-	int layers;
-	Container *containers;
-
+    int layers;
+    //Container layers.
+    void **container;
 }Window;
 
-Window *newWindow(char *title, SDL_Rect size, Uint32 flags, int layers);
-void freeWindow(Window *window);
-SDL_Renderer *newRenderer(SDL_Window *window);
-SDL_Rect window_getBounds(Window *window);
-void window_emptyList(Window *window);
+Window *new_Window(char *title, Size size, Uint32 flags);
 
-///===================----WINDOW CONTAINERS----===================///
-void window_add_container(Window *window, Container container, int layer);
+Window *new_Window_layers(char *title, Size size, Uint32 flags, int layers);
 
-void window_processEvents(Window *window);
+void free_Window(Window *window);
+
+SDL_Rect window_get_bounds(Window *window);
+
+void window_empty_containers(Window *window);
+
+void window_add_container(Window *window, void *container);
+
+void window_add_container_layer(Window *window, void *container, int layer);
+
+void window_process_events(Window *window);
 
 void window_draw(Window *window);
 
