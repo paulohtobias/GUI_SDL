@@ -51,14 +51,18 @@ void label_set_font(Label *label, const char *font);
 
 void label_set_size(Label *label, int size);
 
-void label_center(Label *label);
+void label_set_center(Label *label, bool center);
 
 void label_set_style(Label *label, LabelStyle *style);
 
+SDL_Rect label_get_center_bounds(Label *label, Size *real_size);
+
+
+void generic_label_free(void *raw_label);
 
 void generic_label_set_bounds(void *raw_label, SDL_Rect bounds);
 
-void generic_label_set_changed(void *raw_label, bool changed);
+void generic_label_set_changed(void *raw_label, int changed);
 
 void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer);
 

@@ -9,8 +9,8 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
-#include "texture_widget.h"
 #include <SDL2/SDL_image.h>
+#include "texture_widget.h"
 
 typedef struct Image{
     TextureWidget t_widget;
@@ -28,6 +28,8 @@ Size image_get_original_size(Image image);
 
 void image_set_file(Image *image, const char *file);
 
+
+void generic_image_free(void *raw_image);
 
 void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
 

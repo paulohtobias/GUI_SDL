@@ -12,13 +12,13 @@ char *string_format(const char *format, ...){
 
 void string_change(char **dst, const char *src){
     if(*dst != NULL){
-        free(dst);
+        free(*dst);
         *dst = NULL;
     }
     
-    *dst = malloc(sizeof(strlen(src)));
+    *dst = malloc(strlen(src) + 1);
     if(*dst == NULL){
-        printf("*dst = malloc(sizeof(strlen(src)));\n");
+        printf("*dst = malloc(strlen(src) + 1);\n");
         exit(1);
     }
     strcpy(*dst, src);

@@ -12,6 +12,19 @@
 
 #include "widget.h"
 
+/**
+ * Functions for <code>TextureWidget</code>.
+ * 
+ * <code>set_changed</code><br>
+ * <code>render_copy</code><br>
+ * <code>update</code>
+ */
+typedef struct VT_TextureWidget{
+	void (*set_changed)(void *, int);
+    void (*render_copy)(void *, SDL_Renderer *);
+    void (*update)(void *, SDL_Renderer *);
+}VT_TextureWidget;
+
 typedef struct TextureWidget{
     Widget widget;
     
@@ -19,9 +32,8 @@ typedef struct TextureWidget{
     
     int changed;
     
-    void (*set_changed)(void *, int);
-    void (*render_copy)(void *, SDL_Renderer *);
-    void (*update)(void *, SDL_Renderer *);
+	VT_TextureWidget *functions;
+    
 }TextureWidget;
 
 TextureWidget new_TextureWidget();

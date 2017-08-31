@@ -122,6 +122,9 @@ void *list_get_index(ArrayList *list, int index){
     if(list_is_empty(list) || index > list->size){
         return NULL;
     }
+	
+	//TO-DO
+	return list->data[index];
     
     int i = list->first;
     int count = 0;

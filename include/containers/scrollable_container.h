@@ -22,8 +22,4 @@ void generic_scrollable_container_process_events(void *raw_container, SDL_Event 
 
 void generic_scrollable_container_draw(void *raw_container, SDL_Renderer *renderer, Camera *camera);
 
-void generic_scrollable_container_add_widget(void *raw_container, void *widget);
-
-void *generic_scrollable_container_remove_widget(void *raw_container);
-
 #endif //SCROLLABLE_CONTAINER_H

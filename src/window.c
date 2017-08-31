@@ -2,11 +2,11 @@
 
 extern void gui_init();
 
-Window *new_Window(char *title, SDL_Rect size, Uint32 flags){
+Window *new_Window(char *title, Size size, Uint32 flags){
     return new_Window_layers(title, size, flags, 1);
 }
 
-Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
+Window *new_Window_layers(char *title, Size size, Uint32 flags, int layers){
     Window *window = malloc(sizeof(Window));
 
     window->title = NULL;
@@ -15,7 +15,10 @@ Window *new_Window_layers(char *title, SDL_Rect size, Uint32 flags, int layers){
     gui_init();
 
 	if((SDL_WINDOW_MAXIMIZED & flags) == SDL_WINDOW_MAXIMIZED){
-		SDL_GetDisplayBounds(0, &size);
+		SDL_Rect rect_size;
+		SDL_GetDisplayBounds(0, &rect_size);
+		size.w = rect_size.w;
+		size.h = rect_size.h;
 	}
 
 	window->sdlwindow = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.w, size.h, flags);
@@ -122,6 +125,13 @@ void window_process_events(Window *window){
 	}
 
 	if(window->event.type == SDL_WINDOWEVENT && window->event.window.event == SDL_WINDOWEVENT_RESIZED){
+    }
+    
+    int i;
+    for(i=0; i<window->layers; i++){
+        if(window->container[i] != NULL){
+            container_process_events(window->container[i], window->event, window->mouse);
+        }
     }
     
     //int i;

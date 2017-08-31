@@ -14,27 +14,31 @@
 #include <basic/color.h>
 #include "camera.h"
 
+/**
+ * Functions for <code>Widget</code>.
+ * 
+ * <code>free</code><br>
+ * <code>set_bounds</code><br>
+ * <code>process_events</code><br>
+ * <code>draw</code><br>
+ */
+typedef struct VT_Widget{
+	void (*free)();
+    void (*set_bounds)(void *, SDL_Rect);
+    
+    void (*process_events)(void *, SDL_Event, Mouse);
+    void (*draw)(void *, SDL_Renderer *, Camera *);
+}VT_Widget;
+
+///TO-DO: change this to a enum and each state is a bit to use less memory.
 typedef struct WidgetSate{
-    ///The widget has focus.
-    bool focus;
-    
-    ///The widget can't be dragged.
-    bool fixed;
-    
-    ///The widget is being dragged.
-    bool dragged;
-    
-    ///Mouse cursor is over widget.
-    bool mouse_over;
-    
-    ///Mouse button information.
-    MouseButtonState mouse_state;
-    
-    ///Widget size is defined automatically.
-    bool auto_size;
-    
-    ///Widget entered camera bounds.
-    bool entered_camera;
+    bool focus; ///The widget has focus.
+    bool fixed; ///The widget can't be dragged.
+    bool dragged; ///The widget is being dragged.
+    bool mouse_over; ///Mouse cursor is over widget.
+    MouseButtonState mouse_state; ///Mouse button information.
+    bool auto_size; ///Widget size is defined automatically.
+    bool entered_camera; ///Widget entered camera bounds.
 }WidgetSate;
 
 typedef struct Widget{
@@ -44,11 +48,7 @@ typedef struct Widget{
     Color background_color;
     
     //Functions
-    void (*free)();
-    void (*set_bounds)(void *, SDL_Rect);
-    
-    void (*process_events)(void *, SDL_Event, Mouse);
-    void (*draw)(void *, SDL_Renderer *, Camera *);
+    VT_Widget *functions;
 }Widget;
 
 WidgetSate new_WidgetState();
@@ -73,8 +73,6 @@ void widget_draw_border(void *raw_widget, SDL_Renderer *renderer);
 
 void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
 
-
-void generic_widget_init(void *raw_widget, SDL_Renderer *renderer);
 
 void generic_widget_free(void *raw_widget);
 

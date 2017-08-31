@@ -11,7 +11,7 @@ void gui_init(){
             exit(1);
         }
         //Initialize SDL_image
-        if(IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG) < 0){
+        if(IMG_Init(IMG_INIT_JPG|IMG_INIT_PNG) != (IMG_INIT_JPG|IMG_INIT_PNG)){
             SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error IMG_Init", IMG_GetError(), NULL);
             exit(1);
         }

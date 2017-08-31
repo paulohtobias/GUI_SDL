@@ -1,5 +1,17 @@
 #include "containers/container.h"
 
+VT_Widget __gcontainer_widget_vt = {
+    generic_container_free,
+    generic_container_set_bounds,
+    generic_container_process_events,
+    generic_container_draw
+};
+
+VT_Container __gcontainer_vt = {
+    generic_container_add_widget,
+    generic_container_remove_widget
+};
+
 Container new_Container(){
     return new_Container_max_widgets(CONTAINER_MAX_WIDGETS);
 }
@@ -10,12 +22,8 @@ Container new_Container_max_widgets(int max){
     container.widget = new_Widget();
     container.widget_list = new_ArrayList_max_size(max);
     
-    container.widget.free = generic_container_free;
-    container.widget.set_bounds = generic_container_set_bounds;
-    container.widget.process_events = generic_container_process_events;
-    container.widget.draw = generic_container_draw;
-    container.add_widget = generic_container_add_widget;
-    container.remove_widget = generic_container_remove_widget;
+    container.widget.functions = &__gcontainer_widget_vt;
+    container.functions = &__gcontainer_vt;
     
     return container;
 }
@@ -46,11 +54,11 @@ void container_draw(void *container, SDL_Renderer *renderer, Camera *camera){
 }
 
 void container_add_widget(void *container, void *widget){
-    ((Container *)container)->add_widget(container, widget);
+    ((Container *)container)->functions->add_widget(container, widget);
 }
 
 void *container_remove_widget(void *container){
-    return ((Container *)container)->remove_widget(container);
+    return ((Container *)container)->functions->remove_widget(container);
 }
 
 void container_empty(void *container){
@@ -67,8 +75,8 @@ void generic_container_free(void *raw_container){
     
     free_ArrayList(container->widget_list, widget_free);
     container->widget_list = NULL;
-    container->add_widget = NULL;
-    container->remove_widget = NULL;
+    container->functions->add_widget = NULL;
+    container->functions->remove_widget = NULL;
 }
 
 void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){

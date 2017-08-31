@@ -8,6 +8,13 @@
 
 #include "widgets/widget.h"
 
+VT_Widget __gwidget_vt = {
+    generic_widget_free,
+    generic_widget_set_bounds,
+    generic_widget_process_events,
+    generic_widget_draw
+};
+
 WidgetSate new_WidgetState(){
     WidgetSate state;
     
@@ -29,18 +36,13 @@ Widget new_Widget(){
     widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
     widget.background_color = COLOR_ORANGE;
     
-    widget.free = generic_widget_free;
-    
-    widget.set_bounds = generic_widget_set_bounds;
-    
-    widget.process_events = generic_widget_process_events;
-    widget.draw = generic_widget_draw;
+    widget.functions = &__gwidget_vt;
     
     return widget;
 }
 
 void widget_free(void *widget){
-    ((Widget *)widget)->free(widget);
+    ((Widget *)widget)->functions->free(widget);
 }
 
 SDL_Rect widget_get_bounds_origin(void *widget){
@@ -52,11 +54,11 @@ SDL_Rect widget_get_bounds_camera(void *widget){
 }
 
 void widget_set_bounds(void *widget, SDL_Rect bounds){
-    ((Widget *)widget)->set_bounds(widget, bounds);
+    ((Widget *)widget)->functions->set_bounds(widget, bounds);
 }
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
-    ((Widget *)widget)->process_events(widget, event, mouse);
+    ((Widget *)widget)->functions->process_events(widget, event, mouse);
 }
 
 void widget_update_camera_position(void *raw_widget, Camera *camera){
@@ -98,20 +100,20 @@ void widget_draw_border(void *raw_widget, SDL_Renderer *renderer){
 }
 
 void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
-    widget_update_camera_position(raw_widget, camera);
+    //widget_update_camera_position(raw_widget, camera);
     
     Widget *widget = raw_widget;
-    widget->draw(raw_widget, renderer, camera);
+    widget->functions->draw(raw_widget, renderer, camera);
 }
 
 
 void generic_widget_free(void *raw_widget){
     Widget *widget = raw_widget;
     
-    widget->set_bounds = NULL;
-    widget->process_events = NULL;
-    widget->draw = NULL;
-    widget->free = NULL;
+    widget->functions->set_bounds = NULL;
+    widget->functions->process_events = NULL;
+    widget->functions->draw = NULL;
+    widget->functions->free = NULL;
 }
 
 void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds){
