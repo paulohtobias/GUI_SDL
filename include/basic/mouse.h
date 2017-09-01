@@ -11,7 +11,7 @@
 
 #include "basic/bounds.h"
 
-typedef enum MouseButtonState_{
+typedef enum MouseButtonState{
     MOUSE_IDLE,
     MOUSE_LEFT_PRESSED,
     MOUSE_RIGHT_PRESSED,
@@ -21,7 +21,7 @@ typedef enum MouseButtonState_{
     MOUSE_MIDDLE_RELEASED
 }MouseButtonState;
 
-typedef struct Mouse_{
+typedef struct Mouse{
     MouseButtonState button_state;
     Position position;
     Position drag_offset;

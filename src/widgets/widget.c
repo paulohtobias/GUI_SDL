@@ -134,10 +134,10 @@ void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mous
     
     if(mouse_over(widget->bounds)){
         widget->state.mouse_over = true;
-        widget->state.mouse_state = mouse.button_state;
+        widget->state.focus = true;
         
         if(mouse_is_pressed(mouse)){
-            widget->state.focus = true;
+            widget->state.mouse_state = mouse.button_state;
             
             //Checking if widget is being dragged.
             if(widget->state.fixed == false &&

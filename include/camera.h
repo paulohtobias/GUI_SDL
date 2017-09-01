@@ -19,7 +19,7 @@
     #define camera_offset 20
 #endif
 
-typedef struct Camera_{
+typedef struct Camera{
     //Camera.
     SDL_Rect bounds;
     SDL_Rect limit;
