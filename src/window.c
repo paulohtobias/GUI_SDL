@@ -2,11 +2,11 @@
 
 extern void gui_init();
 
-Window *new_Window(char *title, Size size, Uint32 flags){
-    return new_Window_layers(title, size, flags, 1);
+Window *new_Window(char *title, SDL_Rect bounds, Uint32 flags){
+    return new_Window_layers(title, bounds, flags, 1);
 }
 
-Window *new_Window_layers(char *title, Size size, Uint32 flags, int layers){
+Window *new_Window_layers(char *title, SDL_Rect bounds, Uint32 flags, int layers){
     Window *window = malloc(sizeof(Window));
 
     window->title = NULL;
@@ -15,13 +15,10 @@ Window *new_Window_layers(char *title, Size size, Uint32 flags, int layers){
     gui_init();
 
 	if((SDL_WINDOW_MAXIMIZED & flags) == SDL_WINDOW_MAXIMIZED){
-		SDL_Rect rect_size;
-		SDL_GetDisplayBounds(0, &rect_size);
-		size.w = rect_size.w;
-		size.h = rect_size.h;
+		SDL_GetDisplayBounds(0, &bounds);
 	}
 
-	window->sdlwindow = SDL_CreateWindow(title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, size.w, size.h, flags);
+	window->sdlwindow = SDL_CreateWindow(title, bounds.x, bounds.y, bounds.w, bounds.h, flags);
     
     window->background_color = COLOR_GREY(240);
     if(window->sdlwindow == NULL){
@@ -127,12 +124,35 @@ void window_process_events(Window *window){
 	if(window->event.type == SDL_WINDOWEVENT && window->event.window.event == SDL_WINDOWEVENT_RESIZED){
     }
     
+    window->mouse.position = mouse_get_position();
+    if(mouse_is_released(window->mouse)){
+        window->mouse.button_state = MOUSE_IDLE;
+    }
+    if(window->event.type == SDL_MOUSEBUTTONDOWN){
+		if(window->event.button.button == SDL_BUTTON_LEFT){
+			window->mouse.button_state= MOUSE_LEFT_PRESSED;
+			window->mouse.drag_offset = mouse_get_position();
+		}else if(window->event.button.button == SDL_BUTTON_RIGHT){
+			window->mouse.button_state = MOUSE_RIGHT_PRESSED;
+		}
+	}else if( window->mouse.button_state == MOUSE_LEFT_PRESSED && window->event.type == SDL_MOUSEBUTTONUP){
+		if(window->event.button.button == SDL_BUTTON_LEFT){
+			window->mouse.button_state = MOUSE_LEFT_RELEASED;
+		}else if(window->event.button.button == SDL_BUTTON_RIGHT){
+			window->mouse.button_state = MOUSE_RIGHT_RELEASED;
+		}
+	}
+
     int i;
     for(i=0; i<window->layers; i++){
         if(window->container[i] != NULL){
             container_process_events(window->container[i], window->event, window->mouse);
         }
     }
+    
+    if(window->mouse.button_state == MOUSE_LEFT_PRESSED){
+		window->mouse.drag_offset = window->mouse.position;
+	}
     
     //int i;
 }

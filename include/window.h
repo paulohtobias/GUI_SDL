@@ -26,9 +26,9 @@ typedef struct{
     void **container;
 }Window;
 
-Window *new_Window(char *title, Size size, Uint32 flags);
+Window *new_Window(char *title, SDL_Rect bounds, Uint32 flags);
 
-Window *new_Window_layers(char *title, Size size, Uint32 flags, int layers);
+Window *new_Window_layers(char *title, SDL_Rect bounds, Uint32 flags, int layers);
 
 void free_Window(Window *window);
 
