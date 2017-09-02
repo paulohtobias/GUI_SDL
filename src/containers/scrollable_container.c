@@ -51,6 +51,6 @@ void generic_scrollable_container_draw(void *raw_container, SDL_Renderer *render
     for(i=0; i<scrollable_container->container.widget_list->size; i++){
 		void *widget = list_get_index(scrollable_container->container.widget_list, i);
 		widget_update_camera_position(widget, scrollable_container->camera);
-        widget_draw(list_get_index(scrollable_container->container.widget_list, i), renderer, camera);
+        widget_draw(widget, renderer, scrollable_container->camera);
     }
 }
