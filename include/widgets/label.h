@@ -51,7 +51,7 @@ void label_set_font(Label *label, const char *font);
 
 void label_set_size(Label *label, int size);
 
-void label_set_center(Label *label, bool center);
+void label_center(Label *label);
 
 void label_set_style(Label *label, LabelStyle *style);
 

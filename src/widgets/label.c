@@ -44,25 +44,25 @@ void label_update_size_table(Label *label){
     int i, len = strlen(label->text);
     TTF_Font *font = TTF_OpenFont(label->style->font, label->style->size);
     
-    if(label->size_table == NULL){
-        label->size_table = malloc(len * sizeof(Size));
+    if(label->size_table != NULL){
+		free(label->size_table);
     }
+	label->size_table = malloc(len * sizeof(Size));
+	
     for(i=0; i<len-1; i++){
         char c = label->text[i+1];
         label->text[i+1] = '\0';
-        //label->size_table[i].w = 500; label->size_table[i].h = 500;
 		TTF_SizeUTF8(font, label->text, &label->size_table[i].w, &label->size_table[i].h);
         label->text[i+1] = c;
     }
-    //label->size_table[i].w = 500; label->size_table[i].h = 500;
     TTF_SizeUTF8(font, label->text, &label->size_table[i].w, &label->size_table[i].h);
 }
 
 Size label_get_original_size(Label label, int index){
-    int len = strlen(label.text);
+    /*int len = strlen(label.text);
     if(index >= len){
         return new_Size(-1, -1);
-    }
+    }*/
     return label.size_table[index];
 }
 
@@ -71,23 +71,35 @@ void label_set_text(Label *label, const char *text){
     label_update_size_table(label);
 }
 
+///Internal function used when changing a label's style.
+void __label_new_style(Label *label){
+	if(label->style == &label_default_style){
+		label_set_style(label, malloc(sizeof(LabelStyle)));
+		(*label->style) = label_default_style;
+	}
+}
+
 void label_set_color(Label *label, Color color){
+	__label_new_style(label);
     label->style->color = color;
     label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
 }
 
 void label_set_font(Label *label, const char *font){
+	__label_new_style(label);
     snprintf(label->style->font, 60, "./Resources/Fonts/%s.ttf", font);
     //strncpy(label->style->font, font, 60);
     label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
 }
 
 void label_set_size(Label *label, int size){
+	__label_new_style(label);
     label->style->size = size;
     label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
 }
 
-void label_set_center(Label *label, bool center){
+void label_set_center(Label *label){
+	__label_new_style(label);
     label->style->center = true;
     label->t_widget.functions->set_changed(label, LABEL_STATE_CENTERED);
 }
@@ -112,7 +124,15 @@ SDL_Rect label_get_center_bounds(Label *label, Size *real_size){
 
 
 void generic_label_free(void *raw_label){
-	printf("TO-DO: generic_label_free\n");
+	Label *label = raw_label;
+	
+	widget_free(&label->t_widget);
+	
+	free(label->text);
+	free(label->size_table);
+	if(label->style != &label_default_style){
+		free(label->style);
+	}
 }
 
 void generic_label_set_bounds(void *raw_label, SDL_Rect bounds){
@@ -185,7 +205,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
     //Creating the Font.
     TTF_Font *ttf_font = TTF_OpenFont(label->style->font, label->style->size);   
     if(ttf_font == NULL){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error", TTF_GetError(), NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: generic_label_update", TTF_GetError(), NULL);
         exit(1);
     }
     label_update_size_table(label);
@@ -206,7 +226,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
     
     //Error checking.
     if(surface == NULL){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Surface Error", TTF_GetError(), NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Surface Error: generic_label_update", TTF_GetError(), NULL);
 
         TTF_Quit();
         SDL_Quit();
@@ -227,7 +247,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
     
     //Error checking.
     if(label->t_widget.texture == NULL){
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Texture Error", SDL_GetError(), NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Texture Error: generic_label_update", SDL_GetError(), NULL);
         free(label);
 
         TTF_Quit();
