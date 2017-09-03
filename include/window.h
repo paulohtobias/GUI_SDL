@@ -1,7 +1,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "containers/container.h"
+#include "containers/scrollable_container.h"
 
 #define WINDOW_DEFAULT_FLAGS (SDL_WINDOW_MAXIMIZED | SDL_WINDOW_RESIZABLE)
 #define LAYER_BOTTOM 0

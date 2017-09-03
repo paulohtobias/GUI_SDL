@@ -125,7 +125,14 @@ void generic_container_draw(void *raw_container, SDL_Renderer *renderer, Camera 
 
 void generic_container_add_widget(void *raw_container, void *widget){
     Container *container = raw_container;
-    list_insert_last(container->widget_list, widget);
+	
+    SDL_Rect container_bounds = container_get_bounds_origin(raw_container);
+	SDL_Rect widget_bounds = widget_get_bounds_origin(widget);
+	widget_bounds.x += container_bounds.x;
+	widget_bounds.y += container_bounds.y;
+	widget_set_bounds(widget, widget_bounds);
+	
+	list_insert_last(container->widget_list, widget);
 }
 
 void* generic_container_remove_widget(void *raw_container){

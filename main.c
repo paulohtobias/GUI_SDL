@@ -1,12 +1,12 @@
 #include "gui.h"
-#include "containers/scrollable_container.h"
 
-int main(int argc, char *argv[]) {
+#define printR(c) SDL_Rect r = c; printf("(%d, %d, %d, %d)\n", r.x, r.y, r.w, r.h);
+
+int main(int argc, char *argv[]){
 	Window *window = new_Window("Janela!", new_rect(0, 0, 800, 600), WINDOW_DEFAULT_FLAGS);
 
 	int i, n = 500;
 	ScrollableContainer c = new_ScrollableContainer_max_widgets(n);
-	SDL_Rect *r = &c.camera->bounds;
 	window_add_container(window, &c);
 
 	Image img[n];
