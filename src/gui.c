@@ -32,14 +32,6 @@ void init_look_and_feel(){
 	init_look_and_feel_button();
 }
 
-void init_look_and_feel_label(){
-	label_default_style.color = label_default_color;
-	snprintf(label_default_style.font, 60, "./Resources/Fonts/%s.ttf", label_default_font);
-	label_default_style.size = label_default_size;
-	label_default_style.center = false;
-	label_default_style.wrap = false;
-}
-
 void init_look_and_feel_button(){
 	button_default_style_idle.label = &label_default_style;
 	button_default_style_idle.background = button_default_bg_color_idle;

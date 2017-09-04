@@ -68,4 +68,7 @@ void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer);
 
 void generic_label_update(void *raw_label, SDL_Renderer *renderer);
 
+
+void init_look_and_feel_label();
+
 #endif //LABEL_H

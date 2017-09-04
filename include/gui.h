@@ -11,8 +11,6 @@ void gui_init();
 
 void init_look_and_feel();
 
-void init_look_and_feel_label();
-
 void init_look_and_feel_button();
 
 #endif //GUI_H
