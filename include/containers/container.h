@@ -8,16 +8,16 @@
 
 typedef struct VT_Container{
 	void (*add_widget)(void *, void *);
-    void *(*remove_widget)(void *);
-}VT_Container;
+	void *(*remove_widget)(void *);
+} VT_Container;
 
 typedef struct Container{
-    Widget widget;
-    
-    ArrayList *widget_list;
-    
-    VT_Container *functions;
-}Container;
+	Widget widget;
+
+	ArrayList *widget_list;
+
+	VT_Container *functions;
+} Container;
 
 Container new_Container();
 

@@ -4,17 +4,17 @@
 #include "utils/utils.h"
 
 #ifndef LIST_DEFAULT_MAX_SIZE
-    #define LIST_DEFAULT_MAX_SIZE 300
+#define LIST_DEFAULT_MAX_SIZE 300
 #endif
 
 typedef struct ArrayList{
-    int first;
-    int last;
-    int size;
-    void **data;
-    
-    int max_size;
-}ArrayList;
+	int first;
+	int last;
+	int size;
+	void **data;
+
+	int max_size;
+} ArrayList;
 
 ArrayList *new_ArrayList();
 

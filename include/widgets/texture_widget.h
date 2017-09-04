@@ -21,20 +21,20 @@
  */
 typedef struct VT_TextureWidget{
 	void (*set_changed)(void *, int);
-    void (*render_copy)(void *, SDL_Renderer *);
-    void (*update)(void *, SDL_Renderer *);
-}VT_TextureWidget;
+	void (*render_copy)(void *, SDL_Renderer *);
+	void (*update)(void *, SDL_Renderer *);
+} VT_TextureWidget;
 
 typedef struct TextureWidget{
-    Widget widget;
-    
-    SDL_Texture *texture;
-    
-    int changed;
-    
+	Widget widget;
+
+	SDL_Texture *texture;
+
+	int changed;
+
 	VT_TextureWidget *functions;
-    
-}TextureWidget;
+
+} TextureWidget;
 
 TextureWidget new_TextureWidget();
 

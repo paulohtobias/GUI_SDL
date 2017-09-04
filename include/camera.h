@@ -13,24 +13,24 @@
 
 //Default values for the camera.
 #ifndef default_camera_speed
-    #define default_camera_speed 20
+#define default_camera_speed 20
 #endif
 #ifndef camera_offset
-    #define camera_offset 20
+#define camera_offset 20
 #endif
 
 typedef struct Camera{
-    //Camera.
-    SDL_Rect bounds;
-    SDL_Rect limit;
-    
-    //Speed and movement.
-    int mov_speed;
-    Vector2 speed;
-    
-    //Events
-    //TO-DO: mark which events can be processed by the camera.
-}Camera;
+	//Camera.
+	SDL_Rect bounds;
+	SDL_Rect limit;
+
+	//Speed and movement.
+	int mov_speed;
+	Vector2 speed;
+
+	//Events
+	//TO-DO: mark which events can be processed by the camera.
+} Camera;
 
 /**
  * Creates a new Camera.

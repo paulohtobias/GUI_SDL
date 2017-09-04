@@ -12,20 +12,20 @@
 #include "basic/bounds.h"
 
 typedef enum MouseButtonState{
-    MOUSE_IDLE,
-    MOUSE_LEFT_PRESSED,
-    MOUSE_RIGHT_PRESSED,
-    MOUSE_MIDDLE_PRESSED,
-    MOUSE_LEFT_RELEASED,
-    MOUSE_RIGHT_RELEASED,
-    MOUSE_MIDDLE_RELEASED
-}MouseButtonState;
+	MOUSE_IDLE,
+	MOUSE_LEFT_PRESSED,
+	MOUSE_RIGHT_PRESSED,
+	MOUSE_MIDDLE_PRESSED,
+	MOUSE_LEFT_RELEASED,
+	MOUSE_RIGHT_RELEASED,
+	MOUSE_MIDDLE_RELEASED
+} MouseButtonState;
 
 typedef struct Mouse{
-    MouseButtonState button_state;
-    Position position;
-    Position drag_offset;
-}Mouse;
+	MouseButtonState button_state;
+	Position position;
+	Position drag_offset;
+} Mouse;
 
 //Return the mouse position on the screen.
 Position mouse_get_position();

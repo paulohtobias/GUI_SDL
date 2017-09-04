@@ -8,23 +8,23 @@
 #define LAYER_TOP window->layers - 1
 
 typedef struct{
-    //Window info
-    char *title;
-    SDL_Window *sdlwindow;
-    SDL_Renderer *renderer;
-    SDL_Color background_color;
-    SDL_Rect bounds;
+	//Window info
+	char *title;
+	SDL_Window *sdlwindow;
+	SDL_Renderer *renderer;
+	SDL_Color background_color;
+	SDL_Rect bounds;
 
-    SDL_Event event;
-    bool quit_requested;
+	SDL_Event event;
+	bool quit_requested;
 
-    //Mouse
-    Mouse mouse;
+	//Mouse
+	Mouse mouse;
 
-    int layers;
-    //Container layers.
-    void **container;
-}Window;
+	int layers;
+	//Container layers.
+	void **container;
+} Window;
 
 Window *new_Window(char *title, SDL_Rect bounds, Uint32 flags);
 

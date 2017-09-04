@@ -13,10 +13,10 @@
 #include "texture_widget.h"
 
 typedef struct Image{
-    TextureWidget t_widget;
-    
-    char *file;
-}Image;
+	TextureWidget t_widget;
+
+	char *file;
+} Image;
 
 Image new_Image(const char *file);
 

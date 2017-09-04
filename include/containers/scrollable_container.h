@@ -4,11 +4,11 @@
 #include "container.h"
 
 typedef struct ScrollableContainer{
-    Container container;
-    
-    Camera *camera;
-    //TO-DO: ScrollBar
-}ScrollableContainer;
+	Container container;
+
+	Camera *camera;
+	//TO-DO: ScrollBar
+} ScrollableContainer;
 
 ScrollableContainer new_ScrollableContainer();
 

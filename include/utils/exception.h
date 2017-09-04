@@ -4,9 +4,9 @@
 #include "utils/utils.h"
 
 typedef struct Exception{
-    char *message;
-    void *extra_data;
-}Exception;
+	char *message;
+	void *extra_data;
+} Exception;
 
 Exception new_Exeption(char *message, ...);
 

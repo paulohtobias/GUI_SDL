@@ -24,32 +24,33 @@
  */
 typedef struct VT_Widget{
 	void (*free)();
-    void (*set_bounds)(void *, SDL_Rect);
-    
-    void (*process_events)(void *, SDL_Event, Mouse);
-    void (*draw)(void *, SDL_Renderer *, Camera *);
-}VT_Widget;
+	void (*set_bounds)(void *, SDL_Rect);
+
+	void (*process_events)(void *, SDL_Event, Mouse);
+	void (*draw)(void *, SDL_Renderer *, Camera *);
+} VT_Widget;
 
 ///TO-DO: change this to a enum and each state is a bit to use less memory.
+
 typedef struct WidgetSate{
-    bool focus; ///The widget has focus.
-    bool fixed; ///The widget can't be dragged.
-    bool dragged; ///The widget is being dragged.
-    bool mouse_over; ///Mouse cursor is over widget.
-    MouseButtonState mouse_state; ///Mouse button information.
-    bool auto_size; ///Widget size is defined automatically.
-    bool entered_camera; ///Widget entered camera bounds.
-}WidgetSate;
+	bool focus; ///The widget has focus.
+	bool fixed; ///The widget can't be dragged.
+	bool dragged; ///The widget is being dragged.
+	bool mouse_over; ///Mouse cursor is over widget.
+	MouseButtonState mouse_state; ///Mouse button information.
+	bool auto_size; ///Widget size is defined automatically.
+	bool entered_camera; ///Widget entered camera bounds.
+} WidgetSate;
 
 typedef struct Widget{
-    WidgetSate state;
-    Bounds bounds;
-    
-    Color background_color;
-    
-    //Functions
-    VT_Widget *functions;
-}Widget;
+	WidgetSate state;
+	Bounds bounds;
+
+	Color background_color;
+
+	//Functions
+	VT_Widget *functions;
+} Widget;
 
 WidgetSate new_WidgetState();
 

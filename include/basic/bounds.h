@@ -17,9 +17,9 @@
  * of the screen.
  */
 typedef struct Point{
-    int x; //X position.
-    int y; //Y position.
-}Point;
+	int x; //X position.
+	int y; //Y position.
+} Point;
 
 /**
  * A better name than Point to representa Widget's position.
@@ -37,32 +37,32 @@ typedef Point Vector2;
  * <code>height</code>.
  */
 typedef struct Size{
-    int w;  //Width.
-    int h;  //Height.
-}Size;
+	int w; //Width.
+	int h; //Height.
+} Size;
 
 /**
  * Representation of a Widget in a 2D space with information about position and
  * size.
  */
 typedef struct Bounds{
-    /**
-     * Position relative to parent's origin. Use when calculating position
-     * relative to other widgets
-     */
-    Position origin;
-    
-    /**
-     * Position relative to parent's camera. This will be the used in most
-     * cases.
-     */
-    Position camera;
-    
-    /**
-     * Size of the Widget containing width and height.
-     */
-    Size size;
-}Bounds;
+	/**
+	 * Position relative to parent's origin. Use when calculating position
+	 * relative to other widgets
+	 */
+	Position origin;
+
+	/**
+	 * Position relative to parent's camera. This will be the used in most
+	 * cases.
+	 */
+	Position camera;
+
+	/**
+	 * Size of the Widget containing width and height.
+	 */
+	Size size;
+} Bounds;
 
 ///Constructor
 /**
