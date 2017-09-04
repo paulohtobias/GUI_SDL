@@ -20,10 +20,13 @@ int main(int argc, char *argv[]){
 	label_center(&lbl[1]);
 
 	while(!window->quit_requested){
-		if(SDL_PollEvent(&window->event)){
+		if(SDL_WaitEvent(&window->event)){
 			window_process_events(window);
 
 			window_draw(window);
+		}else{
+			printf("%s\n", SDL_GetError());
+			return 1;
 		}
 	}
 	return 0;
