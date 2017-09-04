@@ -1,0 +1,6 @@
+./include/camera.h:32:    //TO-DO: mark which events can be processed by the camera.
+./include/containers/scrollable_container.h:10:    //TO-DO: ScrollBar
+./include/widgets/widget.h:33:///TO-DO: change this to a enum and each state is a bit to use less memory.
+./src/utils/array_list.c:126:	//TO-DO
+./src/widgets/image.c:73:	printf("TO-DO: generic_image_free\n");
+./src/widgets/widget.c:85:    //TO-DO: Replace all this with a proper border later. This one is a
