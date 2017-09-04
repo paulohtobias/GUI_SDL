@@ -122,9 +122,11 @@ SDL_Rect label_get_center_bounds(Label *label, Size *real_size){
 		(*real_size) = label_get_original_size(*label, strlen(label->text) - 1);
 	}
 
-	SDL_Rect center_bounds = widget_get_bounds_origin(label);
+	SDL_Rect center_bounds = widget_get_bounds_camera(label);
 	center_bounds.x = MAX(center_bounds.x, center_bounds.x + (center_bounds.w / 2) - (real_size->w / 2));
 	center_bounds.y = MAX(center_bounds.y, center_bounds.y + (center_bounds.h / 2) - (real_size->h / 2));
+    center_bounds.w = real_size->w;
+    center_bounds.h = real_size->h;
 
 	return center_bounds;
 }
