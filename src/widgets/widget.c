@@ -32,11 +32,11 @@ WidgetSate new_WidgetState(){
 Widget new_Widget(){
 	Widget widget;
 
+	widget.functions = &__gwidget_vt;
+	
 	widget.state = new_WidgetState();
 	widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
 	widget.background_color = COLOR_ORANGE;
-
-	widget.functions = &__gwidget_vt;
 
 	return widget;
 }

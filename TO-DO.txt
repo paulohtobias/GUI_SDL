@@ -1,6 +1,5 @@
-./include/camera.h:32:	//TO-DO: mark which events can be processed by the camera.
-./include/containers/scrollable_container.h:10:	//TO-DO: ScrollBar
-./include/widgets/widget.h:33:///TO-DO: change this to a enum and each state is a bit to use less memory.
-./src/utils/array_list.c:127:	//TO-DO
-./src/widgets/image.c:72:	printf("TO-DO: generic_image_free\n");
-./src/widgets/widget.c:85:	//TO-DO: Replace all this with a proper border later. This one is a
+* Create generic border and style to widgets.
+    * The default is NULL for both.
+    * Each extended widget can create its own or can use some defaults.
+    * Borders need to have a get_bounds and draw functions at least.
+
