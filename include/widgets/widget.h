@@ -9,10 +9,8 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include <basic/bounds.h>
-#include <basic/mouse.h>
-#include <basic/color.h>
-#include "camera.h"
+#include "basic/mouse.h"
+#include "style/style.h"
 
 /**
  * Functions for <code>Widget</code>.
@@ -46,7 +44,7 @@ typedef struct Widget{
 	WidgetSate state;
 	Bounds bounds;
 
-	Color background_color;
+	Style *style;
 
 	//Functions
 	VT_Widget *functions;
@@ -69,8 +67,6 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 void widget_update_camera_position(void *raw_widget, Camera *camera);
 
 bool widget_is_inside_camera(void *raw_widget, Camera *camera);
-
-void widget_draw_border(void *raw_widget, SDL_Renderer *renderer);
 
 void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera);
 

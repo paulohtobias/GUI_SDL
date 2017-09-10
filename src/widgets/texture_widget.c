@@ -66,6 +66,10 @@ void generic_texture_widget_draw(void *raw_texture_widget, SDL_Renderer *rendere
 
 		t_widget->functions->update(raw_texture_widget, renderer);
 
+		if(t_widget->widget.style != NULL){
+			border_draw(t_widget->widget.style->border, renderer, camera);
+		}
+
 		t_widget->functions->render_copy(raw_texture_widget, renderer);
 	}else if(t_widget->widget.state.entered_camera == true){
 		t_widget->widget.state.entered_camera = false;
