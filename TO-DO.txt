@@ -1,5 +1,2 @@
-* Create generic border and style to widgets.
-    * The default is NULL for both.
-    * Each extended widget can create its own or can use some defaults.
-    * Borders need to have a get_bounds and draw functions at least.
-
+* Add a get_bounds function at the default widget functions struct.
+	* This is needed in case the widget have borders and want to pass the border bounds instead of its own bounds

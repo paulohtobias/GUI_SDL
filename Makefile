@@ -31,9 +31,6 @@ LIBRARIES+= `pkg-config --libs SDL2_image SDL2_ttf`
 COMPILE = $(CC) $(CFLAGS) $(INCLUDE_PATHS)
 
 #FILEs
-#---------------Include---------------#
-INCS = $(wildcard $(IDIR)/*.h) $(wildcard $(IDIR)/*/*.h)
-
 #---------------Source----------------#
 SRCS = $(wildcard $(SDIR)/*.c) $(wildcard $(SDIR)/*/*.c)
 

@@ -1,0 +1,12 @@
+BorderStyle{ //Seria a classe base
+	Color color;
+	int size;
+}
+
+Style{
+	BorderStyle *border; //Um estilo pra borda. Provavelmente vai ser void*
+	//outros atributos de estilo.
+	
+	void (*draw)(void *self, SDL_Renderer *, Camera *); //Cada estilo pode implementar seu próprio
+	
+}
