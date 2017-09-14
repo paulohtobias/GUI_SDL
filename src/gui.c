@@ -1,5 +1,4 @@
 #include "gui.h"
-#include "widgets/button.h"
 
 bool _gui_was_init = false;
 
