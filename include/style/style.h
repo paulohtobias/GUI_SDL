@@ -15,6 +15,12 @@ Style new_Style();
 
 Style *new_Style_dinamic();
 
-//TO-DO: create setters and getters fot style
+Color style_get_background_color(Style *style);
+
+void style_set_background_color(Style *style, Color color);
+
+Border *style_get_border(Style *style);
+
+void style_set_border(Style *style, Border *border);
 
 #endif /* STYLE_H */

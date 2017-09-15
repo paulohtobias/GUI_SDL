@@ -10,6 +10,9 @@ typedef struct VT_Border{
 	void (*draw)(void *, SDL_Renderer *, Camera *);
 }VT_Border;
 
+/**
+ * Information about a border's style.
+ */
 typedef struct Border{
     Uint8 size_up;
     Uint8 size_down;
