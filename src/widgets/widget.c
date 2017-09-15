@@ -134,6 +134,6 @@ void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camer
 	Widget *widget = raw_widget;
 
 	if(widget_is_inside_camera(raw_widget, camera) && widget->style != NULL){
-		border_draw(widget->style->border, renderer, camera);
+		border_draw(style_get_border(widget->style), renderer, camera);
 	}
 }

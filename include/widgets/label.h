@@ -1,30 +1,15 @@
 #ifndef LABEL_H
 #define LABEL_H
 
-#include "texture_widget.h"
 #include <SDL2/SDL_ttf.h>
-
-typedef struct LabelStyle{
-	Color color;
-	char font[60];
-	int size;
-	bool center;
-	bool wrap;
-} LabelStyle;
-
-#define label_default_color COLOR_BLACK
-#define label_default_font "arial"
-#define label_default_size 14
-#define label_default_reach_table_cache_max_size 1024
-
-LabelStyle label_default_style;
+#include "texture_widget.h"
+#include "style/label_style.h"
 
 typedef struct Label{
 	TextureWidget t_widget;
 
 	char *text;
 	Size *size_table;
-	LabelStyle *style;
 } Label;
 
 Label new_Label(const char *text);
@@ -39,13 +24,25 @@ Size label_get_original_size(Label label, int index);
 
 void label_set_text(Label *label, const char *text);
 
+Color label_get_color(Label *label);
+
 void label_set_color(Label *label, Color color);
+
+char *label_get_font(Label *label);
 
 void label_set_font(Label *label, const char *font);
 
+int label_get_size(Label *label);
+
 void label_set_size(Label *label, int size);
 
+bool label_get_center(Label *label);
+
 void label_center(Label *label);
+
+bool label_get_wrap(Label *label);
+
+void label_set_wrap(Label *label, bool wrap);
 
 void label_set_style(Label *label, LabelStyle *style);
 
@@ -59,8 +56,5 @@ void generic_label_set_bounds(void *raw_label, SDL_Rect bounds);
 void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer);
 
 void generic_label_update(void *raw_label, SDL_Renderer *renderer);
-
-
-void init_look_and_feel_label();
 
 #endif //LABEL_H

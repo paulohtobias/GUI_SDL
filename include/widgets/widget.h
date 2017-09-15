@@ -44,7 +44,7 @@ typedef struct Widget{
 	WidgetSate state;
 	Bounds bounds;
 
-	Style *style;
+	void *style;
 
 	//Functions
 	VT_Widget *functions;
