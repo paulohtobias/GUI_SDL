@@ -50,7 +50,7 @@ dll: $(OBJS)
 -include $(DEPS)
 
 $(ODIR)/%.o: $(SDIR)/%.c
-	$(COMPILE) -MMD -c $< -o $@ $(LIBRARIES) $(DLL)
+	$(COMPILE) -c $< -o $@ $(LIBRARIES) $(DLL)
 
 .PHONY : clean
 clean :

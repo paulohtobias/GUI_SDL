@@ -8,7 +8,7 @@ VT_Widget __glabel_widget_vt = {
 };
 
 VT_TextureWidget __glabel_twidget_vt = {
-	generic_label_set_changed,
+	generic_texture_widget_set_changed,
 	generic_label_render_copy,
 	generic_label_update
 };
@@ -78,7 +78,6 @@ void label_set_text(Label *label, const char *text){
 }
 
 ///Internal function used when changing a label's style.
-
 void __label_new_style(Label *label){
 	if(label->style == &label_default_style){
 		label_set_style(label, malloc(sizeof(LabelStyle)));
@@ -89,31 +88,31 @@ void __label_new_style(Label *label){
 void label_set_color(Label *label, Color color){
 	__label_new_style(label);
 	label->style->color = color;
-	label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
+	label->t_widget.functions->set_changed(label, true);
 }
 
 void label_set_font(Label *label, const char *font){
 	__label_new_style(label);
 	snprintf(label->style->font, 60, "./Resources/Fonts/%s.ttf", font);
 	//strncpy(label->style->font, font, 60);
-	label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
+	label->t_widget.functions->set_changed(label, true);
 }
 
 void label_set_size(Label *label, int size){
 	__label_new_style(label);
 	label->style->size = size;
-	label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
+	label->t_widget.functions->set_changed(label, true);
 }
 
 void label_center(Label *label){
 	__label_new_style(label);
 	label->style->center = true;
-	label->t_widget.functions->set_changed(label, LABEL_STATE_CENTERED);
+	label->t_widget.functions->set_changed(label, true);
 }
 
 void label_set_style(Label *label, LabelStyle *style){
 	label->style = style;
-	label->t_widget.functions->set_changed(label, LABEL_STATE_CHANGED);
+	label->t_widget.functions->set_changed(label, true);
 }
 
 SDL_Rect label_get_center_bounds(Label *label, Size *real_size){
@@ -148,38 +147,17 @@ void generic_label_set_bounds(void *raw_label, SDL_Rect bounds){
 
 	if(bounds.w > 0 && bounds.h > 0){
 		label->t_widget.widget.state.auto_size = false;
-		label->t_widget.functions->set_changed(raw_label, LABEL_STATE_CHANGED);
+		label->t_widget.functions->set_changed(raw_label, true);
 	}
 
 	if(label->t_widget.widget.state.auto_size == true){
 		Size size = label_get_original_size(*label, strlen(label->text) - 1);
 		bounds.w = size.w;
 		bounds.h = size.h;
-		label->t_widget.functions->set_changed(raw_label, LABEL_STATE_CHANGED);
+		label->t_widget.functions->set_changed(raw_label, false);
 	}
 
 	set_bounds_from_SDL_Rect(&label->t_widget.widget.bounds, bounds);
-}
-
-void generic_label_set_changed(void *raw_label, int changed){
-	Label *label = raw_label;
-
-	//If they're equal, then don't do anything.
-	if(label->t_widget.changed == changed){
-		return;
-	}
-
-	if(label->t_widget.changed == LABEL_STATE_UNCHANGED || changed == LABEL_STATE_UNCHANGED){
-		label->t_widget.changed = changed;
-		return;
-	}
-
-	//Here, neither are false.
-	//But if the state is already on LABEL_STATE_CENTERED, it needs to
-	//keep that state.
-	if(label->t_widget.changed != LABEL_STATE_CENTERED){
-		label->t_widget.changed = changed;
-	}
 }
 
 void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer){
@@ -205,7 +183,7 @@ void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer){
 void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 	Label *label = raw_label;
 
-	if(label->t_widget.changed == LABEL_STATE_UNCHANGED){
+	if(label->t_widget.changed == false){
 		return;
 	}
 
@@ -265,9 +243,8 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 	if(label->t_widget.widget.state.auto_size == true){
 		set_size(&label->t_widget.widget.bounds, real_size);
 	}
-	label->t_widget.functions->set_changed(raw_label, LABEL_STATE_UNCHANGED);
+	label->t_widget.functions->set_changed(raw_label, false);
 }
-
 
 
 void init_look_and_feel_label(){
