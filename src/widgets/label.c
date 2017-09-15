@@ -102,7 +102,6 @@ char *label_get_font(Label* label){
 void label_set_font(Label *label, const char *font){
 	__label_new_style(label);
 	snprintf(((LabelStyle *)label->t_widget.widget.style)->font, 60, "./Resources/Fonts/%s.ttf", font);
-	//strncpy(label->t_widget.widget.style->font, font, 60);
 	label->t_widget.functions->set_changed(label, true);
 }
 
@@ -120,10 +119,9 @@ bool label_get_center(Label* label){
 	return ((LabelStyle *)label->t_widget.widget.style)->center;
 }
 
-void label_center(Label *label){
+void label_set_center(Label *label, bool center){
 	__label_new_style(label);
-	((LabelStyle *)label->t_widget.widget.style)->center = true;
-	label->t_widget.functions->set_changed(label, true);
+	((LabelStyle *)label->t_widget.widget.style)->center = center;
 }
 
 bool label_get_wrap(Label* label){
@@ -173,14 +171,12 @@ void generic_label_set_bounds(void *raw_label, SDL_Rect bounds){
 
 	if(bounds.w > 0 && bounds.h > 0){
 		label->t_widget.widget.state.auto_size = false;
-		label->t_widget.functions->set_changed(raw_label, true);
 	}
 
 	if(label->t_widget.widget.state.auto_size == true){
 		Size size = label_get_original_size(*label, strlen(label->text) - 1);
 		bounds.w = size.w;
 		bounds.h = size.h;
-		label->t_widget.functions->set_changed(raw_label, false);
 	}
 
 	set_bounds_from_SDL_Rect(&label->t_widget.widget.bounds, bounds);

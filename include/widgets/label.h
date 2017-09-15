@@ -38,7 +38,7 @@ void label_set_size(Label *label, int size);
 
 bool label_get_center(Label *label);
 
-void label_center(Label *label);
+void label_set_center(Label *label, bool center);
 
 bool label_get_wrap(Label *label);
 
