@@ -2,8 +2,6 @@
 CC = gcc
 CFLAGS = -g -Wall -MMD
 
-DLL= #-lm -fPIC
-
 #Binary
 ifeq ($(OS),Windows_NT)
     BIN = main.exe
@@ -21,26 +19,33 @@ else
 	ODIR = ./obj/linux
 endif
 
+#Files
+SOURCE = .c
+MAIN = main
+
 #Paths
-INCLUDE_PATHS = -I$(IDIR) `pkg-config --cflags SDL2_image SDL2_ttf`
+INCLUDE_PATHS = -I$(IDIR)
 
 #Libraries
-LIBRARIES+= `pkg-config --libs SDL2_image SDL2_ttf`
+LIBS = SDL2_image SDL2_ttf
+CFLAGS+= `pkg-config --cflags $(LIBS)`
+LIBRARIES = `pkg-config --libs $(LIBS)`
 
 #Compilation line
 COMPILE = $(CC) $(CFLAGS) $(INCLUDE_PATHS)
 
 #FILEs
 #---------------Source----------------#
-SRCS = $(wildcard $(SDIR)/*.c) $(wildcard $(SDIR)/*/*.c)
-
+SRCS = $(wildcard $(SDIR)/*$(SOURCE)) $(wildcard $(SDIR)/*/*$(SOURCE))
 #---------------Object----------------#
-OBJS = $(SRCS:$(SDIR)/%.c=$(ODIR)/%.o)
+OBJS = $(SRCS:$(SDIR)/%$(SOURCE)=$(ODIR)/%.o)
 #-------------Dependency--------------#
-DEPS = $(SRCS:$(SDIR)/%.c=$(ODIR)/%.d)
+DEPS = $(SRCS:$(SDIR)/%$(SOURCE)=$(ODIR)/%.d)
+
+#demos/%: MAIN = $@
 
 all: $(OBJS)
-	$(COMPILE) $(OBJS) main.c -o $(BIN) $(LIBRARIES)
+	$(COMPILE) $(OBJS) $(MAIN)$(SOURCE) -o $(BIN) $(LIBRARIES)
 
 dll: LIBRARIES+= -lm -fPIC
 dll: $(OBJS)
@@ -49,8 +54,8 @@ dll: $(OBJS)
 # Include all .d files
 -include $(DEPS)
 
-$(ODIR)/%.o: $(SDIR)/%.c
-	$(COMPILE) -c $< -o $@ $(LIBRARIES) $(DLL)
+$(ODIR)/%.o: $(SDIR)/%$(SOURCE)
+	$(COMPILE) -c $< -o $@ $(LIBRARIES)
 
 .PHONY : clean
 clean :
