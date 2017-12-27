@@ -9,7 +9,7 @@ Style new_Style(){
 	return style;
 }
 
-Style *new_Style_dinamic(){
+Style *new_Style_dynamic(){
 	Style *style = malloc(sizeof(Style));
 	
 	(*style) = new_Style();

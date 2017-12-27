@@ -24,7 +24,7 @@ Rectangle new_Rectangle_with_position(Color color, Position position){
 Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 	Rectangle rectangle = new_TextureWidget();
 
-	rectangle.widget.style = new_Style_dinamic();
+	rectangle.widget.style = new_Style_dynamic();
 	style_set_background_color(rectangle.widget.style, color);
 	rectangle.widget.functions = &__grectangle_widget_vt;
 	rectangle.functions = &__grectangle_vt;
@@ -46,7 +46,6 @@ void generic_rectangle_update(void *raw_rectangle, SDL_Renderer *renderer){
 		return;
 	}
 
-	// load the image data into the graphics hardware's memory
 	if(rectangle->texture != NULL){
 		SDL_DestroyTexture(rectangle->texture);
 		rectangle->texture = NULL;
@@ -71,7 +70,6 @@ void generic_rectangle_update(void *raw_rectangle, SDL_Renderer *renderer){
 		SDL_Quit();
 		exit(1);
 	}
-	//image_setBounds(img, image_getBounds(img));
 	SDL_SetTextureBlendMode(rectangle->texture, SDL_BLENDMODE_BLEND);
 
 	SDL_SetRenderTarget(renderer, rectangle->texture);

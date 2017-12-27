@@ -1,2 +1,8 @@
 * Add a get_bounds function at the default widget functions struct.
 	* This is needed in case the widget have borders and want to pass the border bounds instead of its own bounds
+
+* change both prefix 'generic' and 'raw' to '__'.
+
+* Divide Border into BorderStyle and Border, for easier initialization.
+
+* Create a struct EventData to be passed to the process_events functions.

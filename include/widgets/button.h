@@ -1,0 +1,36 @@
+#ifndef BUTTON_H
+#define BUTTON_H
+
+#include "containers/container.h"
+#include "rectangle.h"
+#include "label.h"
+#include "image.h"
+#include "style/button_style.h"
+
+typedef struct Button{
+	Container container;
+
+	Rectangle *rectangle;
+	Label *label;
+	Image *image;
+
+	ButtonStyle *style_idle;
+	ButtonStyle *style_focused;
+	ButtonStyle *style_pressed;
+	ButtonStyle *style_disabled;
+} Button;
+
+Button new_Button(const char *text, const char *image);
+
+Button new_Button_with_position(const char *text, const char *image, Position position);
+
+Button new_Button_with_bounds(const char *text, const char *image, SDL_Rect bounds);
+
+
+void generic_button_free(void *raw_button);
+
+void generic_button_set_bounds(void *raw_button, SDL_Rect bounds);
+
+void generic_button_process_events(void *raw_button, SDL_Event event, Mouse mouse);
+
+#endif //BUTTON_H

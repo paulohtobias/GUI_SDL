@@ -4,6 +4,8 @@
 #include "border.h"
 
 typedef struct Style{
+	//TO-DO: a pointer to the default widget style and some functions (new, set and copy).
+	
 	Color background_color;
 	Border *border;
 	
@@ -13,7 +15,7 @@ typedef struct Style{
 
 Style new_Style();
 
-Style *new_Style_dinamic();
+Style *new_Style_dynamic();
 
 Color style_get_background_color(Style *style);
 

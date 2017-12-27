@@ -1,5 +1,4 @@
 #include "widgets/texture_widget.h"
-#include "utils/exception.h"
 
 VT_Widget __gtwidget_widget_vt = {
 	generic_texture_widget_free,

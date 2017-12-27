@@ -29,7 +29,6 @@ typedef struct VT_Widget{
 } VT_Widget;
 
 ///TO-DO: change this to a enum and each state is a bit to use less memory.
-
 typedef struct WidgetSate{
 	bool focus; ///The widget has focus.
 	bool fixed; ///The widget can't be dragged.

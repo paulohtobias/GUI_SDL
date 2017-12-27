@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
                 grpos = get_position_origin(rec.widget.bounds);
                 
                 set_size(&rec.widget.bounds, new_Size(1, 1));
-                rec.widget.style->background_color = rec_color;
+                ((Style *)rec.widget.style)->background_color = rec_color;
                 rec.functions->set_changed(&rec, true);
             }else if(mouse_is_pressed(window->mouse)){
                 Position mpos = mouse_get_position();
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]){
             }
             if(window->event.type == SDL_MOUSEBUTTONUP){
                 //window->background_color = COLOR_GREY(240);
-                rec.widget.style->background_color = COLOR_RGBA(0, 0, 0, 0);
+                ((Style *)rec.widget.style)->background_color = COLOR_RGBA(0, 0, 0, 0);
                 rec.functions->set_changed(&rec, true);
             }
 			
