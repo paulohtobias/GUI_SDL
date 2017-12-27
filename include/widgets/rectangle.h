@@ -12,8 +12,8 @@ Rectangle new_Rectangle_with_position(Color color, Position position);
 Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds);
 
 
-void generic_rectangle_set_bounds(void *raw_rectangle, SDL_Rect bounds);
+void __rectangle_set_bounds(void *__rectangle, SDL_Rect bounds);
 
-void generic_rectangle_update(void *raw_rectangle, SDL_Renderer *renderer);
+void __rectangle_update(void *__rectangle, SDL_Renderer *renderer);
 
 #endif //RECTANGLE_H

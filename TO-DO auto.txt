@@ -3,4 +3,4 @@
 ./include/style/button_style.h:18://TO-DO: fix button style
 ./include/widgets/widget.h:31:///TO-DO: change this to a enum and each state is a bit to use less memory.
 ./src/utils/array_list.c:127:	//TO-DO
-./src/widgets/image.c:72:	printf("TO-DO: generic_image_free\n");
+./src/widgets/image.c:72:	printf("TO-DO: __image_free\n");

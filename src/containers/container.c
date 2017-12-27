@@ -1,15 +1,15 @@
 #include "containers/container.h"
 
 VT_Widget __gcontainer_widget_vt = {
-	generic_container_free,
-	generic_container_set_bounds,
-	generic_container_process_events,
-	generic_container_draw
+	__container_free,
+	__container_set_bounds,
+	__container_process_events,
+	__container_draw
 };
 
 VT_Container __gcontainer_vt = {
-	generic_container_add_widget,
-	generic_container_remove_widget
+	__container_add_widget,
+	__container_remove_widget
 };
 
 Container new_Container(){
@@ -66,10 +66,10 @@ void container_empty(void *container){
 	container_->widget_list = new_ArrayList();
 }
 
-void generic_container_free(void *raw_container){
-	generic_widget_free(raw_container);
+void __container_free(void *__container){
+	__widget_free(__container);
 
-	Container *container = raw_container;
+	Container *container = __container;
 
 	free_ArrayList(container->widget_list, widget_free);
 	container->widget_list = NULL;
@@ -77,8 +77,8 @@ void generic_container_free(void *raw_container){
 	container->functions->remove_widget = NULL;
 }
 
-void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
-	Container *container = raw_container;
+void __container_set_bounds(void *__container, SDL_Rect bounds){
+	Container *container = __container;
 
 	SDL_Rect container_bounds_old = container_get_bounds_origin(container);
 	set_bounds_from_SDL_Rect(&container->widget.bounds, bounds);
@@ -102,18 +102,18 @@ void generic_container_set_bounds(void *raw_container, SDL_Rect bounds){
 	}
 }
 
-void generic_container_process_events(void *raw_container, SDL_Event event, Mouse mouse){
-	Container *container = raw_container;
+void __container_process_events(void *__container, SDL_Event event, Mouse mouse){
+	Container *container = __container;
 
-	generic_widget_process_events(container, event, mouse);
+	__widget_process_events(container, event, mouse);
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
 		widget_process_events(list_get_index(container->widget_list, i), event, mouse);
 	}
 }
 
-void generic_container_draw(void *raw_container, SDL_Renderer *renderer, Camera *camera){
-	Container *container = raw_container;
+void __container_draw(void *__container, SDL_Renderer *renderer, Camera *camera){
+	Container *container = __container;
 
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
@@ -121,10 +121,10 @@ void generic_container_draw(void *raw_container, SDL_Renderer *renderer, Camera 
 	}
 }
 
-void generic_container_add_widget(void *raw_container, void *widget){
-	Container *container = raw_container;
+void __container_add_widget(void *__container, void *widget){
+	Container *container = __container;
 
-	SDL_Rect container_bounds = container_get_bounds_origin(raw_container);
+	SDL_Rect container_bounds = container_get_bounds_origin(__container);
 	SDL_Rect widget_bounds = widget_get_bounds_origin(widget);
 	widget_bounds.x += container_bounds.x;
 	widget_bounds.y += container_bounds.y;
@@ -135,7 +135,7 @@ void generic_container_add_widget(void *raw_container, void *widget){
 	list_insert_last(container->widget_list, widget);
 }
 
-void* generic_container_remove_widget(void *raw_container){
-	Container *container = raw_container;
+void* __container_remove_widget(void *__container){
+	Container *container = __container;
 	return list_remove_last(container->widget_list);
 }

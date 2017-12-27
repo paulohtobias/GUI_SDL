@@ -1,10 +1,10 @@
 #include "widgets/button.h"
 
 VT_Widget __gbutton_widget_vt = {
-    generic_button_free,
-    generic_button_set_bounds,
-    generic_container_process_events,
-    generic_container_draw
+    __button_free,
+    __button_set_bounds,
+    __button_process_events,
+    __container_draw
 };
 
 Button new_Button(const char *text, const char *image_file){
@@ -53,12 +53,12 @@ Button new_Button_with_bounds(const char *text, const char *image_file, SDL_Rect
 }
 
 
-void generic_button_free(void *raw_button){
+void __button_free(void *__button){
     
 }
 
-void generic_button_set_bounds(void *raw_button, SDL_Rect bounds){
-    Button *button = raw_button;
+void __button_set_bounds(void *__button, SDL_Rect bounds){
+    Button *button = __button;
     
     widget_set_bounds(button->rectangle, bounds);
     if(button->image != NULL){
@@ -71,13 +71,15 @@ void generic_button_set_bounds(void *raw_button, SDL_Rect bounds){
     set_bounds_from_SDL_Rect(&button->container.widget.bounds, bounds);
 }
 
-void generic_button_process_events(void *raw_button, SDL_Event event, Mouse mouse){
-	Button *button = raw_button;
+void __button_process_events(void *__button, SDL_Event event, Mouse mouse){
+	Button *button = __button;
 	
-	generic_container_process_events(raw_button, event, mouse);
+	__container_process_events(__button, event, mouse);
 	
 	ButtonStyle *current_style = button->style_idle;
 	if(button->container.widget.state.mouse_state == MOUSE_LEFT_PRESSED){
-		*((Style *)button->rectangle->widget.style) = button->style_pressed->style;
+		current_style = button->style_pressed;
+	}else if(button->container.widget.state.mouse_over){
+		current_style = button->style_focused;
 	}
 }

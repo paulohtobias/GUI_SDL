@@ -16,8 +16,8 @@ void init_look_and_feel_button(){
 	__init_button_style(&button_default_style_disabled, button_default_bg_color_disabled, button_default_label_color_disabled);
 }
 
-void generic_free_button_style(void *raw_button_style){
-	ButtonStyle *button_style = raw_button_style;
+void __free_button_style(void *__button_style){
+	ButtonStyle *button_style = __button_style;
 	
 	//TO-DO
 }

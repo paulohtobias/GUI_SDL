@@ -38,12 +38,12 @@ typedef struct TextureWidget{
 
 TextureWidget new_TextureWidget();
 
-void generic_texture_widget_free(void *t_widget);
+void __texture_widget_free(void *t_widget);
 
-void generic_texture_widget_set_changed(void *raw_texture_widget, int changed);
+void __texture_widget_set_changed(void *__texture_widget, int changed);
 
-void generic_texture_widget_render_copy(void *raw_widget, SDL_Renderer *renderer);
+void __texture_widget_render_copy(void *__widget, SDL_Renderer *renderer);
 
-void generic_texture_widget_draw(void *t_widget, SDL_Renderer *renderer, Camera *camera);
+void __texture_widget_draw(void *t_widget, SDL_Renderer *renderer, Camera *camera);
 
 #endif //TEXTUREWIDGET_H

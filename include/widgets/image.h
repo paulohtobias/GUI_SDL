@@ -29,11 +29,11 @@ Size image_get_original_size(Image image);
 void image_set_file(Image *image, const char *file);
 
 
-void generic_image_free(void *raw_image);
+void __image_free(void *__image);
 
-void generic_image_set_bounds(void *raw_image, SDL_Rect bounds);
+void __image_set_bounds(void *__image, SDL_Rect bounds);
 
-void generic_image_update(void *raw_image, SDL_Renderer *renderer);
+void __image_update(void *__image, SDL_Renderer *renderer);
 
 #endif //IMAGE_H
 

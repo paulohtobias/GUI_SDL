@@ -41,8 +41,8 @@ void border_set_bounds(void *border, SDL_Rect widget_bounds);
 void border_draw(void *border, SDL_Renderer *renderer, Camera *camera);
 
 
-void generic_border_set_bounds(void *raw_border, SDL_Rect widget_bounds);
+void __border_set_bounds(void *__border, SDL_Rect widget_bounds);
 
-void generic_border_draw(void *raw_border, SDL_Renderer *renderer, Camera *camera);
+void __border_draw(void *__border, SDL_Renderer *renderer, Camera *camera);
 
 #endif /* BORDER_H */

@@ -1,16 +1,16 @@
 #include "widgets/rectangle.h"
 
 VT_Widget __grectangle_widget_vt = {
-	generic_texture_widget_free,
-	generic_rectangle_set_bounds,
-	generic_widget_process_events,
-	generic_texture_widget_draw
+	__texture_widget_free,
+	__rectangle_set_bounds,
+	__widget_process_events,
+	__texture_widget_draw
 };
 
 VT_TextureWidget __grectangle_vt = {
-	generic_texture_widget_set_changed,
-	generic_texture_widget_render_copy,
-	generic_rectangle_update
+	__texture_widget_set_changed,
+	__texture_widget_render_copy,
+	__rectangle_update
 };
 
 Rectangle new_Rectangle(Color color){
@@ -34,13 +34,13 @@ Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 	return rectangle;
 }
 
-void generic_rectangle_set_bounds(void *raw_rectangle, SDL_Rect bounds){
-	generic_widget_set_bounds(raw_rectangle, bounds);
-	((Rectangle *) raw_rectangle)->functions->set_changed(raw_rectangle, true);
+void __rectangle_set_bounds(void *__rectangle, SDL_Rect bounds){
+	__widget_set_bounds(__rectangle, bounds);
+	((Rectangle *) __rectangle)->functions->set_changed(__rectangle, true);
 }
 
-void generic_rectangle_update(void *raw_rectangle, SDL_Renderer *renderer){
-	Rectangle *rectangle = raw_rectangle;
+void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
+	Rectangle *rectangle = __rectangle;
 
 	if(!rectangle->changed){
 		return;
@@ -81,5 +81,5 @@ void generic_rectangle_update(void *raw_rectangle, SDL_Renderer *renderer){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 240, 240, 240, 255);
 
-	rectangle->functions->set_changed(raw_rectangle, false);
+	rectangle->functions->set_changed(__rectangle, false);
 }

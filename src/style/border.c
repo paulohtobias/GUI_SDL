@@ -1,8 +1,8 @@
 #include "style/border.h"
 
 VT_Border __gborder_vt = {
-	generic_border_set_bounds,
-	generic_border_draw
+	__border_set_bounds,
+	__border_draw
 };
 
 Border new_Border(int size, Color color, SDL_Rect widget_bounds){
@@ -50,12 +50,12 @@ void border_draw(void *border, SDL_Renderer *renderer, Camera *camera){
 }
 
 
-void generic_border_set_bounds(void *raw_border, SDL_Rect widget_bounds){
-	if(raw_border == NULL){
+void __border_set_bounds(void *__border, SDL_Rect widget_bounds){
+	if(__border == NULL){
 		return;
 	}
 	
-	Border *border = raw_border;
+	Border *border = __border;
 	
 	border->bounds.x = widget_bounds.x - border->size_left;
 	border->bounds.w = widget_bounds.w + border->size_left + border->size_right;
@@ -63,8 +63,8 @@ void generic_border_set_bounds(void *raw_border, SDL_Rect widget_bounds){
 	border->bounds.h = widget_bounds.h + border->size_up + border->size_down;
 }
 
-void generic_border_draw(void *raw_border, SDL_Renderer *renderer, Camera *camera){
-	Border *border = raw_border;
+void __border_draw(void *__border, SDL_Renderer *renderer, Camera *camera){
+	Border *border = __border;
 	
 	set_renderer_draw_color(renderer, border->color);
 	SDL_RenderFillRect(renderer, &border->bounds);

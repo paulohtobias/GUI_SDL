@@ -9,10 +9,10 @@
 #include "widgets/widget.h"
 
 VT_Widget __gwidget_vt = {
-	generic_widget_free,
-	generic_widget_set_bounds,
-	generic_widget_process_events,
-	generic_widget_draw
+	__widget_free,
+	__widget_set_bounds,
+	__widget_process_events,
+	__widget_draw
 };
 
 WidgetSate new_WidgetState(){
@@ -61,9 +61,9 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
 	((Widget *) widget)->functions->process_events(widget, event, mouse);
 }
 
-void widget_update_camera_position(void *raw_widget, Camera *camera){
+void widget_update_camera_position(void *__widget, Camera *camera){
 	if(camera != NULL){
-		Widget *widget = raw_widget;
+		Widget *widget = __widget;
 		set_position_camera(
 			&widget->bounds,
 			position_subtract(get_position_origin(widget->bounds), camera_get_position(camera))
@@ -71,24 +71,24 @@ void widget_update_camera_position(void *raw_widget, Camera *camera){
 	}
 }
 
-bool widget_is_inside_camera(void *raw_widget, Camera *camera){
+bool widget_is_inside_camera(void *__widget, Camera *camera){
 	if(camera == NULL){
 		return true;
 	}
-	Widget *widget = raw_widget;
+	Widget *widget = __widget;
 	return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
 }
 
-void widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
-	//widget_update_camera_position(raw_widget, camera);
+void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){
+	//widget_update_camera_position(__widget, camera);
 
-	Widget *widget = raw_widget;
-	widget->functions->draw(raw_widget, renderer, camera);
+	Widget *widget = __widget;
+	widget->functions->draw(__widget, renderer, camera);
 }
 
 
-void generic_widget_free(void *raw_widget){
-	Widget *widget = raw_widget;
+void __widget_free(void *__widget){
+	Widget *widget = __widget;
 
 	widget->functions->set_bounds = NULL;
 	widget->functions->process_events = NULL;
@@ -96,8 +96,8 @@ void generic_widget_free(void *raw_widget){
 	widget->functions->free = NULL;
 }
 
-void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds){
-	Widget *widget = raw_widget;
+void __widget_set_bounds(void *__widget, SDL_Rect bounds){
+	Widget *widget = __widget;
 
 	if(bounds.w > 0 && bounds.h > 0){
 		widget->state.auto_size = false;
@@ -105,8 +105,8 @@ void generic_widget_set_bounds(void *raw_widget, SDL_Rect bounds){
 	set_bounds_from_SDL_Rect(&widget->bounds, bounds);
 }
 
-void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mouse){
-	Widget *widget = raw_widget;
+void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
+	Widget *widget = __widget;
 
 	widget->state.mouse_over = false;
 	widget->state.mouse_state = MOUSE_IDLE;
@@ -130,10 +130,10 @@ void generic_widget_process_events(void *raw_widget, SDL_Event event, Mouse mous
 	}
 }
 
-void generic_widget_draw(void *raw_widget, SDL_Renderer *renderer, Camera *camera){
-	Widget *widget = raw_widget;
+void __widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){
+	Widget *widget = __widget;
 
-	if(widget_is_inside_camera(raw_widget, camera) && widget->style != NULL){
+	if(widget_is_inside_camera(__widget, camera) && widget->style != NULL){
 		border_draw(style_get_border(widget->style), renderer, camera);
 	}
 }

@@ -23,35 +23,35 @@ Container new_Container();
 
 Container new_Container_max_widgets(int max);
 
-void container_free(void *raw_container);
+void container_free(void *__container);
 
 SDL_Rect container_get_bounds_origin(void *container);
 
 SDL_Rect container_get_bounds_camera(void *container);
 
-void container_set_bounds(void *raw_container, SDL_Rect bounds);
+void container_set_bounds(void *__container, SDL_Rect bounds);
 
-void container_process_events(void *raw_container, SDL_Event event, Mouse mouse);
+void container_process_events(void *__container, SDL_Event event, Mouse mouse);
 
-void container_draw(void *raw_container, SDL_Renderer *renderer, Camera *camera);
+void container_draw(void *__container, SDL_Renderer *renderer, Camera *camera);
 
-void container_add_widget(void *raw_container, void *widget);
+void container_add_widget(void *__container, void *widget);
 
-void *container_remove_widget(void *raw_container);
+void *container_remove_widget(void *__container);
 
 void container_empty(void *container);
 
 
-void generic_container_free(void *raw_container);
+void __container_free(void *__container);
 
-void generic_container_set_bounds(void *raw_container, SDL_Rect bounds);
+void __container_set_bounds(void *__container, SDL_Rect bounds);
 
-void generic_container_process_events(void *raw_container, SDL_Event event, Mouse mouse);
+void __container_process_events(void *__container, SDL_Event event, Mouse mouse);
 
-void generic_container_draw(void *raw_container, SDL_Renderer *renderer, Camera *camera);
+void __container_draw(void *__container, SDL_Renderer *renderer, Camera *camera);
 
-void generic_container_add_widget(void *raw_container, void *widget);
+void __container_add_widget(void *__container, void *widget);
 
-void *generic_container_remove_widget(void *raw_container);
+void *__container_remove_widget(void *__container);
 
 #endif //CONTAINER_H

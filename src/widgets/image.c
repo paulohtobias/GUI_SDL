@@ -9,16 +9,16 @@
 #include "widgets/image.h"
 
 VT_Widget __gimage_widget_vt = {
-	generic_image_free,
-	generic_image_set_bounds,
-	generic_widget_process_events,
-	generic_texture_widget_draw
+	__image_free,
+	__image_set_bounds,
+	__widget_process_events,
+	__texture_widget_draw
 };
 
 VT_TextureWidget __gimage_vt = {
-	generic_texture_widget_set_changed,
-	generic_texture_widget_render_copy,
-	generic_image_update
+	__texture_widget_set_changed,
+	__texture_widget_render_copy,
+	__image_update
 };
 
 Image new_Image(const char *file){
@@ -68,30 +68,30 @@ void image_set_file(Image *image, const char *file){
 	string_change(&image->file, file);
 }
 
-void generic_image_free(void *raw_image){
-	printf("TO-DO: generic_image_free\n");
+void __image_free(void *__image){
+	printf("TO-DO: __image_free\n");
 }
 
-void generic_image_set_bounds(void *raw_image, SDL_Rect bounds){
-	Image *image = raw_image;
+void __image_set_bounds(void *__image, SDL_Rect bounds){
+	Image *image = __image;
 
 	if(bounds.w > 0 && bounds.h > 0){
 		image->t_widget.widget.state.auto_size = false;
-		image->t_widget.functions->set_changed(raw_image, true);
+		image->t_widget.functions->set_changed(__image, true);
 	}
 
 	if(image->t_widget.widget.state.auto_size == true){
 		Size size = image_get_original_size(*image);
 		bounds.w = size.w;
 		bounds.h = size.h;
-		image->t_widget.functions->set_changed(raw_image, true);
+		image->t_widget.functions->set_changed(__image, true);
 	}
 
 	set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
 }
 
-void generic_image_update(void *raw_image, SDL_Renderer *renderer){
-	Image *image = raw_image;
+void __image_update(void *__image, SDL_Renderer *renderer){
+	Image *image = __image;
 
 	if(!image->t_widget.changed){
 		return;
@@ -121,5 +121,5 @@ void generic_image_update(void *raw_image, SDL_Renderer *renderer){
 		exit(1);
 	}
 	//image_setBounds(img, image_getBounds(img));
-	image->t_widget.functions->set_changed(raw_image, false);
+	image->t_widget.functions->set_changed(__image, false);
 }

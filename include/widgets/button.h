@@ -27,10 +27,10 @@ Button new_Button_with_position(const char *text, const char *image, Position po
 Button new_Button_with_bounds(const char *text, const char *image, SDL_Rect bounds);
 
 
-void generic_button_free(void *raw_button);
+void __button_free(void *__button);
 
-void generic_button_set_bounds(void *raw_button, SDL_Rect bounds);
+void __button_set_bounds(void *__button, SDL_Rect bounds);
 
-void generic_button_process_events(void *raw_button, SDL_Event event, Mouse mouse);
+void __button_process_events(void *__button, SDL_Event event, Mouse mouse);
 
 #endif //BUTTON_H

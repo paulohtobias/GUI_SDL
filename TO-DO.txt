@@ -6,3 +6,5 @@
 * Divide Border into BorderStyle and Border, for easier initialization.
 
 * Create a struct EventData to be passed to the process_events functions.
+
+* Create all the setters and getters from Style in Widget.

@@ -1,16 +1,16 @@
 #include "widgets/label.h"
 
 VT_Widget __glabel_widget_vt = {
-	generic_label_free,
-	generic_label_set_bounds,
-	generic_widget_process_events,
-	generic_texture_widget_draw
+	__label_free,
+	__label_set_bounds,
+	__widget_process_events,
+	__texture_widget_draw
 };
 
 VT_TextureWidget __glabel_twidget_vt = {
-	generic_texture_widget_set_changed,
-	generic_label_render_copy,
-	generic_label_update
+	__texture_widget_set_changed,
+	__label_render_copy,
+	__label_update
 };
 
 Label new_Label(const char *text){
@@ -154,8 +154,8 @@ SDL_Rect label_get_center_bounds(Label *label, Size *real_size){
 	return center_bounds;
 }
 
-void generic_label_free(void *raw_label){
-	Label *label = raw_label;
+void __label_free(void *__label){
+	Label *label = __label;
 
 	widget_free(&label->t_widget);
 
@@ -166,8 +166,8 @@ void generic_label_free(void *raw_label){
 	}
 }
 
-void generic_label_set_bounds(void *raw_label, SDL_Rect bounds){
-	Label *label = raw_label;
+void __label_set_bounds(void *__label, SDL_Rect bounds){
+	Label *label = __label;
 
 	if(bounds.w > 0 && bounds.h > 0){
 		label->t_widget.widget.state.auto_size = false;
@@ -182,8 +182,8 @@ void generic_label_set_bounds(void *raw_label, SDL_Rect bounds){
 	set_bounds_from_SDL_Rect(&label->t_widget.widget.bounds, bounds);
 }
 
-void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer){
-	Label *label = raw_label;
+void __label_render_copy(void *__label, SDL_Renderer *renderer){
+	Label *label = __label;
 
 	SDL_Rect bounds = get_bounds_camera(label->t_widget.widget.bounds);
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
@@ -202,8 +202,8 @@ void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer){
 	SDL_RenderCopy(renderer, label->t_widget.texture, &limit, &bounds);
 }
 
-void generic_label_update(void *raw_label, SDL_Renderer *renderer){
-	Label *label = raw_label;
+void __label_update(void *__label, SDL_Renderer *renderer){
+	Label *label = __label;
 
 	if(label->t_widget.changed == false){
 		return;
@@ -212,7 +212,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 	//Creating the Font.
 	TTF_Font *ttf_font = TTF_OpenFont(label_get_font(label), label_get_size(label));
 	if(ttf_font == NULL){
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: generic_label_update", TTF_GetError(), NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: __label_update", TTF_GetError(), NULL);
 		exit(1);
 	}
 	label_update_size_table(label, ttf_font);
@@ -223,7 +223,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 	if(!label_get_wrap(label)){
 		surface = TTF_RenderUTF8_Blended(ttf_font, label->text, label_get_color(label));
 	}else{
-		int bounds_width = widget_get_bounds_origin(raw_label).w;
+		int bounds_width = widget_get_bounds_origin(__label).w;
 		int max_width = MIN(bounds_width, real_size.w);
 
 		surface = TTF_RenderUTF8_Blended_Wrapped(ttf_font, label->text, label_get_color(label), max_width);
@@ -233,7 +233,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 
 	//Error checking.
 	if(surface == NULL){
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Surface Error: generic_label_update", TTF_GetError(), NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Surface Error: __label_update", TTF_GetError(), NULL);
 
 		TTF_Quit();
 		SDL_Quit();
@@ -254,7 +254,7 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 
 	//Error checking.
 	if(label->t_widget.texture == NULL){
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Texture Error: generic_label_update", SDL_GetError(), NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Texture Error: __label_update", SDL_GetError(), NULL);
 		free(label);
 
 		TTF_Quit();
@@ -265,5 +265,5 @@ void generic_label_update(void *raw_label, SDL_Renderer *renderer){
 	if(label->t_widget.widget.state.auto_size == true){
 		set_size(&label->t_widget.widget.bounds, real_size);
 	}
-	label->t_widget.functions->set_changed(raw_label, false);
+	label->t_widget.functions->set_changed(__label, false);
 }

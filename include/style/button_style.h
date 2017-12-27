@@ -29,6 +29,6 @@ ButtonStyle button_default_style_disabled;
 void init_look_and_feel_button();
 
 
-void generic_free_button_style(void *button_style);
+void __free_button_style(void *__button_style);
 
 #endif /* BUTTON_STYLE_H */

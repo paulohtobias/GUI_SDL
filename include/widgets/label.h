@@ -49,12 +49,12 @@ void label_set_style(Label *label, LabelStyle *style);
 SDL_Rect label_get_center_bounds(Label *label, Size *real_size);
 
 
-void generic_label_free(void *raw_label);
+void __label_free(void *__label);
 
-void generic_label_set_bounds(void *raw_label, SDL_Rect bounds);
+void __label_set_bounds(void *__label, SDL_Rect bounds);
 
-void generic_label_render_copy(void *raw_label, SDL_Renderer *renderer);
+void __label_render_copy(void *__label, SDL_Renderer *renderer);
 
-void generic_label_update(void *raw_label, SDL_Renderer *renderer);
+void __label_update(void *__label, SDL_Renderer *renderer);
 
 #endif //LABEL_H
