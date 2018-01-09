@@ -1,6 +1,11 @@
 ./include/camera.h:32:	//TO-DO: mark which events can be processed by the camera.
 ./include/containers/scrollable_container.h:10:	//TO-DO: ScrollBar
-./include/style/button_style.h:18://TO-DO: fix button style
-./include/widgets/widget.h:31:///TO-DO: change this to a enum and each state is a bit to use less memory.
+./include/style/button_style.h:17://TO-DO: fix button style
+./include/widgets/widget.h:33:///TO-DO: change this to a enum and each state is a bit to use less memory.
+./src/style/button_style.c:22:	//TO-DO
 ./src/utils/array_list.c:127:	//TO-DO
-./src/widgets/image.c:72:	printf("TO-DO: __image_free\n");
+./src/widgets/button.c:6:	NULL, //TO-DO: button_set_style
+./src/widgets/image.c:73:	printf("TO-DO: __image_free\n");
+./src/widgets/label.c:6:	NULL, //TO-DO
+./src/widgets/rectangle.c:6:	NULL, //TO-DO
+./src/widgets/texture_widget.c:6:	NULL, //TO-DO: twidget_set_style
