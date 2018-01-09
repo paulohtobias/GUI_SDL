@@ -76,15 +76,15 @@ void __image_set_bounds(void *__image, SDL_Rect bounds){
 	Image *image = __image;
 
 	if(bounds.w > 0 && bounds.h > 0){
-		image->t_widget.widget.state.auto_size = false;
-		image->t_widget.functions->set_changed(__image, true);
+		image->t_widget.widget.state.auto_size = SDL_FALSE;
+		image->t_widget.functions->set_changed(__image, SDL_TRUE);
 	}
 
-	if(image->t_widget.widget.state.auto_size == true){
+	if(image->t_widget.widget.state.auto_size == SDL_TRUE){
 		Size size = image_get_original_size(*image);
 		bounds.w = size.w;
 		bounds.h = size.h;
-		image->t_widget.functions->set_changed(__image, true);
+		image->t_widget.functions->set_changed(__image, SDL_TRUE);
 	}
 
 	set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
@@ -121,5 +121,5 @@ void __image_update(void *__image, SDL_Renderer *renderer){
 		exit(1);
 	}
 	//image_setBounds(img, image_getBounds(img));
-	image->t_widget.functions->set_changed(__image, false);
+	image->t_widget.functions->set_changed(__image, SDL_FALSE);
 }

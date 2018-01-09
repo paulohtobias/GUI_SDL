@@ -23,7 +23,7 @@ TextureWidget new_TextureWidget(){
 
 	t_widget.texture = NULL;
 
-	t_widget.functions->set_changed(&t_widget, true);
+	t_widget.functions->set_changed(&t_widget, SDL_TRUE);
 
 	return t_widget;
 }
@@ -59,8 +59,8 @@ void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer, Camer
 	TextureWidget *t_widget = __texture_widget;
 
 	if(widget_is_inside_camera(__texture_widget, camera)){
-		if(t_widget->widget.state.entered_camera == false){
-			t_widget->widget.state.entered_camera = true;
+		if(t_widget->widget.state.entered_camera == SDL_FALSE){
+			t_widget->widget.state.entered_camera = SDL_TRUE;
 		}
 
 		t_widget->functions->update(__texture_widget, renderer);
@@ -70,12 +70,12 @@ void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer, Camer
 		}
 
 		t_widget->functions->render_copy(__texture_widget, renderer);
-	}else if(t_widget->widget.state.entered_camera == true){
-		t_widget->widget.state.entered_camera = false;
+	}else if(t_widget->widget.state.entered_camera == SDL_TRUE){
+		t_widget->widget.state.entered_camera = SDL_FALSE;
 
 		SDL_DestroyTexture(t_widget->texture);
 		t_widget->texture = NULL;
 
-		t_widget->functions->set_changed(__texture_widget, true);
+		t_widget->functions->set_changed(__texture_widget, SDL_TRUE);
 	}
 }

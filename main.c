@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 	label_set_color(&lbl[0], COLOR_RED);
 	label_set_font(&lbl[1], "calibri");
 	label_set_size(&lbl[2], 18);
-	label_set_center(&lbl[1], true);*/
+	label_set_center(&lbl[1], SDL_TRUE);*/
     
     Button btn = new_Button_with_bounds("Botãó", NULL, new_rect(100, 100, 200, 50));
 	container_add_widget(&c, &btn);

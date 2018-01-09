@@ -39,7 +39,7 @@ MouseButtonState mouse_is_pressed(Mouse mouse);
 MouseButtonState mouse_is_released(Mouse mouse);
 
 //Check if the mouse is inside the area of bounds.
-bool mouse_over(Bounds bounds);
-bool mouse_over_rect(SDL_Rect bounds);
+SDL_bool mouse_over(Bounds bounds);
+SDL_bool mouse_over_rect(SDL_Rect bounds);
 
 #endif //MOUSE_H

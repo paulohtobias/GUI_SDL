@@ -36,7 +36,7 @@ Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 
 void __rectangle_set_bounds(void *__rectangle, SDL_Rect bounds){
 	__widget_set_bounds(__rectangle, bounds);
-	((Rectangle *) __rectangle)->functions->set_changed(__rectangle, true);
+	((Rectangle *) __rectangle)->functions->set_changed(__rectangle, SDL_TRUE);
 }
 
 void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
@@ -81,5 +81,5 @@ void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 240, 240, 240, 255);
 
-	rectangle->functions->set_changed(__rectangle, false);
+	rectangle->functions->set_changed(__rectangle, SDL_FALSE);
 }

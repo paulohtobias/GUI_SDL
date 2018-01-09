@@ -92,7 +92,7 @@ Color label_get_color(Label* label){
 void label_set_color(Label *label, Color color){
 	__label_new_style(label);
 	((LabelStyle *)label->t_widget.widget.style)->color = color;
-	label->t_widget.functions->set_changed(label, true);
+	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 char *label_get_font(Label* label){
@@ -102,7 +102,7 @@ char *label_get_font(Label* label){
 void label_set_font(Label *label, const char *font){
 	__label_new_style(label);
 	snprintf(((LabelStyle *)label->t_widget.widget.style)->font, 60, "./Resources/Fonts/%s.ttf", font);
-	label->t_widget.functions->set_changed(label, true);
+	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 int label_get_size(Label* label){
@@ -112,31 +112,31 @@ int label_get_size(Label* label){
 void label_set_size(Label *label, int size){
 	__label_new_style(label);
 	((LabelStyle *)label->t_widget.widget.style)->size = size;
-	label->t_widget.functions->set_changed(label, true);
+	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
-bool label_get_center(Label* label){
+SDL_bool label_get_center(Label* label){
 	return ((LabelStyle *)label->t_widget.widget.style)->center;
 }
 
-void label_set_center(Label *label, bool center){
+void label_set_center(Label *label, SDL_bool center){
 	__label_new_style(label);
 	((LabelStyle *)label->t_widget.widget.style)->center = center;
 }
 
-bool label_get_wrap(Label* label){
+SDL_bool label_get_wrap(Label* label){
 	return ((LabelStyle *)label->t_widget.widget.style)->wrap;
 }
 
-void label_set_wrap(Label *label, bool wrap){
+void label_set_wrap(Label *label, SDL_bool wrap){
 	__label_new_style(label);
 	((LabelStyle *)label->t_widget.widget.style)->wrap = wrap;
-	label->t_widget.functions->set_changed(label, true);
+	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 void label_set_style(Label *label, LabelStyle *style){
 	label->t_widget.widget.style = style;
-	label->t_widget.functions->set_changed(label, true);
+	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 SDL_Rect label_get_center_bounds(Label *label, Size *real_size){
@@ -170,10 +170,10 @@ void __label_set_bounds(void *__label, SDL_Rect bounds){
 	Label *label = __label;
 
 	if(bounds.w > 0 && bounds.h > 0){
-		label->t_widget.widget.state.auto_size = false;
+		label->t_widget.widget.state.auto_size = SDL_FALSE;
 	}
 
-	if(label->t_widget.widget.state.auto_size == true){
+	if(label->t_widget.widget.state.auto_size == SDL_TRUE){
 		Size size = label_get_original_size(*label, strlen(label->text) - 1);
 		bounds.w = size.w;
 		bounds.h = size.h;
@@ -195,7 +195,7 @@ void __label_render_copy(void *__label, SDL_Renderer *renderer){
 	bounds.w = limit.w;
 	bounds.h = limit.h;
 
-	if(label_get_center(label) == true){
+	if(label_get_center(label) == SDL_TRUE){
 		bounds = label_get_center_bounds(label, &real_size);
 	}
 
@@ -205,7 +205,7 @@ void __label_render_copy(void *__label, SDL_Renderer *renderer){
 void __label_update(void *__label, SDL_Renderer *renderer){
 	Label *label = __label;
 
-	if(label->t_widget.changed == false){
+	if(label->t_widget.changed == SDL_FALSE){
 		return;
 	}
 
@@ -262,8 +262,8 @@ void __label_update(void *__label, SDL_Renderer *renderer){
 		exit(1);
 	}
 
-	if(label->t_widget.widget.state.auto_size == true){
+	if(label->t_widget.widget.state.auto_size == SDL_TRUE){
 		set_size(&label->t_widget.widget.bounds, real_size);
 	}
-	label->t_widget.functions->set_changed(__label, false);
+	label->t_widget.functions->set_changed(__label, SDL_FALSE);
 }

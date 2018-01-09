@@ -37,7 +37,7 @@ Window *new_Window_layers(char *title, SDL_Rect bounds, Uint32 flags, int layers
 
 	window->bounds = window_get_bounds(window);
 
-	window->quit_requested = false;
+	window->quit_requested = SDL_FALSE;
 	window->mouse.button_state = MOUSE_IDLE;
 	window->mouse.position = mouse_get_position();
 	window->mouse.drag_offset = mouse_get_position();

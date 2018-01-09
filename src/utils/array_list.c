@@ -52,7 +52,7 @@ void free_ArrayList(ArrayList *list, void (*free_data)(void *)){
 	free(list);
 }
 
-bool list_is_empty(ArrayList *list){
+int list_is_empty(ArrayList *list){
 	return(list->size == 0);
 }
 

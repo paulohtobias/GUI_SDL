@@ -6,7 +6,7 @@ void __init_button_style(ButtonStyle *button_style, Color bg_color, Color text_c
 	button_style->label_style = malloc(sizeof(LabelStyle));
     *button_style->label_style = label_default_style;
 	button_style->label_style->color = text_color;
-    button_style->label_style->center = true;
+    button_style->label_style->center = SDL_TRUE;
 }
 
 void init_look_and_feel_button(){

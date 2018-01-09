@@ -30,13 +30,13 @@ typedef struct VT_Widget{
 
 ///TO-DO: change this to a enum and each state is a bit to use less memory.
 typedef struct WidgetSate{
-	bool focus; ///The widget has focus.
-	bool fixed; ///The widget can't be dragged.
-	bool dragged; ///The widget is being dragged.
-	bool mouse_over; ///Mouse cursor is over widget.
+	SDL_bool focus; ///The widget has focus.
+	SDL_bool fixed; ///The widget can't be dragged.
+	SDL_bool dragged; ///The widget is being dragged.
+	SDL_bool mouse_over; ///Mouse cursor is over widget.
 	MouseButtonState mouse_state; ///Mouse button information.
-	bool auto_size; ///Widget size is defined automatically.
-	bool entered_camera; ///Widget entered camera bounds.
+	SDL_bool auto_size; ///Widget size is defined automatically.
+	SDL_bool entered_camera; ///Widget entered camera bounds.
 } WidgetSate;
 
 typedef struct Widget{
@@ -65,7 +65,7 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
 void widget_update_camera_position(void *__widget, Camera *camera);
 
-bool widget_is_inside_camera(void *__widget, Camera *camera);
+SDL_bool widget_is_inside_camera(void *__widget, Camera *camera);
 
 void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera);
 

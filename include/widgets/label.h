@@ -36,13 +36,13 @@ int label_get_size(Label *label);
 
 void label_set_size(Label *label, int size);
 
-bool label_get_center(Label *label);
+SDL_bool label_get_center(Label *label);
 
-void label_set_center(Label *label, bool center);
+void label_set_center(Label *label, SDL_bool center);
 
-bool label_get_wrap(Label *label);
+SDL_bool label_get_wrap(Label *label);
 
-void label_set_wrap(Label *label, bool wrap);
+void label_set_wrap(Label *label, SDL_bool wrap);
 
 void label_set_style(Label *label, LabelStyle *style);
 

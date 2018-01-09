@@ -359,10 +359,10 @@ int rect_reach_y(SDL_Rect rect);
  * 
  * @param point the point that may be inside <code>bounds</code>
  * @param bounds a Bounds containing origin and camera Position and Size
- * @return <code>true</code> if <code>point</code> is inside
- *         <code>bounds</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>point</code> is inside
+ *         <code>bounds</code> and <code>SDL_FALSE</code> otherwise
  */
-bool position_is_inside_bounds_origin(Point point, Bounds bounds);
+SDL_bool position_is_inside_bounds_origin(Point point, Bounds bounds);
 
 /**
  * Check if point is inside the area covered by <code>bounds</code> using camera
@@ -370,20 +370,20 @@ bool position_is_inside_bounds_origin(Point point, Bounds bounds);
  * 
  * @param point the point that may be inside <code>bounds</code>
  * @param bounds a Bounds containing origin and camera Position and Size
- * @return <code>true</code> if <code>point</code> is inside
- *         <code>bounds</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>point</code> is inside
+ *         <code>bounds</code> and <code>SDL_FALSE</code> otherwise
  */
-bool position_is_inside_bounds_camera(Point point, Bounds bounds);
+SDL_bool position_is_inside_bounds_camera(Point point, Bounds bounds);
 
 /**
  * Check if point is inside the area covered by <code>rect</code>.
  * 
  * @param point the point that may be inside <code>bounds</code>
  * @param rect an SDL_Rect struct containing x, y, width and height
- * @return <code>true</code> if <code>point</code> is inside
- *         <code>bounds</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>point</code> is inside
+ *         <code>bounds</code> and <code>SDL_FALSE</code> otherwise
  */
-bool position_is_inside_rect(Point point, SDL_Rect rect);
+SDL_bool position_is_inside_rect(Point point, SDL_Rect rect);
 
 /**
  * Checks if the area covered by <code>rect1</code> is inside the area covered
@@ -391,10 +391,10 @@ bool position_is_inside_rect(Point point, SDL_Rect rect);
  * 
  * @param rect1 an <code>SDL_Rect</code> that may be inside <code>rect2</code>
  * @param rect1 an an SDL_Rect struct containing x, y, width and height
- * @return <code>true</code> if <code>rect1</code> is inside
- *         <code>rect2</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>rect1</code> is inside
+ *         <code>rect2</code> and <code>SDL_FALSE</code> otherwise
  */
-bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2);
+SDL_bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2);
 
 /**
  * Checks if the area covered by <code>bounds1</code> using <b>origin</b>
@@ -403,10 +403,10 @@ bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2);
  * 
  * @param bounds1 a Bounds that may be inside <code>bounds2</code>
  * @param bounds2 a Bounds containing origin and camera Position and Size
- * @return <code>true</code> if <code>bounds1</code> is inside
- *         <code>bounds2</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>SDL_FALSE</code> otherwise
  */
-bool bounds_origin_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
+SDL_bool bounds_origin_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
 
 /**
  * Checks if the area covered by <code>bounds1</code> using <b>origin</b>
@@ -415,10 +415,10 @@ bool bounds_origin_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
  * 
  * @param bounds1 a Bounds that may be inside <code>bounds2</code>
  * @param bounds2 a Bounds containing origin and camera Position and Size
- * @return <code>true</code> if <code>bounds1</code> is inside
- *         <code>bounds2</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>SDL_FALSE</code> otherwise
  */
-bool bounds_origin_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2);
+SDL_bool bounds_origin_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2);
 
 /**
  * Checks if the area covered by <code>bounds1</code> using <b>camera</b>
@@ -427,10 +427,10 @@ bool bounds_origin_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2);
  * 
  * @param bounds1 a Bounds that may be inside <code>bounds2</code>
  * @param bounds2 a Bounds containing origin and camera Position and Size
- * @return <code>true</code> if <code>bounds1</code> is inside
- *         <code>bounds2</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>SDL_FALSE</code> otherwise
  */
-bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
+SDL_bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
 
 /**
  * Checks if the area covered by <code>bounds1</code> using <b>camera</b>
@@ -439,9 +439,9 @@ bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
  * 
  * @param bounds1 a Bounds that may be inside <code>bounds2</code>
  * @param bounds2 a Bounds containing origin and camera Position and Size
- * @return <code>true</code> if <code>bounds1</code> is inside
- *         <code>bounds2</code> and <code>false</code> otherwise
+ * @return <code>SDL_TRUE</code> if <code>bounds1</code> is inside
+ *         <code>bounds2</code> and <code>SDL_FALSE</code> otherwise
  */
-bool bounds_camera_is_inside_bounds_caemera(Bounds bounds1, Bounds bounds2);
+SDL_bool bounds_camera_is_inside_bounds_caemera(Bounds bounds1, Bounds bounds2);
 
 #endif //BOUNDS_H

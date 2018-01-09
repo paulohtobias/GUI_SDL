@@ -22,7 +22,7 @@ ArrayList *new_ArrayList_max_size(int max);
 
 void free_ArrayList(ArrayList *list, void (*free_data)(void *));
 
-bool list_is_empty(ArrayList *list);
+int list_is_empty(ArrayList *list);
 
 void list_insert_first(ArrayList *list, void *data);
 

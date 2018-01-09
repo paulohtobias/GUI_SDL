@@ -1,9 +1,9 @@
 #include "gui.h"
 
-bool _gui_was_init = false;
+SDL_bool _gui_was_init = SDL_FALSE;
 
 void gui_init(){
-	if(_gui_was_init == false){
+	if(_gui_was_init == SDL_FALSE){
 		if(SDL_Init(SDL_INIT_VIDEO) < 0){
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error SDL_Init", SDL_GetError(), NULL);
 			SDL_Quit();
@@ -22,7 +22,7 @@ void gui_init(){
 
 		init_look_and_feel();
 
-		_gui_was_init = true;
+		_gui_was_init = SDL_TRUE;
 	}
 }
 

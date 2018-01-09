@@ -13,8 +13,8 @@ typedef struct LabelStyle{
 	Color color;
 	char font[60];
 	int size;
-	bool center;
-	bool wrap;
+	SDL_bool center;
+	SDL_bool wrap;
 } LabelStyle;
 
 LabelStyle label_default_style;

@@ -18,13 +18,13 @@ VT_Widget __gwidget_vt = {
 WidgetSate new_WidgetState(){
 	WidgetSate state;
 
-	state.focus = false;
-	state.fixed = true;
-	state.dragged = false;
-	state.mouse_over = false;
+	state.focus = SDL_FALSE;
+	state.fixed = SDL_TRUE;
+	state.dragged = SDL_FALSE;
+	state.mouse_over = SDL_FALSE;
 	state.mouse_state = MOUSE_IDLE;
-	state.entered_camera = true;
-	state.auto_size = true;
+	state.entered_camera = SDL_TRUE;
+	state.auto_size = SDL_TRUE;
 
 	return state;
 }
@@ -71,9 +71,9 @@ void widget_update_camera_position(void *__widget, Camera *camera){
 	}
 }
 
-bool widget_is_inside_camera(void *__widget, Camera *camera){
+SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
 	if(camera == NULL){
-		return true;
+		return SDL_TRUE;
 	}
 	Widget *widget = __widget;
 	return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
@@ -100,7 +100,7 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 	Widget *widget = __widget;
 
 	if(bounds.w > 0 && bounds.h > 0){
-		widget->state.auto_size = false;
+		widget->state.auto_size = SDL_FALSE;
 	}
 	set_bounds_from_SDL_Rect(&widget->bounds, bounds);
 }
@@ -108,23 +108,23 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 	Widget *widget = __widget;
 
-	widget->state.mouse_over = false;
+	widget->state.mouse_over = SDL_FALSE;
 	widget->state.mouse_state = MOUSE_IDLE;
-	widget->state.dragged = false;
+	widget->state.dragged = SDL_FALSE;
 
 	if(mouse_over(widget->bounds)){
-		widget->state.mouse_over = true;
-		widget->state.focus = true;
+		widget->state.mouse_over = SDL_TRUE;
+		widget->state.focus = SDL_TRUE;
 
 		if(mouse_is_pressed(mouse)){
 			widget->state.mouse_state = mouse.button_state;
 
 			//Checking if widget is being dragged.
-			if(widget->state.fixed == false &&
+			if(widget->state.fixed == SDL_FALSE &&
 				mouse.button_state == MOUSE_LEFT_PRESSED &&
 				event.type == SDL_MOUSEMOTION){
 
-				widget->state.dragged = true;
+				widget->state.dragged = SDL_TRUE;
 			}
 		}
 	}

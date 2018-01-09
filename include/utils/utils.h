@@ -8,13 +8,6 @@
 #include <string.h>
 #include <stdarg.h>
 
-#ifndef TYPE_BOOL
-#define TYPE_BOOL
-typedef int bool;
-#define false 0
-#define true 1
-#endif //MOUSE_BOOL
-
 #define MIN(x, y) (x<y)?x:y
 #define MAX(x, y) (x>y)?x:y
 

@@ -16,7 +16,7 @@ typedef struct{
 	SDL_Rect bounds;
 
 	SDL_Event event;
-	bool quit_requested;
+	SDL_bool quit_requested;
 
 	//Mouse
 	Mouse mouse;
