@@ -10,3 +10,10 @@ Style{
 	void (*draw)(void *self, SDL_Renderer *, Camera *); //Cada estilo pode implementar seu próprio
 	
 }
+
+===============================================
+march 2018 update
+
+implementar o estilo separadamente (como já está), pois são poucos widgets que usarão e cada um de uma maneira bem diferente.
+
+Deixar a borda separada do estilo e comum para todos os widgets (normalmente NULL).
