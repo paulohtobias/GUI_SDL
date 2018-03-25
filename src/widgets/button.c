@@ -27,8 +27,8 @@ Button new_Button_with_bounds(const char *text, const char *image_file, SDL_Rect
 	button.style_disabled = &button_default_style_disabled;
 
 	button.rectangle = malloc(sizeof(Rectangle));
-	*button.rectangle = new_Rectangle_with_bounds(button_default_style_idle.style.background_color, bounds);
-	style_set_border(button.rectangle->widget.style, new_Border_dynamic(2, COLOR_BLUE, bounds)); //pass the button_default values to the function.
+	*button.rectangle = new_Rectangle_with_bounds(button_default_style_idle.bg_color, bounds);
+	button.rectangle->t_widget.widget.border = new_Border_dynamic(2, COLOR_BLUE, bounds); //TO-DO: pass the button_default values to the function.
 	
 	container_add_widget(&button, button.rectangle);
 

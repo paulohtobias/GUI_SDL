@@ -9,8 +9,11 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
+#include "basic/bounds.h"
 #include "basic/mouse.h"
-#include "style/style.h"
+#include "basic/color.h"
+#include "camera.h"
+#include "style/border.h"
 
 /**
  * Functions for <code>Widget</code>.
@@ -42,8 +45,8 @@ typedef struct WidgetSate{
 typedef struct Widget{
 	WidgetSate state;
 	Bounds bounds;
-
-	void *style;
+	
+	Border *border;
 
 	//Functions
 	VT_Widget *functions;

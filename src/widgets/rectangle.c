@@ -22,12 +22,13 @@ Rectangle new_Rectangle_with_position(Color color, Position position){
 }
 
 Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
-	Rectangle rectangle = new_TextureWidget();
+	Rectangle rectangle;
+	
+	rectangle.t_widget = new_TextureWidget();
 
-	rectangle.widget.style = new_Style_dynamic();
-	style_set_background_color(rectangle.widget.style, color);
-	rectangle.widget.functions = &__grectangle_widget_vt;
-	rectangle.functions = &__grectangle_vt;
+	rectangle.color = color;
+	rectangle.t_widget.widget.functions = &__grectangle_widget_vt;
+	rectangle.t_widget.functions = &__grectangle_vt;
 
 	widget_set_bounds(&rectangle, bounds);
 
@@ -36,32 +37,32 @@ Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 
 void __rectangle_set_bounds(void *__rectangle, SDL_Rect bounds){
 	__widget_set_bounds(__rectangle, bounds);
-	((Rectangle *) __rectangle)->functions->set_changed(__rectangle, SDL_TRUE);
+	((Rectangle *) __rectangle)->t_widget.functions->set_changed(__rectangle, SDL_TRUE);
 }
 
 void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
 	Rectangle *rectangle = __rectangle;
 
-	if(!rectangle->changed){
+	if(!rectangle->t_widget.changed){
 		return;
 	}
 
-	if(rectangle->texture != NULL){
-		SDL_DestroyTexture(rectangle->texture);
-		rectangle->texture = NULL;
+	if(rectangle->t_widget.texture != NULL){
+		SDL_DestroyTexture(rectangle->t_widget.texture);
+		rectangle->t_widget.texture = NULL;
 	}
 
-	Size size = rectangle->widget.bounds.size;
+	Size size = rectangle->t_widget.widget.bounds.size;
 	if(size.w == 0 || size.h == 0){
 		return;
 	}
 
-	rectangle->texture = SDL_CreateTexture(renderer,
+	rectangle->t_widget.texture = SDL_CreateTexture(renderer,
 		SDL_PIXELFORMAT_RGBA8888,
 		SDL_TEXTUREACCESS_TARGET,
 		size.w, size.h);
 
-	if(rectangle->texture == NULL){
+	if(rectangle->t_widget.texture == NULL){
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
 			"Error creating image texture",
 			SDL_GetError(), NULL);
@@ -70,16 +71,16 @@ void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
 		SDL_Quit();
 		exit(1);
 	}
-	SDL_SetTextureBlendMode(rectangle->texture, SDL_BLENDMODE_BLEND);
+	SDL_SetTextureBlendMode(rectangle->t_widget.texture, SDL_BLENDMODE_BLEND);
 
-	SDL_SetRenderTarget(renderer, rectangle->texture);
+	SDL_SetRenderTarget(renderer, rectangle->t_widget.texture);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
-	set_renderer_draw_color(renderer, style_get_background_color(rectangle->widget.style));
+	set_renderer_draw_color(renderer, rectangle->color);
 	SDL_RenderFillRect(renderer, NULL);
 
 	SDL_SetRenderTarget(renderer, NULL);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 240, 240, 240, 255);
 
-	rectangle->functions->set_changed(__rectangle, SDL_FALSE);
+	rectangle->t_widget.functions->set_changed(__rectangle, SDL_FALSE);
 }

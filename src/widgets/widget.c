@@ -36,7 +36,7 @@ Widget new_Widget(){
 	
 	widget.state = new_WidgetState();
 	widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
-	widget.style = NULL;
+	widget.border = NULL;
 
 	return widget;
 }
@@ -133,7 +133,7 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 void __widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){
 	Widget *widget = __widget;
 
-	if(widget_is_inside_camera(__widget, camera) && widget->style != NULL){
-		border_draw(style_get_border(widget->style), renderer, camera);
+	if(widget_is_inside_camera(__widget, camera)){
+		border_draw(widget->border, renderer, camera);
 	}
 }

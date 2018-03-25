@@ -45,4 +45,6 @@ void __border_set_bounds(void *__border, SDL_Rect widget_bounds);
 
 void __border_draw(void *__border, SDL_Renderer *renderer, Camera *camera);
 
+//TO-DO: create a border draw function that draws only the border.
+
 #endif /* BORDER_H */

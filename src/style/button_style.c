@@ -1,8 +1,8 @@
 #include "style/button_style.h"
 
 void __init_button_style(ButtonStyle *button_style, Color bg_color, Color text_color){
-	button_style->style.background_color = button_default_bg_color_idle;
-	button_style->style.border = NULL; //Will be set at the button creation.
+	button_style->bg_color = button_default_bg_color_idle;
+	button_style->border = NULL; //TO-DO: create a new border here and make the button border point to it at creation.
 	button_style->label_style = malloc(sizeof(LabelStyle));
     *button_style->label_style = label_default_style;
 	button_style->label_style->color = text_color;

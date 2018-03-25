@@ -65,9 +65,7 @@ void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer, Camer
 
 		t_widget->functions->update(__texture_widget, renderer);
 
-		if(t_widget->widget.style != NULL){
-			border_draw(style_get_border(t_widget->widget.style), renderer, camera);
-		}
+		border_draw(t_widget->widget.border, renderer, camera);
 
 		t_widget->functions->render_copy(__texture_widget, renderer);
 	}else if(t_widget->widget.state.entered_camera == SDL_TRUE){

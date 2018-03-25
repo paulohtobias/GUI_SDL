@@ -2,6 +2,7 @@
 #define BUTTON_STYLE_H
 
 #include "label_style.h"
+#include "style/border.h"
 
 #define button_default_border_size 1
 #define button_default_label_color_disabled COLOR_GREY(131)
@@ -16,8 +17,8 @@
 
 //TO-DO: fix button style
 typedef struct ButtonStyle{
-	Style style;
-	
+	Color bg_color;
+	Border *border; ///A pointer to the button widget border style.
 	LabelStyle *label_style;
 } ButtonStyle;
 

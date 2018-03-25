@@ -10,6 +10,8 @@ typedef struct Label{
 
 	char *text;
 	Size *size_table;
+	
+	LabelStyle *style;
 } Label;
 
 Label new_Label(const char *text);

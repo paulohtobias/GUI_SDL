@@ -31,7 +31,7 @@ Label new_Label_with_bounds(const char *text, SDL_Rect bounds){
 
 	label.text = NULL;
 	label.size_table = NULL;
-	label.t_widget.widget.style = &label_default_style;
+	label.style = &label_default_style;
 
 	label_set_text(&label, text);
 	widget_set_bounds(&label, bounds);
@@ -79,63 +79,63 @@ void label_set_text(Label *label, const char *text){
 
 ///Internal function used when changing a label's style.
 void __label_new_style(Label *label){
-	if(label->t_widget.widget.style == &label_default_style){
+	if(label->style == &label_default_style){
 		label_set_style(label, malloc(sizeof(LabelStyle)));
-		(*((LabelStyle *)label->t_widget.widget.style)) = label_default_style;
+		*(label->style) = label_default_style;
 	}
 }
 
 Color label_get_color(Label* label){
-	return ((LabelStyle *)label->t_widget.widget.style)->color;
+	return label->style->color;
 }
 
 void label_set_color(Label *label, Color color){
 	__label_new_style(label);
-	((LabelStyle *)label->t_widget.widget.style)->color = color;
+	label->style->color = color;
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 char *label_get_font(Label* label){
-	return ((LabelStyle *)label->t_widget.widget.style)->font;
+	return label->style->font;
 }
 
 void label_set_font(Label *label, const char *font){
 	__label_new_style(label);
-	snprintf(((LabelStyle *)label->t_widget.widget.style)->font, 60, "./Resources/Fonts/%s.ttf", font);
+	snprintf(label->style->font, 60, "./Resources/Fonts/%s.ttf", font);
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 int label_get_size(Label* label){
-	return ((LabelStyle *)label->t_widget.widget.style)->size;
+	return label->style->size;
 }
 
 void label_set_size(Label *label, int size){
 	__label_new_style(label);
-	((LabelStyle *)label->t_widget.widget.style)->size = size;
+	label->style->size = size;
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 SDL_bool label_get_center(Label* label){
-	return ((LabelStyle *)label->t_widget.widget.style)->center;
+	return label->style->center;
 }
 
 void label_set_center(Label *label, SDL_bool center){
 	__label_new_style(label);
-	((LabelStyle *)label->t_widget.widget.style)->center = center;
+	label->style->center = center;
 }
 
 SDL_bool label_get_wrap(Label* label){
-	return ((LabelStyle *)label->t_widget.widget.style)->wrap;
+	return label->style->wrap;
 }
 
 void label_set_wrap(Label *label, SDL_bool wrap){
 	__label_new_style(label);
-	((LabelStyle *)label->t_widget.widget.style)->wrap = wrap;
+	label->style->wrap = wrap;
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 void label_set_style(Label *label, LabelStyle *style){
-	label->t_widget.widget.style = style;
+	label->style = style;
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
@@ -161,8 +161,8 @@ void __label_free(void *__label){
 
 	free(label->text);
 	free(label->size_table);
-	if(label->t_widget.widget.style != &label_default_style){
-		free(label->t_widget.widget.style);
+	if(label->style != &label_default_style){
+		free(label->style);
 	}
 }
 

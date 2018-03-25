@@ -51,10 +51,6 @@ void border_draw(void *border, SDL_Renderer *renderer, Camera *camera){
 
 
 void __border_set_bounds(void *__border, SDL_Rect widget_bounds){
-	if(__border == NULL){
-		return;
-	}
-	
 	Border *border = __border;
 	
 	border->bounds.x = widget_bounds.x - border->size_left;

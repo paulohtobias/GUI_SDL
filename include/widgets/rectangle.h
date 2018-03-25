@@ -3,7 +3,11 @@
 
 #include "texture_widget.h"
 
-typedef TextureWidget Rectangle;
+typedef struct Rectangle{
+	TextureWidget t_widget;
+	
+	Color color;
+}Rectangle;
 
 Rectangle new_Rectangle(Color color);
 
