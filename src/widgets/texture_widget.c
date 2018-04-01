@@ -28,6 +28,15 @@ TextureWidget new_TextureWidget(){
 	return t_widget;
 }
 
+int texture_widget_get_changed(void *t_widget){
+	return ((TextureWidget *)t_widget)->changed;
+}
+
+void texture_widget_set_changed(void *t_widget, int changed){
+	((TextureWidget *) t_widget)->functions->set_changed(t_widget, changed);
+}
+
+
 void __texture_widget_free(void *__texture_widget){
 	TextureWidget *t_widget = __texture_widget;
 

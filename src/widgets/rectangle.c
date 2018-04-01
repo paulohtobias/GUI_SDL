@@ -35,9 +35,18 @@ Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 	return rectangle;
 }
 
+void rectangle_set_color(void *__rectangle, Color color){
+	Rectangle *rectangle = __rectangle;
+	
+	rectangle->color = color;
+	
+	texture_widget_set_changed(rectangle, SDL_TRUE);
+}
+
+
 void __rectangle_set_bounds(void *__rectangle, SDL_Rect bounds){
 	__widget_set_bounds(__rectangle, bounds);
-	((Rectangle *) __rectangle)->t_widget.functions->set_changed(__rectangle, SDL_TRUE);
+	texture_widget_set_changed(__rectangle, SDL_TRUE);
 }
 
 void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
@@ -82,5 +91,5 @@ void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
 	SDL_SetRenderDrawColor(renderer, 240, 240, 240, 255);
 
-	rectangle->t_widget.functions->set_changed(__rectangle, SDL_FALSE);
+	texture_widget_set_changed(__rectangle, SDL_FALSE);
 }

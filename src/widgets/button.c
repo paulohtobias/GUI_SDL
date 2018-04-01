@@ -28,7 +28,6 @@ Button new_Button_with_bounds(const char *text, const char *image_file, SDL_Rect
 
 	button.rectangle = malloc(sizeof(Rectangle));
 	*button.rectangle = new_Rectangle_with_bounds(button_default_style_idle.bg_color, bounds);
-	button.rectangle->t_widget.widget.border = new_Border_dynamic(2, COLOR_BLUE, bounds); //TO-DO: pass the button_default values to the function.
 	
 	container_add_widget(&button, button.rectangle);
 
@@ -81,5 +80,15 @@ void __button_process_events(void *__button, SDL_Event event, Mouse mouse){
 		current_style = button->style_pressed;
 	}else if(button->container.widget.state.mouse_over){
 		current_style = button->style_focused;
+	}
+	
+	rectangle_set_color(button->rectangle, current_style->bg_color);
+	
+	//TO-DO: change to widget_set_border
+	button->rectangle->t_widget.widget.border = current_style->border;
+	border_set_bounds(current_style->border, widget_get_bounds_camera(button));
+	
+	if(button->label != NULL){
+		label_set_style(button->label, current_style->label_style);
 	}
 }

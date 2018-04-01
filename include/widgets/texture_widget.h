@@ -38,6 +38,11 @@ typedef struct TextureWidget{
 
 TextureWidget new_TextureWidget();
 
+int texture_widget_get_changed(void *t_widget);
+
+void texture_widget_set_changed(void *t_widget, int changed);
+
+
 void __texture_widget_free(void *t_widget);
 
 void __texture_widget_set_changed(void *__texture_widget, int changed);

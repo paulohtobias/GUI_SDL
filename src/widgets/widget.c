@@ -101,6 +101,7 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 
 	if(bounds.w > 0 && bounds.h > 0){
 		widget->state.auto_size = SDL_FALSE;
+		border_set_bounds(widget->border, bounds);
 	}
 	set_bounds_from_SDL_Rect(&widget->bounds, bounds);
 }
