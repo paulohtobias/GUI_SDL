@@ -1,6 +1,7 @@
 #include "style/border.h"
 
 VT_Border __gborder_vt = {
+	__border_free,
 	__border_set_bounds,
 	__border_draw
 };
@@ -37,6 +38,12 @@ Border *new_Border_all_dynamic(int size_up, int size_down, int size_right, int s
 	return border;
 }
 
+void border_free(void *border){
+	if(border != NULL){
+		((Border *) border)->functions->free(border);
+	}
+}
+
 void border_set_bounds(void *border, SDL_Rect widget_bounds){
 	if(border != NULL){
 		((Border *)border)->functions->set_bounds(border, widget_bounds);
@@ -49,6 +56,10 @@ void border_draw(void *border, SDL_Renderer *renderer, Camera *camera){
 	}
 }
 
+
+void __border_free(void *__border){
+	free(__border);
+}
 
 void __border_set_bounds(void *__border, SDL_Rect widget_bounds){
 	Border *border = __border;

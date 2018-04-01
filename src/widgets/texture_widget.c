@@ -1,23 +1,28 @@
 #include "widgets/texture_widget.h"
 
-VT_Widget __gtwidget_widget_vt = {
-	__texture_widget_free,
-	__widget_set_bounds,
-	__widget_process_events,
-	__texture_widget_draw
-};
+SDL_bool __twidget_vt_was_init = SDL_FALSE;
 
-VT_TextureWidget __gtwidget_vt = {
-	__texture_widget_set_changed,
-	__texture_widget_render_copy,
-	NULL
-};
+void __twidget_vt_init(){
+	if(__twidget_vt_was_init){
+		return;
+	}
+	__gtwidget_widget_vt = __gwidget_vt;
+	__gtwidget_widget_vt.free = __texture_widget_free;
+	__gtwidget_widget_vt.draw = __texture_widget_draw;
+	
+	__gtwidget_vt.set_changed = __texture_widget_set_changed;
+	__gtwidget_vt.render_copy = __texture_widget_render_copy;
+	__gtwidget_vt.update = NULL;
+	
+	__twidget_vt_was_init = SDL_TRUE;
+}
 
 TextureWidget new_TextureWidget(){
 	TextureWidget t_widget;
-
+	
 	t_widget.widget = new_Widget();
 
+	__twidget_vt_init();
 	t_widget.widget.functions = &__gtwidget_widget_vt;
 	t_widget.functions = &__gtwidget_vt;
 

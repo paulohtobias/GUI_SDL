@@ -8,18 +8,22 @@
 
 #include "widgets/image.h"
 
-VT_Widget __gimage_widget_vt = {
-	__image_free,
-	__image_set_bounds,
-	__widget_process_events,
-	__texture_widget_draw
-};
+SDL_bool __image_vt_was_init = SDL_FALSE;
 
-VT_TextureWidget __gimage_vt = {
-	__texture_widget_set_changed,
-	__texture_widget_render_copy,
-	__image_update
-};
+void __image_vt_init(){
+	if(__image_vt_was_init){
+		return;
+	}
+	
+	__gimage_widget_vt = __gtwidget_widget_vt;
+	__gimage_widget_vt.free = __image_free;
+	__gimage_widget_vt.set_bounds = __image_set_bounds;
+	
+	__gimage_vt = __gtwidget_vt;
+	__gimage_vt.update = __image_update;
+	
+	__image_vt_was_init = SDL_TRUE;
+}
 
 Image new_Image(const char *file){
 	return new_Image_with_bounds(file, new_rect(0, 0, 0, 0));
@@ -34,6 +38,7 @@ Image new_Image_with_bounds(const char *file, SDL_Rect bounds){
 
 	image.t_widget = new_TextureWidget();
 
+	__image_vt_init();
 	image.t_widget.widget.functions = &__gimage_widget_vt;
 	image.t_widget.functions = &__gimage_vt;
 

@@ -12,6 +12,10 @@
 #include <SDL2/SDL_image.h>
 #include "texture_widget.h"
 
+///Global virtual tables.
+VT_Widget __gimage_widget_vt;
+VT_TextureWidget __gimage_vt;
+
 typedef struct Image{
 	TextureWidget t_widget;
 

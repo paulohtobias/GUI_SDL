@@ -5,6 +5,10 @@
 #include "texture_widget.h"
 #include "style/label_style.h"
 
+///Global virtual tables.
+VT_Widget __glabel_widget_vt;
+VT_TextureWidget __glabel_twidget_vt;
+
 typedef struct Label{
 	TextureWidget t_widget;
 

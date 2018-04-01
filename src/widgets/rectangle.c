@@ -1,17 +1,20 @@
 #include "widgets/rectangle.h"
 
-VT_Widget __grectangle_widget_vt = {
-	__texture_widget_free,
-	__rectangle_set_bounds,
-	__widget_process_events,
-	__texture_widget_draw
-};
+SDL_bool __rectangle_vt_was_init = SDL_FALSE;
 
-VT_TextureWidget __grectangle_vt = {
-	__texture_widget_set_changed,
-	__texture_widget_render_copy,
-	__rectangle_update
-};
+void __rectangle_vt_init(){
+	if(__rectangle_vt_was_init){
+		return;
+	}
+	
+	__grectangle_widget_vt = __gtwidget_widget_vt;
+	__grectangle_widget_vt.set_bounds = __rectangle_set_bounds;
+	
+	__grectangle_vt = __gtwidget_vt;
+	__grectangle_vt.update = __rectangle_update;
+	
+	__rectangle_vt_was_init = SDL_TRUE;
+}
 
 Rectangle new_Rectangle(Color color){
 	return new_Rectangle_with_bounds(color, new_rect(0, 0, 0, 0));
@@ -26,10 +29,11 @@ Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 	
 	rectangle.t_widget = new_TextureWidget();
 
-	rectangle.color = color;
+	__rectangle_vt_init();
 	rectangle.t_widget.widget.functions = &__grectangle_widget_vt;
 	rectangle.t_widget.functions = &__grectangle_vt;
-
+	
+	rectangle_set_color(&rectangle, color);
 	widget_set_bounds(&rectangle, bounds);
 
 	return rectangle;

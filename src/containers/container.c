@@ -1,16 +1,23 @@
 #include "containers/container.h"
 
-VT_Widget __gcontainer_widget_vt = {
-	__container_free,
-	__container_set_bounds,
-	__container_process_events,
-	__container_draw
-};
+SDL_bool __container_vt_was_init = SDL_FALSE;
 
-VT_Container __gcontainer_vt = {
-	__container_add_widget,
-	__container_remove_widget
-};
+void __container_vt_init(){
+	if(__container_vt_was_init){
+		return;
+	}
+	
+	__gcontainer_widget_vt = __gwidget_vt;
+	__gcontainer_widget_vt.free = __container_free;
+	__gcontainer_widget_vt.set_bounds = __container_set_bounds;
+	__gcontainer_widget_vt.process_events = __container_process_events;
+	__gcontainer_widget_vt.draw = __container_draw;
+	
+	__gcontainer_vt.add_widget = __container_add_widget;
+	__gcontainer_vt.remove_widget = __container_remove_widget;
+	
+	__container_vt_was_init = SDL_TRUE;
+}
 
 Container new_Container(){
 	return new_Container_max_widgets(CONTAINER_MAX_WIDGETS);
@@ -20,10 +27,12 @@ Container new_Container_max_widgets(int max){
 	Container container;
 
 	container.widget = new_Widget();
-	container.widget_list = new_ArrayList_max_size(max);
 
+	__container_vt_init();
 	container.widget.functions = &__gcontainer_widget_vt;
 	container.functions = &__gcontainer_vt;
+	
+	container.widget_list = new_ArrayList_max_size(max);
 
 	return container;
 }

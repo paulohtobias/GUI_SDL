@@ -11,6 +11,10 @@ typedef struct VT_Container{
 	void *(*remove_widget)(void *);
 } VT_Container;
 
+///Global virtual tables.
+VT_Widget __gcontainer_widget_vt;
+VT_Container __gcontainer_vt;
+
 typedef struct Container{
 	Widget widget;
 

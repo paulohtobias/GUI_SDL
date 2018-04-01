@@ -19,17 +19,24 @@
  * Functions for <code>Widget</code>.
  * 
  * <code>free</code><br>
+ * <code>get_bounds</code><br>
  * <code>set_bounds</code><br>
+ * <code>set_border</code><br>
  * <code>process_events</code><br>
  * <code>draw</code><br>
  */
 typedef struct VT_Widget{
-	void (*free)();
+	void (*free)(void *);
+	Bounds (*get_bounds)(void *);
 	void (*set_bounds)(void *, SDL_Rect);
+	void (*set_border)(void *, void *);
 
 	void (*process_events)(void *, SDL_Event, Mouse);
 	void (*draw)(void *, SDL_Renderer *, Camera *);
 } VT_Widget;
+
+///Global virtual table.
+VT_Widget __gwidget_vt;
 
 ///TO-DO: change this to a enum and each state is a bit to use less memory.
 typedef struct WidgetSate{
@@ -62,7 +69,11 @@ SDL_Rect widget_get_bounds_origin(void *widget);
 
 SDL_Rect widget_get_bounds_camera(void *widget);
 
+Bounds widget_get_bounds(void *widget);
+
 void widget_set_bounds(void *widget, SDL_Rect bounds);
+
+void widget_set_border(void *widget, void *border);
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
@@ -75,7 +86,11 @@ void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera);
 
 void __widget_free(void *__widget);
 
+Bounds __widget_get_bounds(void *__widget);
+
 void __widget_set_bounds(void *__widget, SDL_Rect bounds);
+
+void __widget_set_border(void *__widget, void *border);
 
 void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse);
 

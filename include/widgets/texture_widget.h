@@ -25,6 +25,10 @@ typedef struct VT_TextureWidget{
 	void (*update)(void *, SDL_Renderer *);
 } VT_TextureWidget;
 
+///Global virtual tables.
+VT_Widget __gtwidget_widget_vt;
+VT_TextureWidget __gtwidget_vt;
+
 typedef struct TextureWidget{
 	Widget widget;
 

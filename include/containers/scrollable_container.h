@@ -3,6 +3,9 @@
 
 #include "container.h"
 
+///Global virtual table.
+VT_Widget __gscontainer_widget_vt;
+
 typedef struct ScrollableContainer{
 	Container container;
 

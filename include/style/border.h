@@ -6,6 +6,7 @@
 #include "camera.h"
 
 typedef struct VT_Border{
+	void (*free)(void *);
 	void (*set_bounds)(void *, SDL_Rect);
 	void (*draw)(void *, SDL_Renderer *, Camera *);
 }VT_Border;
@@ -20,9 +21,9 @@ typedef struct Border{
     Uint8 size_left;
     Color color;
 	SDL_Rect bounds;
+	//TO-DO: a value to draw only the border or the whole rectangle
 	
 	//Functions
-	void (*free)(void *);
 	VT_Border *functions;
 }Border;
 
@@ -36,10 +37,14 @@ Border *new_Border_dynamic(int size, Color color, SDL_Rect widget_bounds);
 Border *new_Border_all_dynamic(int size_up, int size_down, int size_right, int size_left,
 				  Color color, SDL_Rect widget_bounds);
 
+void border_free(void *border);
+
 void border_set_bounds(void *border, SDL_Rect widget_bounds);
 
 void border_draw(void *border, SDL_Renderer *renderer, Camera *camera);
 
+
+void __border_free(void *__border);
 
 void __border_set_bounds(void *__border, SDL_Rect widget_bounds);
 

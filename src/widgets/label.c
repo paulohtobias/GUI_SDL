@@ -1,17 +1,22 @@
 #include "widgets/label.h"
 
-VT_Widget __glabel_widget_vt = {
-	__label_free,
-	__label_set_bounds,
-	__widget_process_events,
-	__texture_widget_draw
-};
+SDL_bool __label_vt_was_init = SDL_FALSE;
 
-VT_TextureWidget __glabel_twidget_vt = {
-	__texture_widget_set_changed,
-	__label_render_copy,
-	__label_update
-};
+void __label_vt_init(){
+	if(__label_vt_was_init){
+		return;
+	}
+	
+	__glabel_widget_vt = __gtwidget_widget_vt;
+	__glabel_widget_vt.free = __label_free;
+	__glabel_widget_vt.set_bounds = __label_set_bounds;
+	
+	__glabel_twidget_vt = __gtwidget_vt;
+	__glabel_twidget_vt.render_copy = __label_render_copy;
+	__glabel_twidget_vt.update = __label_update;
+	
+	__label_vt_was_init = SDL_TRUE;
+}
 
 Label new_Label(const char *text){
 	return new_Label_with_bounds(text, new_rect(0, 0, 0, 0));
@@ -26,6 +31,7 @@ Label new_Label_with_bounds(const char *text, SDL_Rect bounds){
 
 	label.t_widget = new_TextureWidget();
 
+	__label_vt_init();
 	label.t_widget.functions = &__glabel_twidget_vt;
 	label.t_widget.widget.functions = &__glabel_widget_vt;
 

@@ -8,12 +8,22 @@
 
 #include "widgets/widget.h"
 
-VT_Widget __gwidget_vt = {
-	__widget_free,
-	__widget_set_bounds,
-	__widget_process_events,
-	__widget_draw
-};
+SDL_bool __widget_vt_was_init = SDL_FALSE;
+
+void __widget_vt_init(){
+	if(__widget_vt_was_init){
+		return;
+	}
+	
+	__gwidget_vt.free = __widget_free;
+	__gwidget_vt.get_bounds = __widget_get_bounds;
+	__gwidget_vt.set_bounds = __widget_set_bounds;
+	__gwidget_vt.set_border =__widget_set_border;
+	__gwidget_vt.process_events = __widget_process_events;
+	__gwidget_vt.draw = __widget_draw;
+	
+	__widget_vt_was_init = SDL_TRUE;
+}
 
 WidgetSate new_WidgetState(){
 	WidgetSate state;
@@ -30,6 +40,8 @@ WidgetSate new_WidgetState(){
 }
 
 Widget new_Widget(){
+	__widget_vt_init();
+	
 	Widget widget;
 
 	widget.functions = &__gwidget_vt;
@@ -46,15 +58,23 @@ void widget_free(void *widget){
 }
 
 SDL_Rect widget_get_bounds_origin(void *widget){
-	return get_bounds_origin(((Widget *) widget)->bounds);
+	return get_bounds_origin(widget_get_bounds(widget));
 }
 
 SDL_Rect widget_get_bounds_camera(void *widget){
-	return get_bounds_camera(((Widget *) widget)->bounds);
+	return get_bounds_camera(widget_get_bounds(widget));
+}
+
+Bounds widget_get_bounds(void *widget){
+	return ((Widget *) widget)->functions->get_bounds(widget);
 }
 
 void widget_set_bounds(void *widget, SDL_Rect bounds){
 	((Widget *) widget)->functions->set_bounds(widget, bounds);
+}
+
+void widget_set_border(void *widget, void *border){
+	((Widget *) widget)->functions->set_border(widget, border);
 }
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
@@ -96,14 +116,25 @@ void __widget_free(void *__widget){
 	widget->functions->free = NULL;
 }
 
+Bounds __widget_get_bounds(void *__widget){
+	return ((Widget *) __widget)->bounds;
+}
+
 void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 	Widget *widget = __widget;
 
 	if(bounds.w > 0 && bounds.h > 0){
 		widget->state.auto_size = SDL_FALSE;
-		border_set_bounds(widget->border, bounds);
 	}
 	set_bounds_from_SDL_Rect(&widget->bounds, bounds);
+	border_set_bounds(widget->border, widget_get_bounds_camera(widget));
+}
+
+void __widget_set_border(void *__widget, void *border){
+	Widget *widget = __widget;
+	
+	border_set_bounds(border, widget_get_bounds_camera(widget));
+	widget->border = border;
 }
 
 void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){

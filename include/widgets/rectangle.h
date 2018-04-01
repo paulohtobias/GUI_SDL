@@ -3,6 +3,10 @@
 
 #include "texture_widget.h"
 
+///Global Virtual Tables.
+VT_Widget __grectangle_widget_vt;
+VT_TextureWidget __grectangle_vt;
+
 typedef struct Rectangle{
 	TextureWidget t_widget;
 	

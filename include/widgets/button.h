@@ -7,6 +7,9 @@
 #include "image.h"
 #include "style/button_style.h"
 
+///Global virtual tables.
+VT_Widget __gbutton_widget_vt;
+
 typedef struct Button{
 	Container container;
 

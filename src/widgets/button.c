@@ -1,11 +1,19 @@
 #include "widgets/button.h"
 
-VT_Widget __gbutton_widget_vt = {
-    __button_free,
-    __button_set_bounds,
-    __button_process_events,
-    __container_draw
-};
+SDL_bool __button_vt_was_init = SDL_FALSE;
+
+void __button_vt_init(){
+	if(__button_vt_was_init){
+		return;
+	}
+	
+	__gbutton_widget_vt = __gcontainer_widget_vt;
+	__gbutton_widget_vt.free = __button_free;
+	__gbutton_widget_vt.set_bounds = __button_set_bounds;
+	__gbutton_widget_vt.process_events = __button_process_events;
+	
+	__button_vt_was_init = SDL_TRUE;
+}
 
 Button new_Button(const char *text, const char *image_file){
 	return new_Button_with_bounds(text, image_file, new_rect(0, 0, 0, 0));
@@ -20,6 +28,7 @@ Button new_Button_with_bounds(const char *text, const char *image_file, SDL_Rect
 
 	button.container = new_Container_max_widgets(3);
 
+	__button_vt_init();
     button.container.widget.functions = &__gbutton_widget_vt;
 	button.style_idle = &button_default_style_idle;
 	button.style_focused = &button_default_style_focused;
@@ -83,10 +92,7 @@ void __button_process_events(void *__button, SDL_Event event, Mouse mouse){
 	}
 	
 	rectangle_set_color(button->rectangle, current_style->bg_color);
-	
-	//TO-DO: change to widget_set_border
-	button->rectangle->t_widget.widget.border = current_style->border;
-	border_set_bounds(current_style->border, widget_get_bounds_camera(button));
+	widget_set_border(button->rectangle, current_style->border);
 	
 	if(button->label != NULL){
 		label_set_style(button->label, current_style->label_style);
