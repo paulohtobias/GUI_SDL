@@ -38,7 +38,6 @@ void __scrollable_container_free(void *__container){
 
 	ScrollableContainer *scrollable_container = __container;
 	free_Camera(scrollable_container->camera);
-	scrollable_container->camera = NULL;
 }
 
 void __scrollable_container_set_bounds(void *__container, SDL_Rect bounds){

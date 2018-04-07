@@ -9,7 +9,7 @@ int main(int argc, char *argv[]){
 	ScrollableContainer c = new_ScrollableContainer_max_widgets(n * 2);
 	window_add_container(windw, &c);
 
-	/*Label lbl[n];
+	Label lbl[n];
 	for(i = 0; i < n; i++){
 		lbl[i] = new_Label_with_position("./Resources/Images/img.png", new_Position(300 * i, 0));
 		container_add_widget(&c, &lbl[i]);
@@ -17,10 +17,13 @@ int main(int argc, char *argv[]){
 	label_set_color(&lbl[0], COLOR_RED);
 	label_set_font(&lbl[1], "calibri");
 	label_set_size(&lbl[2], 18);
-	label_set_center(&lbl[1], SDL_TRUE);*/
+	label_set_center(&lbl[1], SDL_TRUE);
     
     Button btn = new_Button_with_bounds("Botãó", NULL, new_rect(100, 100, 200, 50));
 	container_add_widget(&c, &btn);
+	
+	Image img = new_Image_with_position("Resources/Images/b at.jpg", new_Position(20, 30));
+	container_add_widget(&c, &img);
 
 	while(!windw->quit_requested){
 		if(SDL_WaitEvent(&windw->event)){

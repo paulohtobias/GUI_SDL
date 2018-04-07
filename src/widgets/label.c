@@ -163,7 +163,7 @@ SDL_Rect label_get_center_bounds(Label *label, Size *real_size){
 void __label_free(void *__label){
 	Label *label = __label;
 
-	widget_free(&label->t_widget);
+	__texture_widget_free(&label->t_widget);
 
 	free(label->text);
 	free(label->size_table);

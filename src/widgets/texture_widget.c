@@ -45,13 +45,9 @@ void texture_widget_set_changed(void *t_widget, int changed){
 void __texture_widget_free(void *__texture_widget){
 	TextureWidget *t_widget = __texture_widget;
 
-	widget_free(&t_widget->widget);
+	__widget_free(&t_widget->widget);
 
 	SDL_DestroyTexture(t_widget->texture);
-
-	t_widget->functions->set_changed = NULL;
-	t_widget->functions->render_copy = NULL;
-	t_widget->functions->update = NULL;
 }
 
 void __texture_widget_set_changed(void *__texture_widget, int changed){

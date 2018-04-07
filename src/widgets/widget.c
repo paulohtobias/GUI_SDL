@@ -108,12 +108,6 @@ void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){
 
 
 void __widget_free(void *__widget){
-	Widget *widget = __widget;
-
-	widget->functions->set_bounds = NULL;
-	widget->functions->process_events = NULL;
-	widget->functions->draw = NULL;
-	widget->functions->free = NULL;
 }
 
 Bounds __widget_get_bounds(void *__widget){

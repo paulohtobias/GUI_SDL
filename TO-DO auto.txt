@@ -1,11 +1,9 @@
 ./include/camera.h:32:	//TO-DO: mark which events can be processed by the camera.
-./include/containers/scrollable_container.h:10:	//TO-DO: ScrollBar
-./include/style/button_style.h:17://TO-DO: fix button style
-./include/widgets/widget.h:33:///TO-DO: change this to a enum and each state is a bit to use less memory.
-./src/style/button_style.c:22:	//TO-DO
+./include/containers/scrollable_container.h:13:	//TO-DO: ScrollBar
+./include/style/border.h:24:	//TO-DO: a value to draw only the border or the whole rectangle
+./include/style/border.h:53://TO-DO: create a border draw function that draws only the border.
+./include/style/button_style.h:18://TO-DO: fix button style
+./include/style/label_style.h:13:	char font[60]; //TO-DO: change to char *
+./include/widgets/widget.h:41:///TO-DO: change this to a enum and each state is a bit to use less memory.
+./src/style/button_style.c:5:	button_style->border = new_Border_dynamic(button_default_border_size, border_color, new_rect(0, 0, 0, 0)); //TO-DO: create a new border here and make the button border point to it at creation.
 ./src/utils/array_list.c:127:	//TO-DO
-./src/widgets/button.c:6:	NULL, //TO-DO: button_set_style
-./src/widgets/image.c:73:	printf("TO-DO: __image_free\n");
-./src/widgets/label.c:6:	NULL, //TO-DO
-./src/widgets/rectangle.c:6:	NULL, //TO-DO
-./src/widgets/texture_widget.c:6:	NULL, //TO-DO: twidget_set_style

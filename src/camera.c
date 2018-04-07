@@ -1,7 +1,6 @@
 #include "camera.h"
 
 //Creates a new Camera.
-
 Camera *new_Camera(SDL_Rect limit){
 	Camera *camera = malloc(sizeof(Camera));
 
@@ -13,13 +12,11 @@ Camera *new_Camera(SDL_Rect limit){
 }
 
 //Frees camera from memory.
-
 void free_Camera(Camera *camera){
 	free(camera);
 }
 
 //Returns the distance of camera's position to its limit position.
-
 Position camera_get_position(Camera *camera){
 	Position position;
 	position.x = camera->bounds.x - camera->limit.x;
@@ -28,13 +25,11 @@ Position camera_get_position(Camera *camera){
 }
 
 //Returns the position and size of camera.
-
 SDL_Rect camera_get_bounds(Camera *camera){
 	return camera->bounds;
 }
 
 //Sets a new position and size for the camera.
-
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 	//Setting the X position.
 	camera->bounds.x = bounds.x;
@@ -70,7 +65,6 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 }
 
 //Sets a new limit for the camera.
-
 void camera_set_limit(Camera *camera, SDL_Rect limit){
 	//Setting the X position.
 	camera->limit.x = limit.x;
@@ -107,7 +101,6 @@ void camera_set_limit(Camera *camera, SDL_Rect limit){
 
 //Process the events for the camera, such as scroll and keyboard presses that
 //move the camera.
-
 void camera_process_events(Camera *camera, SDL_Event event){
 	switch(event.type){
 		case SDL_MOUSEWHEEL:
@@ -138,25 +131,21 @@ void camera_process_events(Camera *camera, SDL_Event event){
 }
 
 //Sets the X speed of the camera.
-
 void camera_set_x_speed(Camera *camera, int x_speed){
 	camera->speed.x = x_speed;
 }
 
 //Sets the Y speed of the camera.
-
 void camera_set_y_speed(Camera *camera, int y_speed){
 	camera->speed.y = y_speed;
 }
 
 //Sets the speed of the camera.
-
 void camera_set_speed(Camera *camera, Vector2 speed){
 	camera->speed = speed;
 }
 
 //Move the camera (i.e change its position) according to its speed.
-
 void camera_move(Camera *camera){
 	camera->bounds.x += camera->speed.x;
 	camera->bounds.y += camera->speed.y;

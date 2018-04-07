@@ -8,7 +8,6 @@ void __button_vt_init(){
 	}
 	
 	__gbutton_widget_vt = __gcontainer_widget_vt;
-	__gbutton_widget_vt.free = __button_free;
 	__gbutton_widget_vt.set_bounds = __button_set_bounds;
 	__gbutton_widget_vt.process_events = __button_process_events;
 	
@@ -60,10 +59,6 @@ Button new_Button_with_bounds(const char *text, const char *image_file, SDL_Rect
 	return button;
 }
 
-
-void __button_free(void *__button){
-    
-}
 
 void __button_set_bounds(void *__button, SDL_Rect bounds){
     Button *button = __button;

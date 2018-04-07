@@ -74,7 +74,11 @@ void image_set_file(Image *image, const char *file){
 }
 
 void __image_free(void *__image){
-	printf("TO-DO: __image_free\n");
+	Image *image = __image;
+	
+	__texture_widget_free(&image->t_widget);
+	
+	free(image->file);
 }
 
 void __image_set_bounds(void *__image, SDL_Rect bounds){

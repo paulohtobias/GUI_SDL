@@ -30,8 +30,6 @@ Button new_Button_with_position(const char *text, const char *image, Position po
 Button new_Button_with_bounds(const char *text, const char *image, SDL_Rect bounds);
 
 
-void __button_free(void *__button);
-
 void __button_set_bounds(void *__button, SDL_Rect bounds);
 
 void __button_process_events(void *__button, SDL_Event event, Mouse mouse);

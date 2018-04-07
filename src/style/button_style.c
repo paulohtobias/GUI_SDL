@@ -19,5 +19,6 @@ void init_look_and_feel_button(){
 void __free_button_style(void *__button_style){
 	ButtonStyle *button_style = __button_style;
 	
-	//TO-DO
+	border_free(button_style->border);
+	free(button_style->label_style);
 }

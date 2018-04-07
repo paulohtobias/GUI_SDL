@@ -1,11 +1,4 @@
-* Add a get_bounds function at the default widget functions struct.
-	* This is needed in case the widget have borders and want to pass the border bounds instead of its own bounds
-
-* Divide Border into BorderStyle and Border, for easier initialization.
+* (DONE) Add a get_bounds function at the default widget functions struct.
+	- This is needed in case the widget have borders and want to pass the border bounds instead of its own bounds
 
 * Create a struct EventData to be passed to the process_events functions.
-
-* Create all the setters and getters from Style in Widget.
-
-* A macro for verify errors when calling the functions from the virtual table.
-	* #define CHECK_VT_ERROR(type, obj, func)
