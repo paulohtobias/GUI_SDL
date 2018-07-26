@@ -10,19 +10,19 @@
 
 SDL_bool __widget_vt_was_init = SDL_FALSE;
 
-void __widget_vt_init(){
-	if(__widget_vt_was_init){
-		return;
+void __widget_vt_init(Widget *widget){
+	if(!__widget_vt_was_init){
+		__gwidget_vt.free = __widget_free;
+		__gwidget_vt.get_bounds = __widget_get_bounds;
+		__gwidget_vt.set_bounds = __widget_set_bounds;
+		__gwidget_vt.set_border =__widget_set_border;
+		__gwidget_vt.process_events = __widget_process_events;
+		__gwidget_vt.draw = __widget_draw;
+		
+		__widget_vt_was_init = SDL_TRUE;
 	}
 	
-	__gwidget_vt.free = __widget_free;
-	__gwidget_vt.get_bounds = __widget_get_bounds;
-	__gwidget_vt.set_bounds = __widget_set_bounds;
-	__gwidget_vt.set_border =__widget_set_border;
-	__gwidget_vt.process_events = __widget_process_events;
-	__gwidget_vt.draw = __widget_draw;
-	
-	__widget_vt_was_init = SDL_TRUE;
+	widget->functions = &__gwidget_vt;
 }
 
 WidgetSate new_WidgetState(){
@@ -40,11 +40,9 @@ WidgetSate new_WidgetState(){
 }
 
 Widget new_Widget(){
-	__widget_vt_init();
-	
 	Widget widget;
-
-	widget.functions = &__gwidget_vt;
+	
+	__widget_vt_init(&widget);
 	
 	widget.state = new_WidgetState();
 	widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
@@ -96,7 +94,8 @@ SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
 		return SDL_TRUE;
 	}
 	Widget *widget = __widget;
-	return position_is_inside_rect(get_position_camera(widget->bounds), camera_get_bounds(camera));
+	//return rect_is_inside_rect(widget_get_bounds_camera(widget), camera_get_bounds(camera));
+	return rect_intersects_rect(widget_get_bounds_origin(widget), camera_get_bounds(camera));
 }
 
 void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){

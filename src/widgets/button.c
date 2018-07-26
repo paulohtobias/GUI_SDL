@@ -2,16 +2,18 @@
 
 SDL_bool __button_vt_was_init = SDL_FALSE;
 
-void __button_vt_init(){
-	if(__button_vt_was_init){
-		return;
+void __button_vt_init(Button *button){
+	if(!__button_vt_was_init){
+		__gbutton_widget_vt = __gcontainer_widget_vt;
+		__gbutton_widget_vt.set_bounds = __button_set_bounds;
+		__gbutton_widget_vt.process_events = __button_process_events;
+		__gbutton_container_vt = __gcontainer_vt;
+
+		__button_vt_was_init = SDL_TRUE;
 	}
-	
-	__gbutton_widget_vt = __gcontainer_widget_vt;
-	__gbutton_widget_vt.set_bounds = __button_set_bounds;
-	__gbutton_widget_vt.process_events = __button_process_events;
-	
-	__button_vt_was_init = SDL_TRUE;
+
+	button->container.widget.functions = &__gbutton_widget_vt;
+	button->container.functions = &__gcontainer_vt;
 }
 
 Button new_Button(const char *text, const char *image_file){
@@ -26,9 +28,8 @@ Button new_Button_with_bounds(const char *text, const char *image_file, SDL_Rect
 	Button button;
 
 	button.container = new_Container_max_widgets(3);
+	__button_vt_init(&button);
 
-	__button_vt_init();
-    button.container.widget.functions = &__gbutton_widget_vt;
 	button.style_idle = &button_default_style_idle;
 	button.style_focused = &button_default_style_focused;
 	button.style_pressed = &button_default_style_pressed;

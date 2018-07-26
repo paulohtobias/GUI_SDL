@@ -12,6 +12,9 @@
 #include "utils/utils.h"
 #include <SDL2/SDL.h>
 
+///Debug
+#define printR(r) printf("(%d, %d, %d, %d)\n", r.x, r.y, r.w, r.h);
+
 /**
  * Struct used to represent a 2D point. Origin is set at the upper-left corner
  * of the screen.
@@ -397,6 +400,17 @@ SDL_bool position_is_inside_rect(Point point, SDL_Rect rect);
 SDL_bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2);
 
 /**
+ * Checks if any point in the area covered by <code>rect1</code> is inside the
+ * area covered by <code>rect2</code>.
+ * 
+ * @param rect1 an <code>SDL_Rect</code>
+ * @param rect2 an <code>SDL_Rect</code>
+ * @return <code>SDL_TRUE</code> if any point of <code>rect1</code> is inside
+ *	       <code>rect2</code> and <code>SDL_FALSE</code> otherwise
+ */
+SDL_bool rect_intersects_rect(SDL_Rect rect1, SDL_Rect rect2);
+
+/**
  * Checks if the area covered by <code>bounds1</code> using <b>origin</b>
  * position is inside the area covered by <code>bounds2</code> using
  * <b>origin</b> position.
@@ -442,6 +456,6 @@ SDL_bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2);
  * @return <code>SDL_TRUE</code> if <code>bounds1</code> is inside
  *         <code>bounds2</code> and <code>SDL_FALSE</code> otherwise
  */
-SDL_bool bounds_camera_is_inside_bounds_caemera(Bounds bounds1, Bounds bounds2);
+SDL_bool bounds_camera_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2);
 
 #endif //BOUNDS_H

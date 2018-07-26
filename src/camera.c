@@ -99,6 +99,28 @@ void camera_set_limit(Camera *camera, SDL_Rect limit){
 	}
 }
 
+void camera_update_limit(Camera *camera, SDL_Rect bounds){
+	if(bounds.x < camera->limit.x){
+		camera->limit.x = bounds.x;
+	}
+	
+	if(bounds.y < camera->limit.y){
+		camera->limit.y = bounds.y;
+	}
+	
+	int brx = rect_reach_x(bounds);
+	int lrx = rect_reach_x(camera->limit);
+	if(brx > lrx + camera_offset){
+		camera->limit.w += brx - lrx;
+	}
+	
+	int bry = rect_reach_y(bounds);
+	int lry = rect_reach_y(camera->limit);
+	if(bry > lry + camera_offset){
+		camera->limit.h += bry - lry;
+	}
+}
+
 //Process the events for the camera, such as scroll and keyboard presses that
 //move the camera.
 void camera_process_events(Camera *camera, SDL_Event event){

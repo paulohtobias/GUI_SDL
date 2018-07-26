@@ -89,6 +89,14 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds);
 void camera_set_limit(Camera *camera, SDL_Rect limit);
 
 /**
+ * Resize the camera's limit if bounds is not inside it.
+ * 
+ * @param camera a <code>Camera</code>
+ * @param bounds an <code>SDL_Rect</code>
+ */
+void camera_update_limit(Camera *camera, SDL_Rect bounds);
+
+/**
  * Process the events for the camera, such as scroll and keyboard presses that
  * move the camera.
  * 

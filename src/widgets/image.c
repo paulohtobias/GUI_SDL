@@ -10,19 +10,20 @@
 
 SDL_bool __image_vt_was_init = SDL_FALSE;
 
-void __image_vt_init(){
-	if(__image_vt_was_init){
-		return;
+void __image_vt_init(Image *image){
+	if(!__image_vt_was_init){
+		__gimage_widget_vt = __gtwidget_widget_vt;
+		__gimage_widget_vt.free = __image_free;
+		__gimage_widget_vt.set_bounds = __image_set_bounds;
+
+		__gimage_vt = __gtwidget_vt;
+		__gimage_vt.update = __image_update;
+
+		__image_vt_was_init = SDL_TRUE;
 	}
 	
-	__gimage_widget_vt = __gtwidget_widget_vt;
-	__gimage_widget_vt.free = __image_free;
-	__gimage_widget_vt.set_bounds = __image_set_bounds;
-	
-	__gimage_vt = __gtwidget_vt;
-	__gimage_vt.update = __image_update;
-	
-	__image_vt_was_init = SDL_TRUE;
+	image->t_widget.widget.functions = &__gimage_widget_vt;
+	image->t_widget.functions = &__gimage_vt;
 }
 
 Image new_Image(const char *file){
@@ -37,10 +38,7 @@ Image new_Image_with_bounds(const char *file, SDL_Rect bounds){
 	Image image;
 
 	image.t_widget = new_TextureWidget();
-
-	__image_vt_init();
-	image.t_widget.widget.functions = &__gimage_widget_vt;
-	image.t_widget.functions = &__gimage_vt;
+	__image_vt_init(&image);
 
 	image.file = NULL;
 

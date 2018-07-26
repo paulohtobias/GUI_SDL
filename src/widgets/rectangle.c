@@ -2,18 +2,19 @@
 
 SDL_bool __rectangle_vt_was_init = SDL_FALSE;
 
-void __rectangle_vt_init(){
-	if(__rectangle_vt_was_init){
-		return;
+void __rectangle_vt_init(Rectangle *rectangle){
+	if(!__rectangle_vt_was_init){
+		__grectangle_widget_vt = __gtwidget_widget_vt;
+		__grectangle_widget_vt.set_bounds = __rectangle_set_bounds;
+
+		__grectangle_vt = __gtwidget_vt;
+		__grectangle_vt.update = __rectangle_update;
+
+		__rectangle_vt_was_init = SDL_TRUE;
 	}
 	
-	__grectangle_widget_vt = __gtwidget_widget_vt;
-	__grectangle_widget_vt.set_bounds = __rectangle_set_bounds;
-	
-	__grectangle_vt = __gtwidget_vt;
-	__grectangle_vt.update = __rectangle_update;
-	
-	__rectangle_vt_was_init = SDL_TRUE;
+	rectangle->t_widget.widget.functions = &__grectangle_widget_vt;
+	rectangle->t_widget.functions = &__grectangle_vt;
 }
 
 Rectangle new_Rectangle(Color color){
@@ -26,13 +27,10 @@ Rectangle new_Rectangle_with_position(Color color, Position position){
 
 Rectangle new_Rectangle_with_bounds(Color color, SDL_Rect bounds){
 	Rectangle rectangle;
-	
-	rectangle.t_widget = new_TextureWidget();
 
-	__rectangle_vt_init();
-	rectangle.t_widget.widget.functions = &__grectangle_widget_vt;
-	rectangle.t_widget.functions = &__grectangle_vt;
-	
+	rectangle.t_widget = new_TextureWidget();
+	__rectangle_vt_init(&rectangle);
+
 	rectangle_set_color(&rectangle, color);
 	widget_set_bounds(&rectangle, bounds);
 

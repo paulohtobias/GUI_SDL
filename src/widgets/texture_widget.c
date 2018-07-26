@@ -2,33 +2,32 @@
 
 SDL_bool __twidget_vt_was_init = SDL_FALSE;
 
-void __twidget_vt_init(){
-	if(__twidget_vt_was_init){
-		return;
+void __twidget_vt_init(TextureWidget *t_widget){
+	if(!__twidget_vt_was_init){
+		__gtwidget_widget_vt = __gwidget_vt;
+		__gtwidget_widget_vt.free = __texture_widget_free;
+		__gtwidget_widget_vt.draw = __texture_widget_draw;
+
+		__gtwidget_vt.set_changed = __texture_widget_set_changed;
+		__gtwidget_vt.render_copy = __texture_widget_render_copy;
+		__gtwidget_vt.update = NULL;
+
+		__twidget_vt_was_init = SDL_TRUE;
 	}
-	__gtwidget_widget_vt = __gwidget_vt;
-	__gtwidget_widget_vt.free = __texture_widget_free;
-	__gtwidget_widget_vt.draw = __texture_widget_draw;
 	
-	__gtwidget_vt.set_changed = __texture_widget_set_changed;
-	__gtwidget_vt.render_copy = __texture_widget_render_copy;
-	__gtwidget_vt.update = NULL;
-	
-	__twidget_vt_was_init = SDL_TRUE;
+	t_widget->widget.functions = &__gtwidget_widget_vt;
+	t_widget->functions = &__gtwidget_vt;
 }
 
 TextureWidget new_TextureWidget(){
 	TextureWidget t_widget;
-	
-	t_widget.widget = new_Widget();
 
-	__twidget_vt_init();
-	t_widget.widget.functions = &__gtwidget_widget_vt;
-	t_widget.functions = &__gtwidget_vt;
+	t_widget.widget = new_Widget();
+	__twidget_vt_init(&t_widget);
 
 	t_widget.texture = NULL;
 
-	t_widget.functions->set_changed(&t_widget, SDL_TRUE);
+	texture_widget_set_changed(&t_widget, SDL_TRUE);
 
 	return t_widget;
 }

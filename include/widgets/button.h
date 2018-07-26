@@ -9,6 +9,7 @@
 
 ///Global virtual tables.
 VT_Widget __gbutton_widget_vt;
+VT_Container __gbutton_container_vt;
 
 typedef struct Button{
 	Container container;

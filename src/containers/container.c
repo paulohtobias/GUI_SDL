@@ -2,21 +2,22 @@
 
 SDL_bool __container_vt_was_init = SDL_FALSE;
 
-void __container_vt_init(){
-	if(__container_vt_was_init){
-		return;
+void __container_vt_init(Container *container){
+	if(!__container_vt_was_init){
+		__gcontainer_widget_vt = __gwidget_vt;
+		__gcontainer_widget_vt.free = __container_free;
+		__gcontainer_widget_vt.set_bounds = __container_set_bounds;
+		__gcontainer_widget_vt.process_events = __container_process_events;
+		__gcontainer_widget_vt.draw = __container_draw;
+
+		__gcontainer_vt.add_widget = __container_add_widget;
+		__gcontainer_vt.remove_widget = __container_remove_widget;
+
+		__container_vt_was_init = SDL_TRUE;
 	}
 	
-	__gcontainer_widget_vt = __gwidget_vt;
-	__gcontainer_widget_vt.free = __container_free;
-	__gcontainer_widget_vt.set_bounds = __container_set_bounds;
-	__gcontainer_widget_vt.process_events = __container_process_events;
-	__gcontainer_widget_vt.draw = __container_draw;
-	
-	__gcontainer_vt.add_widget = __container_add_widget;
-	__gcontainer_vt.remove_widget = __container_remove_widget;
-	
-	__container_vt_was_init = SDL_TRUE;
+	container->widget.functions = &__gcontainer_widget_vt;
+	container->functions = &__gcontainer_vt;
 }
 
 Container new_Container(){
@@ -27,11 +28,8 @@ Container new_Container_max_widgets(int max){
 	Container container;
 
 	container.widget = new_Widget();
+	__container_vt_init(&container);
 
-	__container_vt_init();
-	container.widget.functions = &__gcontainer_widget_vt;
-	container.functions = &__gcontainer_vt;
-	
 	container.widget_list = new_ArrayList_max_size(max);
 
 	return container;
@@ -133,7 +131,7 @@ void __container_draw(void *__container, SDL_Renderer *renderer, Camera *camera)
 void __container_add_widget(void *__container, void *widget){
 	Container *container = __container;
 
-	SDL_Rect container_bounds = container_get_bounds_origin(__container);
+	SDL_Rect container_bounds = container_get_bounds_origin(container);
 	SDL_Rect widget_bounds = widget_get_bounds_origin(widget);
 	widget_bounds.x += container_bounds.x;
 	widget_bounds.y += container_bounds.y;
