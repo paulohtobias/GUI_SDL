@@ -9,7 +9,6 @@
 #include "basic/bounds.h"
 
 ///Constructor
-//Creates a new Position from x and y coordinates.
 Position new_Position(int x, int y){
 	Position position;
 
@@ -19,7 +18,6 @@ Position new_Position(int x, int y){
 	return position;
 }
 
-//Creates a new Size from width and height.
 Size new_Size(int width, int height){
 	Size size;
 
@@ -29,33 +27,29 @@ Size new_Size(int width, int height){
 	return size;
 }
 
-//Creates a new Bounds from <code>Position</code> and <code>Size</code>.
 Bounds new_Bounds(Position position, Size size){
 	Bounds bounds;
 
-	bounds.origin = position;
-	bounds.camera = position;
+	bounds.local = position;
+	bounds.global = position;
 	bounds.size = size;
 
 	return bounds;
 }
 
-//Creates a new Bounds using integers from x, y, width and height.
 Bounds new_Bounds_from_integer(int x, int y, int w, int h){
 	return new_Bounds(new_Position(x, y), new_Size(w, h));
 }
 
-//Creates a new Bounds using an SDL_Rect struct.
 Bounds new_Bounds_from_SDL_Rect(SDL_Rect rect){
 	return new_Bounds_from_integer(
 		rect.x,
 		rect.y,
 		rect.w,
 		rect.h
-		);
+	);
 }
 
-//Creates a new SDL_Rect struct.
 SDL_Rect new_rect(int x, int y, int w, int h){
 	SDL_Rect rect;
 
@@ -68,90 +62,77 @@ SDL_Rect new_rect(int x, int y, int w, int h){
 }
 
 
-///Extra
-//Adds <code>p1</code> to <code>p2</code> and returns the result.
+///Operations
 Position position_add(Position p1, Position p2){
 	Position p3;
+	
 	p3.x = p1.x + p2.x;
 	p3.y = p1.y + p2.y;
+	
 	return p3;
 }
 
-//Subtracts <code>p2</code> from <code>p1</code> and returns the result.
 Position position_subtract(Position p1, Position p2){
 	Position p3;
+	
 	p3.x = p1.x - p2.x;
 	p3.y = p1.y - p2.y;
+	
 	return p3;
+}
+
+SDL_Rect rect_add(SDL_Rect rect1, SDL_Rect rect2){
+	return new_rect(
+	    rect1.x + rect2.x,
+	    rect1.y + rect2.y,
+	    rect1.w + rect2.w,
+	    rect1.h + rect2.h
+	);
 }
 
 
 ///Get
-//Get the position relative to parent's origin.
-Position get_position_origin(Bounds bounds){
-	return bounds.origin;
-}
-
-//Get the position relative to the camera.
-Position get_position_camera(Bounds bounds){
-	return bounds.camera;
-}
-
-//Get origin position and size in form of SDL_Rect.
-SDL_Rect get_bounds_origin(Bounds bounds){
+SDL_Rect get_bounds_local(Bounds bounds){
 	SDL_Rect rect;
 
-	rect.x = bounds.origin.x;
-	rect.y = bounds.origin.y;
+	rect.x = bounds.local.x;
+	rect.y = bounds.local.y;
 	rect.w = bounds.size.w;
 	rect.h = bounds.size.h;
 
 	return rect;
 }
 
-//Get camera position and size in form of SDL_Rect.
-SDL_Rect get_bounds_camera(Bounds bounds){
+SDL_Rect get_bounds_global(Bounds bounds){
 	SDL_Rect rect;
 
-	rect.x = bounds.camera.x;
-	rect.y = bounds.camera.y;
+	rect.x = bounds.global.x;
+	rect.y = bounds.global.y;
 	rect.w = bounds.size.w;
 	rect.h = bounds.size.h;
 
 	return rect;
-}
-
-//Get the size.
-Size get_size(Bounds bounds){
-	return bounds.size;
 }
 
 
 ///Set
-//Sets the new position relative to origin
-void set_position_origin(Bounds *bounds, Position position){
-	int camera_offset_x = bounds->camera.x - bounds->origin.x;
-	int camera_offset_y = bounds->camera.y - bounds->origin.y;
+void bounds_set_position_local(Bounds *bounds, Position position){
+	Position offset = position_subtract(position, bounds->local);
 
-	bounds->origin = position;
-	bounds->camera = position;
-	bounds->camera.x += camera_offset_x;
-	bounds->camera.y += camera_offset_y;
+	bounds->local = position;
+	bounds->global.x += offset.x;
+	bounds->global.y += offset.y;
 }
 
-//Set the position relative to camera. Origin position is <b>NOT</b> updated.
-void set_position_camera(Bounds *bounds, Position position){
-	bounds->camera = position;
+void bounds_set_position_global(Bounds *bounds, Position position){
+	Position offset = position_subtract(position, bounds->global);
+
+	bounds->global = position;
+	bounds->local.x += offset.x;
+	bounds->local.y += offset.y;
 }
 
-//Set both origin and camera to the same value.
-void reset_position(Bounds *bounds, Position position){
-	bounds->origin = position;
-	bounds->camera = position;
-}
-
-//Set the size.
-void set_size(Bounds *bounds, Size size){
+void bounds_set_size(Bounds *bounds, Size size){
 	if(size.w > 0){
 		bounds->size.w = size.w;
 	}
@@ -160,148 +141,110 @@ void set_size(Bounds *bounds, Size size){
 	}
 }
 
-//Sets the new Position and Size of bounds_dst from a SDL_Rect struct.
 void set_bounds_from_SDL_Rect(Bounds *bounds_dst, SDL_Rect bounds_src){
 	Position position = new_Position(bounds_src.x, bounds_src.y);
 	Size size = new_Size(bounds_src.w, bounds_src.h);
 
-	set_position_origin(bounds_dst, position);
-	set_size(bounds_dst, size);
+	bounds_set_position_local(bounds_dst, position);
+	bounds_set_size(bounds_dst, size);
 }
 
 
 ///Update
-//Update the origin position by adding the new values to the current position.
-void update_position_origin(Bounds *bounds, Position position){
-	Position new_pos = new_Position(
-		bounds->origin.x + position.x,
-		bounds->origin.y + position.y
-		);
-
-	set_position_origin(bounds, new_pos);
+void bounds_update_position(Bounds *bounds, Position position){
+	bounds->local.x += position.x;
+	bounds->local.y += position.y;
+	bounds->global.x += position.x;
+	bounds->global.y += position.y;
 }
 
-//Update the camera position by adding the new values to the current position.
-void update_position_camera(Bounds *bounds, Position position){
-	Position new_pos = new_Position(
-		bounds->camera.x + position.x,
-		bounds->camera.y + position.y
-		);
-
-	set_position_camera(bounds, new_pos);
-}
-
-//Update the size adding the new values to the current size.
-void update_size(Bounds *bounds, Size size){
+void bounds_update_size(Bounds *bounds, Size size){
 	Size new_size = new_Size(
-		bounds->size.w + size.w,
-		bounds->size.h + size.h
-		);
+	    bounds->size.w + size.w,
+	    bounds->size.h + size.h
+	);
 
-	set_size(bounds, new_size);
+	bounds_set_size(bounds, new_size);
 }
 
-//Updates the Position and Size of bounds_dst from a SDL_Rect struct.
 void update_bounds(Bounds *bounds_dst, SDL_Rect bounds_src){
 	Position position = new_Position(bounds_src.x, bounds_src.y);
 	Size size = new_Size(bounds_src.w, bounds_src.h);
 
-	update_position_origin(bounds_dst, position);
-	update_size(bounds_dst, size);
+	bounds_update_position(bounds_dst, position);
+	bounds_update_size(bounds_dst, size);
 }
 
-//Update the SDL_Rect.
 void update_rect(SDL_Rect *dst, SDL_Rect src){
 	dst->x += src.x;
 	dst->y += src.y;
-	dst->w += src.w;
-	dst->h += src.h;
+	
+	int value = dst->w + src.w;
+	if (value > 0) {
+		dst->w = value;
+	}
+	
+	value = dst->h + src.h;
+	if (value > 0) {
+		dst->h = value;
+	}
 }
 
 
 ///Reach
-//Returns the end point of bounds in X using origin position.
-int bounds_reach_x_origin(Bounds bounds){
-	return bounds.origin.x + bounds.size.w;
+int bounds_reach_x_local(Bounds bounds){
+	return bounds.local.x + bounds.size.w;
 }
 
-//Returns the end point of bounds in Y using origin position.
-int bounds_reach_y_origin(Bounds bounds){
-	return bounds.origin.y + bounds.size.h;
+int bounds_reach_y_local(Bounds bounds){
+	return bounds.local.y + bounds.size.h;
 }
 
-//Returns the end point of bounds in X using camera position.
-int bounds_reach_x_camera(Bounds bounds){
-	return bounds.camera.x + bounds.size.w;
+int bounds_reach_x_global(Bounds bounds){
+	return bounds.global.x + bounds.size.w;
 }
 
-//Returns the end point of bounds in Y using camera position.
-int bounds_reach_y_camera(Bounds bounds){
-	return bounds.camera.y + bounds.size.h;
+int bounds_reach_y_global(Bounds bounds){
+	return bounds.global.y + bounds.size.h;
 }
 
-//Returns the end point of rect in X using origin position.
 int rect_reach_x(SDL_Rect rect){
 	return rect.x + rect.w;
 }
 
-//Returns the end point of rect in Y using origin position.
 int rect_reach_y(SDL_Rect rect){
 	return rect.y + rect.h;
 }
 
-//Check if point is inside the area covered by bounds using origin position.
-SDL_bool position_is_inside_bounds_origin(Point point, Bounds bounds){
-	return (point.x >= bounds.origin.x && point.x <= bounds_reach_x_origin(bounds) && //origin.x <= pos.x <= reach_x_origin
-		point.y >= bounds.origin.y && point.y <= bounds_reach_y_origin(bounds)); //origin.y <= pos.y <= reach_y_origin
+SDL_bool position_is_inside_bounds_local(Point point, Bounds bounds){
+	return (point.x >= bounds.local.x && point.x <= bounds_reach_x_local(bounds) && //origin.x <= pos.x <= reach_x_origin
+		point.y >= bounds.local.y && point.y <= bounds_reach_y_local(bounds)); //origin.y <= pos.y <= reach_y_origin
 }
 
-//Check if point is inside the area covered by bounds using camera position.
-SDL_bool position_is_inside_bounds_camera(Point point, Bounds bounds){
-	return (point.x >= bounds.camera.x && point.x <= bounds_reach_x_camera(bounds) && //camera.x <= pos.x <= reach_x_camera
-		point.y >= bounds.camera.y && point.y <= bounds_reach_y_camera(bounds)); //camera.y <= pos.y <= reach_y_camera
+SDL_bool position_is_inside_bounds_global(Point point, Bounds bounds){
+	return (point.x >= bounds.global.x && point.x <= bounds_reach_x_global(bounds) && //camera.x <= pos.x <= reach_x_camera
+		point.y >= bounds.global.y && point.y <= bounds_reach_y_global(bounds)); //camera.y <= pos.y <= reach_y_camera
 }
 
-//Check if point is inside the area covered by SDL_Rect.
 SDL_bool position_is_inside_rect(Point point, SDL_Rect rect){
 	return (point.x >= rect.x && point.x <= rect_reach_x(rect) && //rect.x <= pos.x <= rect_reach_x
 		point.y >= rect.y && point.y <= rect_reach_y(rect)); //rect.y <= pos.y <= rect_reach_y
 }
 
-//Checks if the area covered by rect1 is inside the area covered by rect2.
 SDL_bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2){
 	return (rect1.x >= rect2.x && rect1.y >= rect2.y &&
 		rect_reach_x(rect1) < rect_reach_x(rect2) && rect_reach_y(rect1) < rect_reach_y(rect2));
 }
 
-//Checks if any point in the area covered by rect1 is inside the area covered by
-//rect2.
-//TO-DO: add another rectangle with offset.
 SDL_bool rect_intersects_rect(SDL_Rect rect1, SDL_Rect rect2){
+	printf("rect_intersects_rect\n");
+	printR(rect1);
+	printR(rect2);
+	puts("=============================\n");
 	return !(rect_reach_x(rect1) < rect2.x || rect_reach_y(rect1) < rect2.y ||
 	         rect_reach_x(rect2) < rect1.x || rect_reach_y(rect2) < rect1.y);
 }
 
-//Checks if the area covered by bounds1 using origin position is inside the area
-//covered by bounds2 using origin position.
-SDL_bool bounds_origin_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2){
-	return (rect_is_inside_rect(get_bounds_origin(bounds1), get_bounds_origin(bounds2)));
-}
-
-//Checks if the area covered by bounds1 using origin position is inside the area
-//covered by bounds2 using camera position.
-SDL_bool bounds_origin_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2){
-	return (rect_is_inside_rect(get_bounds_origin(bounds1), get_bounds_camera(bounds2)));
-}
-
-//Checks if the area covered by bounds1 using camera position is inside the area
-//covered by bounds2 using origin position.
-SDL_bool bounds_camera_is_inside_bounds_origin(Bounds bounds1, Bounds bounds2){
-	return (rect_is_inside_rect(get_bounds_camera(bounds1), get_bounds_camera(bounds2)));
-}
-
-//Checks if the area covered by bounds1 using camera position is inside the area
-//covered by bounds2 using camera position.
-SDL_bool bounds_camera_is_inside_bounds_camera(Bounds bounds1, Bounds bounds2){
-	return (rect_is_inside_rect(get_bounds_camera(bounds1), get_bounds_camera(bounds2)));
+SDL_bool bounds_is_inside_bounds(Bounds bounds1, Bounds bounds2){
+	return (rect_is_inside_rect(get_bounds_global(bounds1), get_bounds_global(bounds2)));
 }

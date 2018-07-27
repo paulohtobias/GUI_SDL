@@ -38,39 +38,13 @@ typedef struct Camera{
  * @param limit the initial bounds and limit for the camera.
  * @return the Camera created.
  */
-Camera *new_Camera(SDL_Rect limit);
-
-/**
- * Frees camera from memory.
- * 
- * @param camera the camera to be freed from memory.
- */
-void free_Camera(Camera *camera);
-
-/**
- * Returns the distance of <code>camera</code>'s position to its
- * <code>limit</code> position. Use this function instead of acessing the
- * <code>bounds</code> attribute directly because <code>limit</code> position
- * can be diferent from (0,0).
- * 
- * @param camera a <code>Camera</code>
- * @return a <code>Position</code> with the actual distance of the camera to its
- * limit position
- */
-Position camera_get_position(Camera *camera);
-
-/**
- * Returns the position and size of <code>camera</code>.
- * @param camera a <code>Camera</code>
- * @return an <code>SDL_Rect</code> with the camera position and size.
- */
-SDL_Rect camera_get_bounds(Camera *camera);
+Camera new_Camera(SDL_Rect limit);
 
 /**
  * Sets a new position and size for the camera.
  * 
- * If the new bounds is greater than camera limit, then it will also be updated
- * to match the new bounds.
+ * If the new bounds is greater than camera limit, then its limits will grow to
+ * match the new bounds.
  * 
  * @param camera the camera that will be updated.
  * @param bounds the new bounds of the camera.
@@ -80,7 +54,7 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds);
 /**
  * Sets a new limit for the camera.
  * 
- * If the new limit is smaller than camera bounds, then it will also be updated
+ * If the new limit is smaller than camera bounds, then its bounds will shrink
  * to match the new limit.
  * 
  * @param camera the camera that will be updated.

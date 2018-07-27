@@ -33,7 +33,7 @@ MouseButtonState mouse_is_released(Mouse mouse){
 //Check if the mouse is inside the area of bounds.
 
 SDL_bool mouse_over(Bounds bounds){
-	return position_is_inside_bounds_camera(mouse_get_position(), bounds);
+	return position_is_inside_bounds_global(mouse_get_position(), bounds);
 }
 
 SDL_bool mouse_over_rect(SDL_Rect bounds){

@@ -10,7 +10,7 @@ VT_Container __gscontainer_container_vt;
 typedef struct ScrollableContainer{
 	Container container;
 
-	Camera *camera;
+	Camera camera;
 	//TO-DO: ScrollBar
 } ScrollableContainer;
 
@@ -24,9 +24,9 @@ void __scrollable_container_set_bounds(void *__container, SDL_Rect bounds);
 
 void __scrollable_container_process_events(void *__container, SDL_Event event, Mouse mouse);
 
-void __scrollable_container_draw(void *__container, SDL_Renderer *renderer, Camera *camera);
+void __scrollable_container_draw(void *__container, SDL_Renderer *renderer);
 
-void __scrollable_container_add_widget(void *__container, void *widget);
+void __scrollable_container_add_widget(void *__container, void *__widget);
 
 void *__scrollable_container_remove_widget(void *__container);
 

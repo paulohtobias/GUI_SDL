@@ -8,8 +8,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#define MIN(x, y) (x<y)?x:y
-#define MAX(x, y) (x>y)?x:y
+#define MIN(x, y) ((x<y)?x:y)
+#define MAX(x, y) ((x>y)?x:y)
 
 char *string_format(const char *format, ...);
 

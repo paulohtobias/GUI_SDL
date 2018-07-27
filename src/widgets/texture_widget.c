@@ -60,21 +60,21 @@ void __texture_widget_render_copy(void *__widget, SDL_Renderer *renderer){
 		return;
 	}
 
-	SDL_Rect bounds = get_bounds_camera(t_widget->widget.bounds);
+	SDL_Rect bounds = widget_get_bounds_camera(t_widget);
 	SDL_RenderCopy(renderer, t_widget->texture, NULL, &bounds);
 }
 
-void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer, Camera *camera){
+void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer){
 	TextureWidget *t_widget = __texture_widget;
 
-	if(widget_is_inside_camera(__texture_widget, camera)){
+	if(widget_is_inside_camera(__texture_widget)){
 		if(t_widget->widget.state.entered_camera == SDL_FALSE){
 			t_widget->widget.state.entered_camera = SDL_TRUE;
 		}
 
 		t_widget->functions->update(__texture_widget, renderer);
-
-		border_draw(t_widget->widget.border, renderer, camera);
+		
+		border_draw(t_widget->widget.border, renderer);
 
 		t_widget->functions->render_copy(__texture_widget, renderer);
 	}else if(t_widget->widget.state.entered_camera == SDL_TRUE){

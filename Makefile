@@ -29,6 +29,7 @@ INCLUDE_PATHS = -I$(IDIR)
 #Libraries
 LIBS = SDL2_image SDL2_ttf
 CFLAGS+= `pkg-config --cflags $(LIBS)`
+#LIBRARIES = -LD:/dev/msys64/mingw64/lib -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
 LIBRARIES = `pkg-config --libs $(LIBS)`
 
 #Compilation line

@@ -29,56 +29,58 @@ ScrollableContainer new_ScrollableContainer_max_widgets(int max){
 	scrollable_container.container = new_Container_max_widgets(max);
 	__scontainer_vt_init(&scrollable_container);
 
-	scrollable_container.camera = new_Camera(container_get_bounds_origin(&scrollable_container));
+	scrollable_container.camera = new_Camera(container_get_bounds_local(&scrollable_container));
 
 	return scrollable_container;
 }
 
 void __scrollable_container_free(void *__container){
 	__container_free(__container);
-
-	ScrollableContainer *scrollable_container = __container;
-	free_Camera(scrollable_container->camera);
+	
+	//TO-DO: free the scrollbar
 }
 
 void __scrollable_container_set_bounds(void *__container, SDL_Rect bounds){
-	__container_set_bounds(__container, bounds);
-
-	ScrollableContainer *scrollable_container = __container;
+	ScrollableContainer *container = __container;
 	
-	//TO-DO: check to see if this really do what it's intended to do.
-	camera_set_bounds(scrollable_container->camera, container_get_bounds_origin(scrollable_container));
+	__container_set_bounds(__container, bounds);
+	
+	container->camera.limit = container_get_bounds_global(container);
+	container->camera.bounds = container->camera.limit;
 }
 
 void __scrollable_container_process_events(void *__container, SDL_Event event, Mouse mouse){
-	ScrollableContainer *scrollable_container = __container;
+	ScrollableContainer *container = __container;
 	
-	Camera *c = scrollable_container->camera;
-	camera_process_events(scrollable_container->camera, event);
-	camera_move(scrollable_container->camera);
+	camera_process_events(&container->camera, event);
+	camera_move(&container->camera);
 
 	__container_process_events(__container, event, mouse);
 }
 
-void __scrollable_container_draw(void *__container, SDL_Renderer *renderer, Camera *camera){
-	ScrollableContainer *scrollable_container = __container;
+void __scrollable_container_draw(void *__container, SDL_Renderer *renderer){
+	ScrollableContainer *container = __container;
 
 	int i;
-	for(i = 0; i < scrollable_container->container.widget_list->size; i++){
-		void *widget = list_get_index(scrollable_container->container.widget_list, i);
-		widget_update_camera_position(widget, scrollable_container->camera);
-		widget_draw(widget, renderer, scrollable_container->camera);
+	for(i = 0; i < container->container.widget_list->size; i++){
+		void *widget = list_get_index(container->container.widget_list, i);
+		widget_draw(widget, renderer);
 	}
 }
 
-void __scrollable_container_add_widget(void *__container, void *widget){
-	__container_add_widget(__container, widget);
-	
+void __scrollable_container_add_widget(void *__container, void *__widget){
 	ScrollableContainer *container = __container;
+	Widget *widget = __widget;
+	
+	//Adds the widget to the list.
+	__container_add_widget(__container, __widget);
+	
+	//Sets the widget's rendering camera.
+	widget->rendering_camera = &container->camera;
 	
 	//Checking to see if the widget is 'out of bounds' in order to update its
 	//camera limits.
-	camera_update_limit(container->camera, widget_get_bounds_origin(widget));
+	camera_update_limit(&container->camera, widget_get_bounds_local(widget));
 }
 
 void *__scrollable_container_remove_widget(void *__container){

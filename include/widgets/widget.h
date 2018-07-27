@@ -32,7 +32,7 @@ typedef struct VT_Widget{
 	void (*set_border)(void *, void *);
 
 	void (*process_events)(void *, SDL_Event, Mouse);
-	void (*draw)(void *, SDL_Renderer *, Camera *);
+	void (*draw)(void *, SDL_Renderer *);
 } VT_Widget;
 
 ///Global virtual table.
@@ -54,6 +54,12 @@ typedef struct Widget{
 	Bounds bounds;
 	
 	Border *border;
+	
+	/**
+	 * A pointer to the camera that is rendering the widget.
+	 * Can be NULL.
+	 */
+	Camera *rendering_camera;
 
 	//Functions
 	VT_Widget *functions;
@@ -65,7 +71,9 @@ Widget new_Widget();
 
 void widget_free(void *widget);
 
-SDL_Rect widget_get_bounds_origin(void *widget);
+SDL_Rect widget_get_bounds_local(void *widget);
+
+SDL_Rect widget_get_bounds_global(void *widget);
 
 SDL_Rect widget_get_bounds_camera(void *widget);
 
@@ -77,11 +85,9 @@ void widget_set_border(void *widget, void *border);
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
-void widget_update_camera_position(void *__widget, Camera *camera);
+SDL_bool widget_is_inside_camera(void *__widget);
 
-SDL_bool widget_is_inside_camera(void *__widget, Camera *camera);
-
-void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera);
+void widget_draw(void *__widget, SDL_Renderer *renderer);
 
 
 void __widget_free(void *__widget);
@@ -94,6 +100,6 @@ void __widget_set_border(void *__widget, void *border);
 
 void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse);
 
-void __widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera);
+void __widget_draw(void *__widget, SDL_Renderer *renderer);
 
 #endif //WIDGET_H

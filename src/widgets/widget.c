@@ -47,6 +47,7 @@ Widget new_Widget(){
 	widget.state = new_WidgetState();
 	widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
 	widget.border = NULL;
+	widget.rendering_camera = NULL;
 
 	return widget;
 }
@@ -55,12 +56,26 @@ void widget_free(void *widget){
 	((Widget *) widget)->functions->free(widget);
 }
 
-SDL_Rect widget_get_bounds_origin(void *widget){
-	return get_bounds_origin(widget_get_bounds(widget));
+SDL_Rect widget_get_bounds_local(void *widget){
+	return get_bounds_local(widget_get_bounds(widget));
 }
 
-SDL_Rect widget_get_bounds_camera(void *widget){
-	return get_bounds_camera(widget_get_bounds(widget));
+SDL_Rect widget_get_bounds_global(void *widget){
+	return get_bounds_global(widget_get_bounds(widget));
+}
+
+SDL_Rect widget_get_bounds_camera(void *__widget){
+	Widget *widget = __widget;
+	
+	SDL_Rect widget_bounds_camera = widget_get_bounds_global(widget);
+	
+	if (widget->rendering_camera != NULL) {
+		SDL_Rect camera_bounds = widget->rendering_camera->bounds;
+		widget_bounds_camera.x -= camera_bounds.x;
+		widget_bounds_camera.y -= camera_bounds.y;
+	}
+	
+	return widget_bounds_camera;
 }
 
 Bounds widget_get_bounds(void *widget){
@@ -79,30 +94,28 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
 	((Widget *) widget)->functions->process_events(widget, event, mouse);
 }
 
-void widget_update_camera_position(void *__widget, Camera *camera){
-	if(camera != NULL){
-		Widget *widget = __widget;
-		set_position_camera(
-			&widget->bounds,
-			position_subtract(get_position_origin(widget->bounds), camera_get_position(camera))
-			);
-	}
-}
-
-SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
-	if(camera == NULL){
+SDL_bool widget_is_inside_camera(void *__widget){
+	Widget *widget = __widget;
+	
+	//TO-DO:? Maybe pass an SDL_Window to the function to expand this if
+	if (widget->rendering_camera == NULL) {
 		return SDL_TRUE;
 	}
-	Widget *widget = __widget;
-	//return rect_is_inside_rect(widget_get_bounds_camera(widget), camera_get_bounds(camera));
-	return rect_intersects_rect(widget_get_bounds_origin(widget), camera_get_bounds(camera));
+
+	return rect_intersects_rect(
+	    widget_get_bounds_global(widget),
+	    rect_add(
+		    widget->rendering_camera->bounds,
+		    new_rect(camera_offset, camera_offset, camera_offset, camera_offset)
+		)
+	);
 }
 
-void widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){
+void widget_draw(void *__widget, SDL_Renderer *renderer){
 	//widget_update_camera_position(__widget, camera);
 
 	Widget *widget = __widget;
-	widget->functions->draw(__widget, renderer, camera);
+	widget->functions->draw(__widget, renderer);
 }
 
 
@@ -126,7 +139,7 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 void __widget_set_border(void *__widget, void *border){
 	Widget *widget = __widget;
 	
-	border_set_bounds(border, widget_get_bounds_camera(widget));
+	border_set_bounds(border, widget_get_bounds_global(widget));
 	widget->border = border;
 }
 
@@ -155,10 +168,10 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 	}
 }
 
-void __widget_draw(void *__widget, SDL_Renderer *renderer, Camera *camera){
+void __widget_draw(void *__widget, SDL_Renderer *renderer){
 	Widget *widget = __widget;
 
-	if(widget_is_inside_camera(__widget, camera)){
-		border_draw(widget->border, renderer, camera);
+	if(widget_is_inside_camera(__widget)){
+		border_draw(widget->border, renderer);
 	}
 }

@@ -29,15 +29,15 @@ Container new_Container_max_widgets(int max);
 
 void container_free(void *__container);
 
-SDL_Rect container_get_bounds_origin(void *container);
+SDL_Rect container_get_bounds_local(void *container);
 
-SDL_Rect container_get_bounds_camera(void *container);
+SDL_Rect container_get_bounds_global(void *container);
 
 void container_set_bounds(void *__container, SDL_Rect bounds);
 
 void container_process_events(void *__container, SDL_Event event, Mouse mouse);
 
-void container_draw(void *__container, SDL_Renderer *renderer, Camera *camera);
+void container_draw(void *__container, SDL_Renderer *renderer);
 
 void container_add_widget(void *__container, void *widget);
 
@@ -52,9 +52,9 @@ void __container_set_bounds(void *__container, SDL_Rect bounds);
 
 void __container_process_events(void *__container, SDL_Event event, Mouse mouse);
 
-void __container_draw(void *__container, SDL_Renderer *renderer, Camera *camera);
+void __container_draw(void *__container, SDL_Renderer *renderer);
 
-void __container_add_widget(void *__container, void *widget);
+void __container_add_widget(void *__container, void *__widget);
 
 void *__container_remove_widget(void *__container);
 

@@ -164,7 +164,7 @@ void window_draw(Window *window){
 	int i;
 	for(i = 0; i < window->layers; i++){
 		if(window->container[i] != NULL){
-			container_draw(window->container[i], window->renderer, NULL);
+			container_draw(window->container[i], window->renderer);
 		}
 	}
 

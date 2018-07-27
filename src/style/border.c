@@ -50,9 +50,9 @@ void border_set_bounds(void *border, SDL_Rect widget_bounds){
 	}
 }
 
-void border_draw(void *border, SDL_Renderer *renderer, Camera *camera){
+void border_draw(void *border, SDL_Renderer *renderer){
 	if(border != NULL){
-		((Border *)border)->functions->draw(border, renderer, camera);
+		((Border *)border)->functions->draw(border, renderer);
 	}
 }
 
@@ -70,7 +70,7 @@ void __border_set_bounds(void *__border, SDL_Rect widget_bounds){
 	border->bounds.h = widget_bounds.h + border->size_up + border->size_down;
 }
 
-void __border_draw(void *__border, SDL_Renderer *renderer, Camera *camera){
+void __border_draw(void *__border, SDL_Renderer *renderer){
 	Border *border = __border;
 	
 	set_renderer_draw_color(renderer, border->color);

@@ -53,6 +53,6 @@ void __texture_widget_set_changed(void *__texture_widget, int changed);
 
 void __texture_widget_render_copy(void *__widget, SDL_Renderer *renderer);
 
-void __texture_widget_draw(void *t_widget, SDL_Renderer *renderer, Camera *camera);
+void __texture_widget_draw(void *t_widget, SDL_Renderer *renderer);
 
 #endif //TEXTUREWIDGET_H

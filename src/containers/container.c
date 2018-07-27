@@ -39,12 +39,12 @@ void container_free(void *container){
 	widget_free(container);
 }
 
-SDL_Rect container_get_bounds_origin(void *container){
-	return widget_get_bounds_origin(container);
+SDL_Rect container_get_bounds_local(void *container){
+	return widget_get_bounds_local(container);
 }
 
-SDL_Rect container_get_bounds_camera(void *container){
-	return widget_get_bounds_camera(container);
+SDL_Rect container_get_bounds_global(void *container){
+	return widget_get_bounds_global(container);
 }
 
 void container_set_bounds(void *container, SDL_Rect bounds){
@@ -55,8 +55,8 @@ void container_process_events(void *container, SDL_Event event, Mouse mouse){
 	widget_process_events(container, event, mouse);
 }
 
-void container_draw(void *container, SDL_Renderer *renderer, Camera *camera){
-	widget_draw(container, renderer, camera);
+void container_draw(void *container, SDL_Renderer *renderer){
+	widget_draw(container, renderer);
 }
 
 void container_add_widget(void *container, void *widget){
@@ -87,25 +87,25 @@ void __container_free(void *__container){
 void __container_set_bounds(void *__container, SDL_Rect bounds){
 	Container *container = __container;
 
-	SDL_Rect container_bounds_old = container_get_bounds_origin(container);
+	SDL_Rect container_bounds_old = container_get_bounds_local(container);
+	
 	set_bounds_from_SDL_Rect(&container->widget.bounds, bounds);
-	SDL_Rect container_bounds_new = container_get_bounds_origin(container);
+	
+	SDL_Rect container_bounds_new = container_get_bounds_local(container);
 
+	border_set_bounds(container->widget.border, widget_get_bounds_camera(container));
+	
 	Position container_offset;
 	container_offset = new_Position(
-		container_bounds_new.x - container_bounds_old.x,
-		container_bounds_new.y - container_bounds_old.y
-		);
+	    container_bounds_new.x - container_bounds_old.x,
+	    container_bounds_new.y - container_bounds_old.y
+	);
 
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
-		void *widget = list_get_index(container->widget_list, i);
+		Widget *widget = list_get_index(container->widget_list, i);
 
-		SDL_Rect widget_bounds = widget_get_bounds_origin(widget);
-		widget_bounds.x += container_offset.x;
-		widget_bounds.y += container_offset.y;
-
-		widget_set_bounds(widget, widget_bounds);
+		bounds_update_position(&widget->bounds, container_offset);
 	}
 }
 
@@ -119,25 +119,27 @@ void __container_process_events(void *__container, SDL_Event event, Mouse mouse)
 	}
 }
 
-void __container_draw(void *__container, SDL_Renderer *renderer, Camera *camera){
+void __container_draw(void *__container, SDL_Renderer *renderer){
 	Container *container = __container;
 
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
-		widget_draw(list_get_index(container->widget_list, i), renderer, camera);
+		widget_draw(list_get_index(container->widget_list, i), renderer);
 	}
 }
 
-void __container_add_widget(void *__container, void *widget){
+void __container_add_widget(void *__container, void *__widget){
 	Container *container = __container;
-
-	SDL_Rect container_bounds = container_get_bounds_origin(container);
-	SDL_Rect widget_bounds = widget_get_bounds_origin(widget);
-	widget_bounds.x += container_bounds.x;
-	widget_bounds.y += container_bounds.y;
-	widget_bounds.w = 0;
-	widget_bounds.h = 0;
-	widget_set_bounds(widget, widget_bounds);
+	Widget *widget = __widget;
+	
+	Position container_position_global = widget_get_bounds(container).global;
+	Position widget_position_local = widget_get_bounds(widget).local;
+	
+	//Updates the widget's global position.
+	widget->bounds.global = position_add(
+	    container_position_global,
+	    widget_position_local
+	);
 
 	list_insert_last(container->widget_list, widget);
 }

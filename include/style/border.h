@@ -3,12 +3,11 @@
 
 #include "basic/bounds.h"
 #include "basic/color.h"
-#include "camera.h"
 
 typedef struct VT_Border{
 	void (*free)(void *);
 	void (*set_bounds)(void *, SDL_Rect);
-	void (*draw)(void *, SDL_Renderer *, Camera *);
+	void (*draw)(void *, SDL_Renderer *);
 }VT_Border;
 
 /**
@@ -41,14 +40,14 @@ void border_free(void *border);
 
 void border_set_bounds(void *border, SDL_Rect widget_bounds);
 
-void border_draw(void *border, SDL_Renderer *renderer, Camera *camera);
+void border_draw(void *border, SDL_Renderer *renderer);
 
 
 void __border_free(void *__border);
 
 void __border_set_bounds(void *__border, SDL_Rect widget_bounds);
 
-void __border_draw(void *__border, SDL_Renderer *renderer, Camera *camera);
+void __border_draw(void *__border, SDL_Renderer *renderer);
 
 //TO-DO: create a border draw function that draws only the border.
 
