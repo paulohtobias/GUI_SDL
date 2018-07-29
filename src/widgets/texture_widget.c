@@ -60,8 +60,13 @@ void __texture_widget_render_copy(void *__widget, SDL_Renderer *renderer){
 		return;
 	}
 
-	SDL_Rect bounds = widget_get_bounds_camera(t_widget);
-	SDL_RenderCopy(renderer, t_widget->texture, NULL, &bounds);
+	
+	SDL_Rect bounds;
+	SDL_Rect draw_area = widget_get_drawable_area(t_widget, &bounds);
+	
+	border_set_bounds(t_widget->widget.border, bounds);
+	border_draw(t_widget->widget.border, renderer);
+	SDL_RenderCopy(renderer, t_widget->texture, &draw_area, &bounds);
 }
 
 void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer){
@@ -73,8 +78,6 @@ void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer){
 		}
 
 		t_widget->functions->update(__texture_widget, renderer);
-		
-		border_draw(t_widget->widget.border, renderer);
 
 		t_widget->functions->render_copy(__texture_widget, renderer);
 	}else if(t_widget->widget.state.entered_camera == SDL_TRUE){

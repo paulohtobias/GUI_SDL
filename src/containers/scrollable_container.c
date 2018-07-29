@@ -80,7 +80,7 @@ void __scrollable_container_add_widget(void *__container, void *__widget){
 	
 	//Checking to see if the widget is 'out of bounds' in order to update its
 	//camera limits.
-	camera_update_limit(&container->camera, widget_get_bounds_local(widget));
+	camera_update_limit(&container->camera, widget_get_bounds_global(widget));
 }
 
 void *__scrollable_container_remove_widget(void *__container){

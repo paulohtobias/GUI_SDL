@@ -109,10 +109,10 @@ void camera_process_events(Camera *camera, SDL_Event event){
 		case SDL_KEYDOWN:
 			switch(event.key.keysym.sym){
 				case SDLK_UP:
-					camera->speed.y -= event.wheel.y * camera->mov_speed;
+					camera->speed.y -= camera->mov_speed;
 					break;
 				case SDLK_DOWN:
-					camera->speed.y += event.wheel.y * camera->mov_speed;
+					camera->speed.y += camera->mov_speed;
 					break;
 				case SDLK_END:
 					camera->speed.y = (camera->limit.h - camera->bounds.h) - camera->bounds.y;

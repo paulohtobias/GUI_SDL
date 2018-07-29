@@ -1,4 +1,9 @@
+* Create a struct RenderData (Widget, SDL_Renderer, Camera) to pass to all render related functions.
+	- Remove the rendering_camera field from Widget.
+	- Debug the Label render_copy method.
+
+* Create a struct EventData to be passed to the process_events functions.
+
 * (DONE) Add a get_bounds function at the default widget functions struct.
 	- This is needed in case the widget have borders and want to pass the border bounds instead of its own bounds
 
-* Create a struct EventData to be passed to the process_events functions.

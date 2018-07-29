@@ -71,8 +71,9 @@ SDL_Rect widget_get_bounds_camera(void *__widget){
 	
 	if (widget->rendering_camera != NULL) {
 		SDL_Rect camera_bounds = widget->rendering_camera->bounds;
-		widget_bounds_camera.x -= camera_bounds.x;
-		widget_bounds_camera.y -= camera_bounds.y;
+		SDL_Rect camera_limit = widget->rendering_camera->limit;
+		widget_bounds_camera.x -= (camera_bounds.x - camera_limit.x);
+		widget_bounds_camera.y -= (camera_bounds.y - camera_limit.y);
 	}
 	
 	return widget_bounds_camera;
@@ -104,11 +105,39 @@ SDL_bool widget_is_inside_camera(void *__widget){
 
 	return rect_intersects_rect(
 	    widget_get_bounds_global(widget),
-	    rect_add(
-		    widget->rendering_camera->bounds,
-		    new_rect(camera_offset, camera_offset, camera_offset, camera_offset)
-		)
+		widget->rendering_camera->bounds
 	);
+}
+
+SDL_Rect widget_get_drawable_area(void* __widget, SDL_Rect *dst_bounds){
+	Widget *widget = __widget;
+	
+	SDL_Rect global = widget_get_bounds_global(widget);
+	*dst_bounds = widget_get_bounds_camera(widget);
+	
+	SDL_Rect draw_area = *dst_bounds;
+	draw_area.x = draw_area.y = 0;
+	if (widget->rendering_camera != NULL) {
+		Camera *camera = widget->rendering_camera;
+		
+		if(dst_bounds->h == 480){
+			printf("drawable area:\n");
+			printf("(%d, %d)\n", global.x, global.y);
+			printR((*dst_bounds));
+			printR(camera->bounds);
+			printf("===================\n");
+		}
+		
+		draw_area.x = MAX(0, camera->bounds.x - global.x);
+		draw_area.y = MAX(0, camera->bounds.y - global.y);
+		
+		dst_bounds->x += draw_area.x;
+		dst_bounds->y += draw_area.y;
+		dst_bounds->w -= draw_area.x;
+		dst_bounds->h -= draw_area.y;
+	}
+	
+	return draw_area;
 }
 
 void widget_draw(void *__widget, SDL_Renderer *renderer){

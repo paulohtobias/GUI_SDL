@@ -294,6 +294,8 @@ int rect_reach_x(SDL_Rect rect);
  */
 int rect_reach_y(SDL_Rect rect);
 
+
+///Area
 /**
  * Check if point is inside the area covered by <code>bounds</code> using local
  * position.

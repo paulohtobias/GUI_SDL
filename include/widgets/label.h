@@ -52,7 +52,7 @@ void label_set_wrap(Label *label, SDL_bool wrap);
 
 void label_set_style(Label *label, LabelStyle *style);
 
-SDL_Rect label_get_center_bounds(Label *label, Size *real_size);
+SDL_Rect label_get_center_bounds(Label *label, SDL_Rect *center_bounds, Size *real_size);
 
 
 void __label_free(void *__label);

@@ -87,6 +87,8 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
 SDL_bool widget_is_inside_camera(void *__widget);
 
+SDL_Rect widget_get_drawable_area(void *__widget, SDL_Rect *dst_bounds);
+
 void widget_draw(void *__widget, SDL_Renderer *renderer);
 
 
@@ -100,6 +102,7 @@ void __widget_set_border(void *__widget, void *border);
 
 void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse);
 
+//TO-DO: delete this and set the default to NULL ?
 void __widget_draw(void *__widget, SDL_Renderer *renderer);
 
 #endif //WIDGET_H

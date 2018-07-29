@@ -216,6 +216,8 @@ int rect_reach_y(SDL_Rect rect){
 	return rect.y + rect.h;
 }
 
+
+///Area
 SDL_bool position_is_inside_bounds_local(Point point, Bounds bounds){
 	return (point.x >= bounds.local.x && point.x <= bounds_reach_x_local(bounds) && //origin.x <= pos.x <= reach_x_origin
 		point.y >= bounds.local.y && point.y <= bounds_reach_y_local(bounds)); //origin.y <= pos.y <= reach_y_origin
@@ -237,10 +239,6 @@ SDL_bool rect_is_inside_rect(SDL_Rect rect1, SDL_Rect rect2){
 }
 
 SDL_bool rect_intersects_rect(SDL_Rect rect1, SDL_Rect rect2){
-	printf("rect_intersects_rect\n");
-	printR(rect1);
-	printR(rect2);
-	puts("=============================\n");
 	return !(rect_reach_x(rect1) < rect2.x || rect_reach_y(rect1) < rect2.y ||
 	         rect_reach_x(rect2) < rect1.x || rect_reach_y(rect2) < rect1.y);
 }
