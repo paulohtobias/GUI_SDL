@@ -11,7 +11,7 @@ typedef struct{
 	//Window info
 	char *title;
 	SDL_Window *sdlwindow;
-	SDL_Renderer *renderer;
+	RenderData *render_data;
 	SDL_Color background_color;
 	SDL_Rect bounds;
 

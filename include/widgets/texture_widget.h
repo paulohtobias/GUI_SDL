@@ -21,7 +21,7 @@
  */
 typedef struct VT_TextureWidget{
 	void (*set_changed)(void *, int);
-	void (*render_copy)(void *, SDL_Renderer *);
+	void (*render_copy)(void *, RenderData *);
 	void (*update)(void *, SDL_Renderer *);
 } VT_TextureWidget;
 
@@ -51,8 +51,8 @@ void __texture_widget_free(void *t_widget);
 
 void __texture_widget_set_changed(void *__texture_widget, int changed);
 
-void __texture_widget_render_copy(void *__widget, SDL_Renderer *renderer);
+void __texture_widget_render_copy(void *__widget, RenderData *data);
 
-void __texture_widget_draw(void *t_widget, SDL_Renderer *renderer);
+void __texture_widget_draw(void *t_widget, RenderData *data);
 
 #endif //TEXTUREWIDGET_H

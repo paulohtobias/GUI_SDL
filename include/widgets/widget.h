@@ -9,10 +9,7 @@
 #ifndef WIDGET_H
 #define WIDGET_H
 
-#include "basic/bounds.h"
 #include "basic/mouse.h"
-#include "basic/color.h"
-#include "camera.h"
 #include "style/border.h"
 
 /**
@@ -32,7 +29,7 @@ typedef struct VT_Widget{
 	void (*set_border)(void *, void *);
 
 	void (*process_events)(void *, SDL_Event, Mouse);
-	void (*draw)(void *, SDL_Renderer *);
+	void (*draw)(void *, RenderData *);
 } VT_Widget;
 
 ///Global virtual table.
@@ -54,12 +51,6 @@ typedef struct Widget{
 	Bounds bounds;
 	
 	Border *border;
-	
-	/**
-	 * A pointer to the camera that is rendering the widget.
-	 * Can be NULL.
-	 */
-	Camera *rendering_camera;
 
 	//Functions
 	VT_Widget *functions;
@@ -75,7 +66,7 @@ SDL_Rect widget_get_bounds_local(void *widget);
 
 SDL_Rect widget_get_bounds_global(void *widget);
 
-SDL_Rect widget_get_bounds_camera(void *widget);
+SDL_Rect widget_get_bounds_camera(void *widget, Camera *camera);
 
 Bounds widget_get_bounds(void *widget);
 
@@ -85,11 +76,11 @@ void widget_set_border(void *widget, void *border);
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
-SDL_bool widget_is_inside_camera(void *__widget);
+SDL_bool widget_is_inside_camera(void *__widget, Camera *camera);
 
-SDL_Rect widget_get_drawable_area(void *__widget, SDL_Rect *dst_bounds);
+SDL_Rect widget_get_drawable_area(void *__widget, SDL_Rect *dst_bounds, Camera *camera);
 
-void widget_draw(void *__widget, SDL_Renderer *renderer);
+void widget_draw(void *__widget, RenderData *data);
 
 
 void __widget_free(void *__widget);
@@ -101,8 +92,5 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds);
 void __widget_set_border(void *__widget, void *border);
 
 void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse);
-
-//TO-DO: delete this and set the default to NULL ?
-void __widget_draw(void *__widget, SDL_Renderer *renderer);
 
 #endif //WIDGET_H

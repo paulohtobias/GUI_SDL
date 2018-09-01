@@ -59,7 +59,7 @@ void __label_free(void *__label);
 
 void __label_set_bounds(void *__label, SDL_Rect bounds);
 
-void __label_render_copy(void *__label, SDL_Renderer *renderer);
+void __label_render_copy(void *__label, RenderData *data);
 
 void __label_update(void *__label, SDL_Renderer *renderer);
 

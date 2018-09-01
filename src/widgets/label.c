@@ -184,15 +184,15 @@ void __label_set_bounds(void *__label, SDL_Rect bounds){
 	}
 
 	set_bounds_from_SDL_Rect(&label->t_widget.widget.bounds, bounds);
-	border_set_bounds(label->t_widget.widget.border, widget_get_bounds_camera(label));
+	border_set_bounds(label->t_widget.widget.border, widget_get_bounds_global(label));
 }
 
-void __label_render_copy(void *__label, SDL_Renderer *renderer){
+void __label_render_copy(void *__label, RenderData *data){
 	Label *label = __label;
 
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
 	SDL_Rect bounds;
-	SDL_Rect draw_area = widget_get_drawable_area(label, &bounds);
+	SDL_Rect draw_area = widget_get_drawable_area(label, &bounds, data->camera);
 	draw_area.w = MIN(real_size.w, bounds.w);
 	draw_area.h = MIN(real_size.h, bounds.h);
 
@@ -203,9 +203,8 @@ void __label_render_copy(void *__label, SDL_Renderer *renderer){
 		label_get_center_bounds(label, &bounds, &real_size);
 	}
 	
-	border_set_bounds(label->t_widget.widget.border, bounds);
-	border_draw(label->t_widget.widget.border, renderer);
-	SDL_RenderCopy(renderer, label->t_widget.texture, &draw_area, &bounds);
+	border_draw(label->t_widget.widget.border, data);
+	SDL_RenderCopy(data->renderer, label->t_widget.texture, &draw_area, &bounds);
 }
 
 void __label_update(void *__label, SDL_Renderer *renderer){

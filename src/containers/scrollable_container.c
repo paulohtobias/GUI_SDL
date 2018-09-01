@@ -58,13 +58,15 @@ void __scrollable_container_process_events(void *__container, SDL_Event event, M
 	__container_process_events(__container, event, mouse);
 }
 
-void __scrollable_container_draw(void *__container, SDL_Renderer *renderer){
+void __scrollable_container_draw(void *__container, RenderData *data){
 	ScrollableContainer *container = __container;
 
 	int i;
+	RenderData new_data = *data;
+	new_data.camera = &container->camera;
 	for(i = 0; i < container->container.widget_list->size; i++){
 		void *widget = list_get_index(container->container.widget_list, i);
-		widget_draw(widget, renderer);
+		widget_draw(widget, &new_data);
 	}
 }
 
@@ -74,9 +76,6 @@ void __scrollable_container_add_widget(void *__container, void *__widget){
 	
 	//Adds the widget to the list.
 	__container_add_widget(__container, __widget);
-	
-	//Sets the widget's rendering camera.
-	widget->rendering_camera = &container->camera;
 	
 	//Checking to see if the widget is 'out of bounds' in order to update its
 	//camera limits.

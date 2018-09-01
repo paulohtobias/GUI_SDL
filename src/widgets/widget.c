@@ -17,7 +17,7 @@ void __widget_vt_init(Widget *widget){
 		__gwidget_vt.set_bounds = __widget_set_bounds;
 		__gwidget_vt.set_border =__widget_set_border;
 		__gwidget_vt.process_events = __widget_process_events;
-		__gwidget_vt.draw = __widget_draw;
+		__gwidget_vt.draw = NULL;
 		
 		__widget_vt_was_init = SDL_TRUE;
 	}
@@ -47,7 +47,6 @@ Widget new_Widget(){
 	widget.state = new_WidgetState();
 	widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
 	widget.border = NULL;
-	widget.rendering_camera = NULL;
 
 	return widget;
 }
@@ -64,19 +63,8 @@ SDL_Rect widget_get_bounds_global(void *widget){
 	return get_bounds_global(widget_get_bounds(widget));
 }
 
-SDL_Rect widget_get_bounds_camera(void *__widget){
-	Widget *widget = __widget;
-	
-	SDL_Rect widget_bounds_camera = widget_get_bounds_global(widget);
-	
-	if (widget->rendering_camera != NULL) {
-		SDL_Rect camera_bounds = widget->rendering_camera->bounds;
-		SDL_Rect camera_limit = widget->rendering_camera->limit;
-		widget_bounds_camera.x -= (camera_bounds.x - camera_limit.x);
-		widget_bounds_camera.y -= (camera_bounds.y - camera_limit.y);
-	}
-	
-	return widget_bounds_camera;
+SDL_Rect widget_get_bounds_camera(void *__widget, Camera *camera){
+	return camera_get_relative_bounds(camera, widget_get_bounds_global(__widget));
 }
 
 Bounds widget_get_bounds(void *widget){
@@ -95,31 +83,29 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
 	((Widget *) widget)->functions->process_events(widget, event, mouse);
 }
 
-SDL_bool widget_is_inside_camera(void *__widget){
+SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
 	Widget *widget = __widget;
-	
+
 	//TO-DO:? Maybe pass an SDL_Window to the function to expand this if
-	if (widget->rendering_camera == NULL) {
+	if (camera == NULL) {
 		return SDL_TRUE;
 	}
 
 	return rect_intersects_rect(
 	    widget_get_bounds_global(widget),
-		widget->rendering_camera->bounds
+		camera->bounds
 	);
 }
 
-SDL_Rect widget_get_drawable_area(void* __widget, SDL_Rect *dst_bounds){
+SDL_Rect widget_get_drawable_area(void* __widget, SDL_Rect *dst_bounds, Camera *camera){
 	Widget *widget = __widget;
 	
 	SDL_Rect global = widget_get_bounds_global(widget);
-	*dst_bounds = widget_get_bounds_camera(widget);
+	*dst_bounds = widget_get_bounds_camera(widget, camera);
 	
 	SDL_Rect draw_area = *dst_bounds;
 	draw_area.x = draw_area.y = 0;
-	if (widget->rendering_camera != NULL) {
-		Camera *camera = widget->rendering_camera;
-		
+	if (camera != NULL) {
 		if(dst_bounds->h == 480){
 			printf("drawable area:\n");
 			printf("(%d, %d)\n", global.x, global.y);
@@ -140,11 +126,11 @@ SDL_Rect widget_get_drawable_area(void* __widget, SDL_Rect *dst_bounds){
 	return draw_area;
 }
 
-void widget_draw(void *__widget, SDL_Renderer *renderer){
+void widget_draw(void *__widget, RenderData *data){
 	//widget_update_camera_position(__widget, camera);
 
 	Widget *widget = __widget;
-	widget->functions->draw(__widget, renderer);
+	widget->functions->draw(__widget, data);
 }
 
 
@@ -162,7 +148,7 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 		widget->state.auto_size = SDL_FALSE;
 	}
 	set_bounds_from_SDL_Rect(&widget->bounds, bounds);
-	border_set_bounds(widget->border, widget_get_bounds_camera(widget));
+	border_set_bounds(widget->border, widget_get_bounds_global(widget));
 }
 
 void __widget_set_border(void *__widget, void *border){
@@ -179,6 +165,7 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 	widget->state.mouse_state = MOUSE_IDLE;
 	widget->state.dragged = SDL_FALSE;
 
+	//TO-DO: check this!!
 	if(mouse_over(widget->bounds)){
 		widget->state.mouse_over = SDL_TRUE;
 		widget->state.focus = SDL_TRUE;
@@ -194,13 +181,5 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 				widget->state.dragged = SDL_TRUE;
 			}
 		}
-	}
-}
-
-void __widget_draw(void *__widget, SDL_Renderer *renderer){
-	Widget *widget = __widget;
-
-	if(widget_is_inside_camera(__widget)){
-		border_draw(widget->border, renderer);
 	}
 }

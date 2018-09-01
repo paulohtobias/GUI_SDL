@@ -20,9 +20,9 @@
 #endif
 
 typedef struct Camera{
-	//Camera.
-	SDL_Rect bounds;
+	///Relative to window's origin.
 	SDL_Rect limit;
+	SDL_Rect bounds;
 
 	//Speed and movement.
 	int mov_speed;
@@ -39,6 +39,8 @@ typedef struct Camera{
  * @return the Camera created.
  */
 Camera new_Camera(SDL_Rect limit);
+
+SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds);
 
 /**
  * Sets a new position and size for the camera.

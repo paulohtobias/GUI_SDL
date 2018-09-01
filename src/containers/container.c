@@ -55,8 +55,8 @@ void container_process_events(void *container, SDL_Event event, Mouse mouse){
 	widget_process_events(container, event, mouse);
 }
 
-void container_draw(void *container, SDL_Renderer *renderer){
-	widget_draw(container, renderer);
+void container_draw(void *container, RenderData *data){
+	widget_draw(container, data);
 }
 
 void container_add_widget(void *container, void *widget){
@@ -93,7 +93,7 @@ void __container_set_bounds(void *__container, SDL_Rect bounds){
 	
 	SDL_Rect container_bounds_new = container_get_bounds_local(container);
 
-	border_set_bounds(container->widget.border, widget_get_bounds_camera(container));
+	border_set_bounds(container->widget.border, widget_get_bounds_global(container));
 	
 	Position container_offset;
 	container_offset = new_Position(
@@ -119,12 +119,14 @@ void __container_process_events(void *__container, SDL_Event event, Mouse mouse)
 	}
 }
 
-void __container_draw(void *__container, SDL_Renderer *renderer){
+void __container_draw(void *__container, RenderData *data){
 	Container *container = __container;
 
+	border_draw(container->widget.border, data);
+	
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
-		widget_draw(list_get_index(container->widget_list, i), renderer);
+		widget_draw(list_get_index(container->widget_list, i), data);
 	}
 }
 

@@ -27,15 +27,19 @@ Window *new_Window_layers(char *title, SDL_Rect bounds, Uint32 flags, int layers
 		exit(1);
 	}
 
-	window->renderer = SDL_CreateRenderer(window->sdlwindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	if(window->renderer == NULL){
+	window->render_data = malloc(sizeof *window->render_data);
+	window->render_data->camera = malloc(sizeof *window->render_data->camera);
+	*window->render_data->camera = new_Camera(new_rect(0, 0, 0, 0));
+	window->render_data->renderer = SDL_CreateRenderer(window->sdlwindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	if(window->render_data->renderer == NULL){
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error creating renderer", SDL_GetError(), NULL);
 		SDL_Quit();
 		exit(1);
 	}
-	set_renderer_draw_color(window->renderer, window->background_color);
+	set_renderer_draw_color(window->render_data->renderer, window->background_color);
 
 	window->bounds = window_get_bounds(window);
+	camera_set_bounds(window->render_data->camera, window->bounds);
 
 	window->quit_requested = SDL_FALSE;
 	window->mouse.button_state = MOUSE_IDLE;
@@ -63,7 +67,7 @@ void free_Window(Window *window){
 	int i;
 
 	free(window->title);
-	SDL_DestroyRenderer(window->renderer);
+	SDL_DestroyRenderer(window->render_data->renderer);
 	SDL_DestroyWindow(window->sdlwindow);
 
 	//This should be replaced with window_emptyList
@@ -121,7 +125,11 @@ void window_process_events(Window *window){
 		return;
 	}
 
-	if(window->event.type == SDL_WINDOWEVENT && window->event.window.event == SDL_WINDOWEVENT_RESIZED){
+	if(window->event.type == SDL_WINDOWEVENT){
+		if(window->event.window.event == SDL_WINDOWEVENT_RESIZED){
+			window->bounds = window_get_bounds(window);
+			camera_set_bounds(window->render_data->camera, window->bounds);
+		}
 	}
 
 	window->mouse.position = mouse_get_position();
@@ -153,20 +161,18 @@ void window_process_events(Window *window){
 	if(window->mouse.button_state == MOUSE_LEFT_PRESSED){
 		window->mouse.drag_offset = window->mouse.position;
 	}
-
-	//int i;
 }
 
 void window_draw(Window *window){
-	set_renderer_draw_color(window->renderer, window->background_color);
-	SDL_RenderClear(window->renderer);
+	set_renderer_draw_color(window->render_data->renderer, window->background_color);
+	SDL_RenderClear(window->render_data->renderer);
 
 	int i;
 	for(i = 0; i < window->layers; i++){
 		if(window->container[i] != NULL){
-			container_draw(window->container[i], window->renderer);
+			container_draw(window->container[i], window->render_data);
 		}
 	}
 
-	SDL_RenderPresent(window->renderer);
+	SDL_RenderPresent(window->render_data->renderer);
 }

@@ -10,6 +10,15 @@ Camera new_Camera(SDL_Rect limit){
 	return camera;
 }
 
+SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
+	if (camera != NULL) {
+		bounds.x -= (camera->bounds.x - camera->limit.x);
+		bounds.y -= (camera->bounds.y - camera->limit.y);
+	}
+	
+	return bounds;
+}
+
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 	//Setting the X position.
 	camera->bounds.x = bounds.x;
