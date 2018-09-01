@@ -106,8 +106,6 @@ SDL_Rect widget_get_drawable_area(void* __widget, SDL_Rect *dst_bounds, Camera *
 	SDL_Rect draw_area = *dst_bounds;
 	draw_area.x = draw_area.y = 0;
 	if (camera != NULL) {
-		Camera *camera = camera;
-		
 		if(dst_bounds->h == 480){
 			printf("drawable area:\n");
 			printf("(%d, %d)\n", global.x, global.y);
@@ -167,6 +165,7 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 	widget->state.mouse_state = MOUSE_IDLE;
 	widget->state.dragged = SDL_FALSE;
 
+	//TO-DO: check this!!
 	if(mouse_over(widget->bounds)){
 		widget->state.mouse_over = SDL_TRUE;
 		widget->state.focus = SDL_TRUE;
