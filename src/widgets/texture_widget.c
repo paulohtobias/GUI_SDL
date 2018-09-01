@@ -53,33 +53,31 @@ void __texture_widget_set_changed(void *__texture_widget, int changed){
 	((TextureWidget *) __texture_widget)->changed = changed;
 }
 
-void __texture_widget_render_copy(void *__widget, SDL_Renderer *renderer){
+void __texture_widget_render_copy(void *__widget, RenderData *data){
 	TextureWidget *t_widget = __widget;
 
 	if(t_widget->texture == NULL){
 		return;
 	}
 
-	
 	SDL_Rect bounds;
-	SDL_Rect draw_area = widget_get_drawable_area(t_widget, &bounds);
-	
-	border_set_bounds(t_widget->widget.border, bounds);
-	border_draw(t_widget->widget.border, renderer);
-	SDL_RenderCopy(renderer, t_widget->texture, &draw_area, &bounds);
+	SDL_Rect draw_area = widget_get_drawable_area(t_widget, &bounds, data->camera);
+
+	border_draw(t_widget->widget.border, data);
+	SDL_RenderCopy(data->renderer, t_widget->texture, &draw_area, &bounds);
 }
 
-void __texture_widget_draw(void *__texture_widget, SDL_Renderer *renderer){
+void __texture_widget_draw(void *__texture_widget, RenderData *data){
 	TextureWidget *t_widget = __texture_widget;
 
-	if(widget_is_inside_camera(__texture_widget)){
+	if(widget_is_inside_camera(__texture_widget, data->camera)){
 		if(t_widget->widget.state.entered_camera == SDL_FALSE){
 			t_widget->widget.state.entered_camera = SDL_TRUE;
 		}
 
-		t_widget->functions->update(__texture_widget, renderer);
+		t_widget->functions->update(__texture_widget, data->renderer);
 
-		t_widget->functions->render_copy(__texture_widget, renderer);
+		t_widget->functions->render_copy(__texture_widget, data);
 	}else if(t_widget->widget.state.entered_camera == SDL_TRUE){
 		t_widget->widget.state.entered_camera = SDL_FALSE;
 
