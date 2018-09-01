@@ -20,8 +20,9 @@
 #endif
 
 typedef struct Camera{
-	SDL_Rect limit; ///Relative to window's origin.
-	SDL_Rect bounds; ///TO-DO: make ut relative to limit.
+	///Relative to window's origin.
+	SDL_Rect limit;
+	SDL_Rect bounds;
 
 	//Speed and movement.
 	int mov_speed;
