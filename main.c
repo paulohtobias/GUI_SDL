@@ -14,7 +14,6 @@ int main(int argc, char *argv[]){
 		int x = 20;
 		imgs[i] = new_Image_with_position("Resources/Images/b at.jpg", new_Position(x, 480 * i));
 		container_add_widget(&c, &imgs[i]);
-		printR(widget_get_bounds_global(&imgs[i]));
 	}
 
 	Label lbl[n];
@@ -26,8 +25,8 @@ int main(int argc, char *argv[]){
 	}
 	label_set_color(&lbl[0], COLOR_RED);
 	label_set_font(&lbl[1], "calibri");
-	label_set_size(&lbl[1], 32);
-	label_set_size(&lbl[2], 24);
+	label_set_font_size(&lbl[1], 32);
+	label_set_font_size(&lbl[2], 24);
 	label_set_center(&lbl[1], SDL_TRUE);
     
     Button btn = new_Button_with_bounds("Botãó", NULL, new_rect(100, 100, 200, 50));
@@ -38,16 +37,8 @@ int main(int argc, char *argv[]){
 			window_process_events(window);
 
 			window_draw(window);
-			
-			/**
-			set_renderer_draw_color(window->renderer, COLOR_BLUE);
-			SDL_RenderDrawLine(window->renderer, 0, 30, 1200, 30);
-			SDL_RenderPresent(window->renderer);
-			/**/
-			
-			puts("");
 		}else{
-			printf("%s\n", SDL_GetError());
+			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), window->sdlwindow);
 			return 1;
 		}
 	}

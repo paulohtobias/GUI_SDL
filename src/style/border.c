@@ -75,6 +75,17 @@ void __border_draw(void *__border, RenderData *data){
 
 	SDL_Rect rect = camera_get_relative_bounds(data->camera, border->bounds);
 
+	if (data->camera != NULL) {
+		int x_offset = MAX(0, data->camera->bounds.x - border->bounds.x);
+		int y_offset = MAX(0, data->camera->bounds.y - border->bounds.y);
+
+		rect.x += x_offset;
+		rect.y += y_offset;
+
+		rect.w -= x_offset;
+		rect.h -= y_offset;
+	}
+
 	set_renderer_draw_color(data->renderer, border->color);
 	SDL_RenderFillRect(data->renderer, &rect);
 }

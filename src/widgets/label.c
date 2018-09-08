@@ -47,7 +47,7 @@ Label new_Label_with_bounds(const char *text, SDL_Rect bounds){
 void label_update_size_table(Label *label, TTF_Font *font){
 	int i, len = strlen(label->text);
 	if(font == NULL){
-		font = TTF_OpenFont(label_get_font(label), label_get_size(label));
+		font = TTF_OpenFont(label_get_font(label), label_get_font_size(label));
 		if(font == NULL){
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: label_update_size_table", TTF_GetError(), NULL);
 			exit(1);
@@ -105,15 +105,16 @@ char *label_get_font(Label* label){
 
 void label_set_font(Label *label, const char *font){
 	__label_new_style(label);
+	//TO-DO: change this hardcoded font path to a dir list and make it that the user can edit it.
 	snprintf(label->style->font, 60, "./Resources/Fonts/%s.ttf", font);
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
-int label_get_size(Label* label){
+int label_get_font_size(Label* label){
 	return label->style->size;
 }
 
-void label_set_size(Label *label, int size){
+void label_set_font_size(Label *label, int size){
 	__label_new_style(label);
 	label->style->size = size;
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
@@ -193,16 +194,16 @@ void __label_render_copy(void *__label, RenderData *data){
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
 	SDL_Rect bounds;
 	SDL_Rect draw_area = widget_get_drawable_area(label, &bounds, data->camera);
-	draw_area.w = MIN(real_size.w, bounds.w);
-	draw_area.h = MIN(real_size.h, bounds.h);
+	draw_area.w = MIN(real_size.w, draw_area.w);
+	draw_area.h = MIN(real_size.h, draw_area.h);
 
-	bounds.w = draw_area.w;
-	bounds.h = draw_area.h;
-	
+	bounds.w = draw_area.w -draw_area.x;
+	bounds.h = draw_area.h -draw_area.y;
+
 	if (label_get_center(label) == SDL_TRUE) {
-		label_get_center_bounds(label, &bounds, &real_size);
+		//label_get_center_bounds(label, &bounds, &real_size);
 	}
-	
+
 	border_draw(label->t_widget.widget.border, data);
 	SDL_RenderCopy(data->renderer, label->t_widget.texture, &draw_area, &bounds);
 }
@@ -215,7 +216,7 @@ void __label_update(void *__label, SDL_Renderer *renderer){
 	}
 
 	//Creating the Font.
-	TTF_Font *ttf_font = TTF_OpenFont(label_get_font(label), label_get_size(label));
+	TTF_Font *ttf_font = TTF_OpenFont(label_get_font(label), label_get_font_size(label));
 	if(ttf_font == NULL){
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: __label_update", TTF_GetError(), NULL);
 		exit(1);
@@ -228,8 +229,8 @@ void __label_update(void *__label, SDL_Renderer *renderer){
 	if(!label_get_wrap(label)){
 		surface = TTF_RenderUTF8_Blended(ttf_font, label->text, label_get_color(label));
 	}else{
-		int bounds_width = widget_get_bounds_local(__label).w;
-		int max_width = MIN(bounds_width, real_size.w);
+		int label_width = widget_get_bounds_local(label).w;
+		int max_width = MIN(label_width, real_size.w);
 
 		surface = TTF_RenderUTF8_Blended_Wrapped(ttf_font, label->text, label_get_color(label), max_width);
 	}
@@ -269,6 +270,7 @@ void __label_update(void *__label, SDL_Renderer *renderer){
 
 	if(label->t_widget.widget.state.auto_size == SDL_TRUE){
 		bounds_set_size(&label->t_widget.widget.bounds, real_size);
+		border_set_bounds(label->t_widget.widget.border, widget_get_bounds_global(label));
 	}
 	label->t_widget.functions->set_changed(__label, SDL_FALSE);
 }

@@ -38,9 +38,9 @@ char *label_get_font(Label *label);
 
 void label_set_font(Label *label, const char *font);
 
-int label_get_size(Label *label);
+int label_get_font_size(Label *label);
 
-void label_set_size(Label *label, int size);
+void label_set_font_size(Label *label, int size);
 
 SDL_bool label_get_center(Label *label);
 
