@@ -188,7 +188,6 @@ void __label_render_copy(void *__label, RenderData *data){
 
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
 	SDL_Rect bounds = widget_get_bounds_camera(label, data->camera);
-	SDL_Rect center_bounds = bounds;
 
 	if (label_get_center(label) == SDL_TRUE) {
 		bounds = label_get_center_bounds(label, bounds);
@@ -196,8 +195,7 @@ void __label_render_copy(void *__label, RenderData *data){
 
 	bounds.w = real_size.w;
 	bounds.h = real_size.h;
-
-	SDL_Rect draw_area = widget_get_drawable_area(label, &bounds, data->camera);
+	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &bounds);
 
 	border_draw(label->t_widget.widget.border, data);
 	SDL_RenderCopy(data->renderer, label->t_widget.texture, &draw_area, &bounds);

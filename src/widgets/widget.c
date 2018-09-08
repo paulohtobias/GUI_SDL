@@ -97,28 +97,6 @@ SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
 	);
 }
 
-SDL_Rect widget_get_drawable_area(void* __widget, SDL_Rect *dst_bounds, Camera *camera){
-	Widget *widget = __widget;
-
-	SDL_Rect draw_area = *dst_bounds;
-	draw_area.x = draw_area.y = 0;
-	if (camera != NULL) {
-		SDL_Rect global = *dst_bounds;
-		global.x += camera->bounds.x - camera->limit.x;
-		global.y += camera->bounds.y - camera->limit.y;
-
-		draw_area.x = MAX(0, camera->bounds.x - global.x);
-		draw_area.y = MAX(0, camera->bounds.y - global.y);
-
-		dst_bounds->x += draw_area.x;
-		dst_bounds->y += draw_area.y;
-		dst_bounds->w -= draw_area.x;
-		dst_bounds->h -= draw_area.y;
-	}
-
-	return draw_area;
-}
-
 void widget_draw(void *__widget, RenderData *data){
 	//widget_update_camera_position(__widget, camera);
 

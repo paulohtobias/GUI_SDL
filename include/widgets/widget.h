@@ -78,8 +78,6 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
 SDL_bool widget_is_inside_camera(void *__widget, Camera *camera);
 
-SDL_Rect widget_get_drawable_area(void *__widget, SDL_Rect *dst_bounds, Camera *camera);
-
 void widget_draw(void *__widget, RenderData *data);
 
 

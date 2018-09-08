@@ -43,6 +43,18 @@ Camera new_Camera(SDL_Rect limit);
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds);
 
 /**
+ * Gets the source and destination SDL_Rect to draw something relative to the
+ * camera.
+ * 
+ * @param camera a <code>Camera</code>. Can be <code>NULL</code>.
+ * @param dst_bounds an <code>SDL_Rect</code> with the position and size of the
+ *                   object relative to the camera. A call to
+ *                   <code>camera_get_relative_bounds</code> will be enough in
+ *                   most cases. <code>dst_bounds</code> will be updated.
+ */
+SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds);
+
+/**
  * Sets a new position and size for the camera.
  * 
  * If the new bounds is greater than camera limit, then its limits will grow to

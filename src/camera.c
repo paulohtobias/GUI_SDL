@@ -19,6 +19,27 @@ SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
 	return bounds;
 }
 
+SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
+	SDL_Rect draw_area = *dst_bounds;
+	draw_area.x = draw_area.y = 0;
+	
+	if (camera != NULL) {
+		SDL_Rect global = *dst_bounds;
+		global.x += camera->bounds.x - camera->limit.x;
+		global.y += camera->bounds.y - camera->limit.y;
+
+		draw_area.x = MAX(0, camera->bounds.x - global.x); //limit - dst
+		draw_area.y = MAX(0, camera->bounds.y - global.y); //limit - dst
+
+		dst_bounds->x += draw_area.x;
+		dst_bounds->y += draw_area.y;
+		dst_bounds->w -= draw_area.x;
+		dst_bounds->h -= draw_area.y;
+	}
+
+	return draw_area;
+}
+
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 	//Setting the X position.
 	camera->bounds.x = bounds.x;
