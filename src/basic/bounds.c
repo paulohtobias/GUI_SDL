@@ -246,3 +246,14 @@ SDL_bool rect_intersects_rect(SDL_Rect rect1, SDL_Rect rect2){
 SDL_bool bounds_is_inside_bounds(Bounds bounds1, Bounds bounds2){
 	return (rect_is_inside_rect(get_bounds_global(bounds1), get_bounds_global(bounds2)));
 }
+
+SDL_Rect bounds_get_center(Size size, SDL_Rect area){
+	SDL_Rect center_bounds;
+
+	center_bounds.x = area.x + (area.w / 2) - (size.w / 2);
+	center_bounds.y = area.y + (area.h / 2) - (size.h / 2);
+	center_bounds.w = size.w;
+	center_bounds.h = size.h;
+
+	return center_bounds;
+}

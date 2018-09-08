@@ -361,4 +361,10 @@ SDL_bool rect_intersects_rect(SDL_Rect rect1, SDL_Rect rect2);
  */
 SDL_bool bounds_is_inside_bounds(Bounds bounds1, Bounds bounds2);
 
+/**
+ * Returns a new <code>SDL_Rect</code> that has the same size as
+ * <code>size</code> centralized in <code>area</code>.
+ */
+SDL_Rect bounds_get_center(Size bounds, SDL_Rect area);
+
 #endif //BOUNDS_H

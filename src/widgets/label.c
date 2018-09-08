@@ -145,13 +145,7 @@ void label_set_style(Label *label, LabelStyle *style){
 }
 
 SDL_Rect label_get_center_bounds(Label *label, SDL_Rect area){
-	SDL_Rect center_bounds = area;
-	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
-
-	center_bounds.x += (area.w / 2) - (real_size.w / 2);
-	center_bounds.y += (area.h / 2) - (real_size.h / 2);
-
-	return center_bounds;
+	return bounds_get_center(label_get_original_size(*label, strlen(label->text) - 1), area);
 }
 
 void __label_free(void *__label){
