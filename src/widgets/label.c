@@ -144,19 +144,14 @@ void label_set_style(Label *label, LabelStyle *style){
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
-SDL_Rect label_get_center_bounds(Label *label, SDL_Rect *center_bounds, Size *real_size){
-	if(real_size == NULL){
-		real_size = malloc(sizeof(SDL_Rect));
-		(*real_size) = label_get_original_size(*label, strlen(label->text) - 1);
-	}
+SDL_Rect label_get_center_bounds(Label *label, SDL_Rect area){
+	SDL_Rect center_bounds = area;
+	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
 
-	//SDL_Rect center_bounds = widget_get_bounds_camera(label);
-	center_bounds->x = MAX(center_bounds->x, center_bounds->x + (center_bounds->w / 2) - (real_size->w / 2));
-	center_bounds->y = MAX(center_bounds->y, center_bounds->y + (center_bounds->h / 2) - (real_size->h / 2));
-    /*center_bounds->w = real_size->w;
-    center_bounds->h = real_size->h;*/
+	center_bounds.x += (area.w / 2) - (real_size.w / 2);
+	center_bounds.y += (area.h / 2) - (real_size.h / 2);
 
-	return *center_bounds;
+	return center_bounds;
 }
 
 void __label_free(void *__label){
@@ -192,17 +187,17 @@ void __label_render_copy(void *__label, RenderData *data){
 	Label *label = __label;
 
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
-	SDL_Rect bounds;
-	SDL_Rect draw_area = widget_get_drawable_area(label, &bounds, data->camera);
-	draw_area.w = MIN(real_size.w, draw_area.w);
-	draw_area.h = MIN(real_size.h, draw_area.h);
-
-	bounds.w = draw_area.w -draw_area.x;
-	bounds.h = draw_area.h -draw_area.y;
+	SDL_Rect bounds = widget_get_bounds_camera(label, data->camera);
+	SDL_Rect center_bounds = bounds;
 
 	if (label_get_center(label) == SDL_TRUE) {
-		//label_get_center_bounds(label, &bounds, &real_size);
+		bounds = label_get_center_bounds(label, bounds);
 	}
+
+	bounds.w = real_size.w;
+	bounds.h = real_size.h;
+
+	SDL_Rect draw_area = widget_get_drawable_area(label, &bounds, data->camera);
 
 	border_draw(label->t_widget.widget.border, data);
 	SDL_RenderCopy(data->renderer, label->t_widget.texture, &draw_area, &bounds);

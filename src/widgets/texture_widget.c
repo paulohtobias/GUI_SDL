@@ -60,7 +60,7 @@ void __texture_widget_render_copy(void *__widget, RenderData *data){
 		return;
 	}
 
-	SDL_Rect bounds;
+	SDL_Rect bounds = widget_get_bounds_camera(t_widget, data->camera);;
 	SDL_Rect draw_area = widget_get_drawable_area(t_widget, &bounds, data->camera);
 
 	border_draw(t_widget->widget.border, data);

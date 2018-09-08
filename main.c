@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
 
 	Label lbl[n];
 	for(i = 0; i < n; i++){
-		lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(300 * i, 10, 250, 50));
+		lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(300, 60 * i, 550, 50));
 		//lbl[i] = new_Label_with_position("./Resources/Images/img.png", new_Position(300 * i, 10));
 		container_add_widget(&c, &lbl[i]);
 		widget_set_border(lbl + i, new_Border_dynamic(2, COLOR_GREEN, widget_get_bounds_global(lbl + i)));
