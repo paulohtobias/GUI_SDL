@@ -7,6 +7,7 @@ int main(int argc, char *argv[]){
 	ScrollableContainer c = new_ScrollableContainer_max_widgets(n * 5);
 	window_add_container(window, &c);
 	container_set_bounds(&c, new_rect(30, 30, 1200, 700));
+	widget_set_border(&c, new_Border_dynamic(2, COLOR_BLUE, container_get_bounds_global(&c)));
 	printR(widget_get_bounds_global(&c));
 	
 	Image imgs[n];
@@ -18,10 +19,10 @@ int main(int argc, char *argv[]){
 
 	Label lbl[n];
 	for(i = 0; i < n; i++){
-		lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(300, 60 * i, 550, 50));
+		lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(420, 70 * i + 10, 250, 50));
 		//lbl[i] = new_Label_with_position("./Resources/Images/img.png", new_Position(300 * i, 10));
 		container_add_widget(&c, &lbl[i]);
-		widget_set_border(lbl + i, new_Border_dynamic(2, COLOR_GREEN, widget_get_bounds_global(lbl + i)));
+		widget_set_border(lbl + i, new_Border_dynamic(5, COLOR_GREEN, widget_get_bounds_global(lbl + i)));
 	}
 	label_set_color(&lbl[0], COLOR_RED);
 	label_set_font(&lbl[1], "calibri");

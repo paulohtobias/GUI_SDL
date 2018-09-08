@@ -20,10 +20,8 @@ typedef struct Border{
     Uint8 size_left;
     Color color;
 	SDL_Rect bounds;
-	//TO-DO: a value to draw only the border or the whole rectangle
-	//...or check the alpha in the color.
-	
-	//Functions
+
+    //Functions
 	VT_Border *functions;
 }Border;
 
@@ -49,6 +47,8 @@ void __border_free(void *__border);
 void __border_set_bounds(void *__border, SDL_Rect widget_bounds);
 
 void __border_draw(void *__border, RenderData *data);
+
+void __border_draw_edges_only(void *__border, RenderData *data);
 
 //TO-DO: create a border draw function that draws only the border.
 

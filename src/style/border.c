@@ -3,7 +3,7 @@
 VT_Border __gborder_vt = {
 	__border_free,
 	__border_set_bounds,
-	__border_draw
+	__border_draw_edges_only
 };
 
 Border new_Border(int size, Color color, SDL_Rect widget_bounds){
@@ -75,17 +75,44 @@ void __border_draw(void *__border, RenderData *data){
 
 	SDL_Rect rect = camera_get_relative_bounds(data->camera, border->bounds);
 
-	if (data->camera != NULL) {
-		int x_offset = MAX(0, data->camera->bounds.x - border->bounds.x);
-		int y_offset = MAX(0, data->camera->bounds.y - border->bounds.y);
-
-		rect.x += x_offset;
-		rect.y += y_offset;
-
-		rect.w -= x_offset;
-		rect.h -= y_offset;
-	}
+	camera_get_drawable_area(data->camera, &rect);
 
 	set_renderer_draw_color(data->renderer, border->color);
 	SDL_RenderFillRect(data->renderer, &rect);
+}
+
+void __border_draw_edges_only(void *__border, RenderData *data){
+	Border *border = __border;
+
+	SDL_Rect top, bottom, left, right;
+	top = bottom = left = right = camera_get_relative_bounds(data->camera, border->bounds);
+
+
+	//Transformations.
+	//Top
+	top.h = border->size_up;
+	camera_get_drawable_area(data->camera, &top);
+
+	//Bottom
+	bottom.h = border->size_down;
+	bottom.y += border->bounds.h - bottom.h;
+	camera_get_drawable_area(data->camera, &bottom);
+
+	//Left
+	left.w = border->size_left;
+	camera_get_drawable_area(data->camera, &left);
+
+	//Right
+	right.w = border->size_right;
+	right.x += border->bounds.w - right.w;
+	camera_get_drawable_area(data->camera, &right);
+
+	
+	set_renderer_draw_color(data->renderer, border->color);
+	//Draw.
+	//Top
+	SDL_RenderFillRect(data->renderer, &top);
+	SDL_RenderFillRect(data->renderer, &bottom);
+	SDL_RenderFillRect(data->renderer, &left);
+	SDL_RenderFillRect(data->renderer, &right);
 }

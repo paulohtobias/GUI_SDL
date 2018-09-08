@@ -64,6 +64,9 @@ void __scrollable_container_draw(void *__container, RenderData *data){
 	int i;
 	RenderData new_data = *data;
 	new_data.camera = &container->camera;
+
+	border_draw(container->container.widget.border, data);
+	
 	for(i = 0; i < container->container.widget_list->size; i++){
 		void *widget = list_get_index(container->container.widget_list, i);
 		widget_draw(widget, &new_data);
