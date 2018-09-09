@@ -24,11 +24,12 @@ int main(int argc, char *argv[]){
 		container_add_widget(&c, &lbl[i]);
 		widget_set_border(lbl + i, new_Border_dynamic(5, COLOR_GREEN, widget_get_bounds_global(lbl + i)));
 	}
-	label_set_color(&lbl[0], COLOR_RED);
-	label_set_font(&lbl[1], "calibri");
-	label_set_font_size(&lbl[1], 32);
-	label_set_font_size(&lbl[2], 24);
+	label_set_font(&lbl[0], "calibri");
+	label_set_font_size(&lbl[0], 32);
+	label_set_center(&lbl[0], SDL_TRUE);
 	label_set_center(&lbl[1], SDL_TRUE);
+	label_set_color(&lbl[1], COLOR_RED);
+	label_set_font_size(&lbl[2], 24);
     
     Button btn = new_Button_with_bounds("Botãó", NULL, new_rect(100, 100, 200, 50));
 	container_add_widget(&c, &btn);

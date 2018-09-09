@@ -34,6 +34,8 @@ Color COLOR_RGBA(Uint8 red, Uint8 green, Uint8 blue, Uint8 alpha);
 //Create a new Color using RGB.
 Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue);
 
+Color get_renderer_draw_color(SDL_Renderer * renderer);
+
 void set_renderer_draw_color(SDL_Renderer *renderer, Color color);
 
 #endif //COLOR_H

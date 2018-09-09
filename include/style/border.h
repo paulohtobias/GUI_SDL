@@ -50,6 +50,4 @@ void __border_draw(void *__border, RenderData *data);
 
 void __border_draw_edges_only(void *__border, RenderData *data);
 
-//TO-DO: create a border draw function that draws only the border.
-
 #endif /* BORDER_H */

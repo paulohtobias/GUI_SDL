@@ -91,7 +91,6 @@ void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
 
 	SDL_SetRenderTarget(renderer, NULL);
 	SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-	SDL_SetRenderDrawColor(renderer, 240, 240, 240, 255);
 
 	texture_widget_set_changed(__rectangle, SDL_FALSE);
 }

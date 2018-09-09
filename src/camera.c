@@ -26,6 +26,8 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 	if (camera != NULL) {
 		draw_area.x = MAX(0, camera->limit.x - dst_bounds->x);
 		draw_area.y = MAX(0, camera->limit.y - dst_bounds->y);
+		draw_area.w -= draw_area.x;
+		draw_area.h -= draw_area.y;
 
 		dst_bounds->x += draw_area.x;
 		dst_bounds->y += draw_area.y;

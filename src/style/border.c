@@ -73,6 +73,11 @@ void __border_set_bounds(void *__border, SDL_Rect widget_bounds){
 void __border_draw(void *__border, RenderData *data){
 	Border *border = __border;
 
+	// No need to draw if invisible.
+	if (border->color.a == 0) {
+		return;
+	}
+
 	SDL_Rect rect = camera_get_relative_bounds(data->camera, border->bounds);
 
 	camera_get_drawable_area(data->camera, &rect);
@@ -84,9 +89,13 @@ void __border_draw(void *__border, RenderData *data){
 void __border_draw_edges_only(void *__border, RenderData *data){
 	Border *border = __border;
 
+	// No need to draw if invisible.
+	if (border->color.a == 0) {
+		return;
+	}
+
 	SDL_Rect top, bottom, left, right;
 	top = bottom = left = right = camera_get_relative_bounds(data->camera, border->bounds);
-
 
 	//Transformations.
 	//Top

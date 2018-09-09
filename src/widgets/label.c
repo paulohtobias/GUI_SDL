@@ -180,19 +180,50 @@ void __label_set_bounds(void *__label, SDL_Rect bounds){
 void __label_render_copy(void *__label, RenderData *data){
 	Label *label = __label;
 
-	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
 	SDL_Rect bounds = widget_get_bounds_camera(label, data->camera);
+	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
+	SDL_Rect dst_bounds = bounds;
 
 	if (label_get_center(label) == SDL_TRUE) {
-		bounds = label_get_center_bounds(label, bounds);
+		dst_bounds = label_get_center_bounds(label, bounds);
 	}
 
-	bounds.w = real_size.w;
-	bounds.h = real_size.h;
-	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &bounds);
+	dst_bounds.w = real_size.w;
+	dst_bounds.h = real_size.h;
+	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &dst_bounds);
 
+	//Cropping the text to to left. It only happens if the label is centralized
+	//and its real size is bigger than its bounds. Again, this only happens if
+	//the user explicitly set the size.
+	if (label_get_center(label) == SDL_TRUE) {
+		int x_offset = MAX(0, bounds.x - dst_bounds.x);
+		int y_offset = MAX(0, bounds.y - dst_bounds.y);
+		
+		draw_area.x += x_offset;
+		draw_area.y += y_offset;
+		draw_area.w -= x_offset;
+		draw_area.h -= y_offset;
+		
+		dst_bounds.x += x_offset;
+		dst_bounds.y += y_offset;
+		dst_bounds.w = MAX(0, dst_bounds.w - x_offset);
+		dst_bounds.h = MAX(0, dst_bounds.h - y_offset);
+	}
+
+	//Cropping the text to to right. It only happens if the label's real size is
+	//bigger than its bounds. Again, this only happens if
+	//the user explicitly set the size.
+	int w_offset = MAX(0, dst_bounds.w - bounds.w);
+	int h_offset = MAX(0, dst_bounds.h - bounds.h);
+	
+	draw_area.w -= w_offset;
+	draw_area.h -= h_offset;
+	dst_bounds.w = MAX(0, dst_bounds.w - w_offset);
+	dst_bounds.h = MAX(0, dst_bounds.h - h_offset);
+
+	//Draw the border and the label.
 	border_draw(label->t_widget.widget.border, data);
-	SDL_RenderCopy(data->renderer, label->t_widget.texture, &draw_area, &bounds);
+	SDL_RenderCopy(data->renderer, label->t_widget.texture, &draw_area, &dst_bounds);
 }
 
 void __label_update(void *__label, SDL_Renderer *renderer){

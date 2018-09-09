@@ -19,6 +19,14 @@ Color COLOR_RGB(Uint8 red, Uint8 green, Uint8 blue){
 	return COLOR_RGBA(red, green, blue, 255);
 }
 
+Color get_renderer_draw_color(SDL_Renderer * renderer){
+	Color color;
+
+	SDL_GetRenderDrawColor(renderer, &color.r, &color.g, &color.b, &color.a);
+
+	return color;
+}
+
 void set_renderer_draw_color(SDL_Renderer *renderer, Color color){
 	SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
 }
