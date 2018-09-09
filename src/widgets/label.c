@@ -192,7 +192,7 @@ void __label_render_copy(void *__label, RenderData *data){
 	dst_bounds.h = real_size.h;
 	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &dst_bounds);
 
-	//Cropping the text to to left. It only happens if the label is centralized
+	//Cropping the text left and above. It only happens if the label is centralized
 	//and its real size is bigger than its bounds. Again, this only happens if
 	//the user explicitly set the size.
 	if (label_get_center(label) == SDL_TRUE) {
@@ -210,7 +210,7 @@ void __label_render_copy(void *__label, RenderData *data){
 		dst_bounds.h = MAX(0, dst_bounds.h - y_offset);
 	}
 
-	//Cropping the text to to right. It only happens if the label's real size is
+	//Cropping the text right and below. It only happens if the label's real size is
 	//bigger than its bounds. Again, this only happens if
 	//the user explicitly set the size.
 	int w_offset = MAX(0, dst_bounds.w - bounds.w);

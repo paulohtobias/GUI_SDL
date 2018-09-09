@@ -24,8 +24,12 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 	draw_area.x = draw_area.y = 0;
 	
 	if (camera != NULL) {
-		draw_area.x = MAX(0, camera->limit.x - dst_bounds->x);
-		draw_area.y = MAX(0, camera->limit.y - dst_bounds->y);
+		//Up and Left
+		int x_offset = MAX(0, camera->limit.x - dst_bounds->x);
+		int y_offset = MAX(0, camera->limit.y - dst_bounds->y);
+		
+		draw_area.x = x_offset;
+		draw_area.y = y_offset;
 		draw_area.w -= draw_area.x;
 		draw_area.h -= draw_area.y;
 
@@ -33,6 +37,16 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 		dst_bounds->y += draw_area.y;
 		dst_bounds->w = MAX(0, dst_bounds->w - draw_area.x);
 		dst_bounds->h = MAX(0, dst_bounds->h - draw_area.y);
+
+
+		//Down and Right
+		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->limit));
+		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->limit));	
+		
+		draw_area.w -= w_offset;
+		draw_area.h -= h_offset;
+		dst_bounds->w = MAX(0, dst_bounds->w - w_offset);
+		dst_bounds->h = MAX(0, dst_bounds->h - h_offset);
 	}
 
 	return draw_area;

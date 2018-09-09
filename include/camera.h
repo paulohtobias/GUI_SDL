@@ -13,7 +13,7 @@
 
 //Default values for the camera.
 #ifndef default_camera_speed
-#define default_camera_speed 20
+#define default_camera_speed 5
 #endif
 #ifndef camera_offset
 #define camera_offset 20

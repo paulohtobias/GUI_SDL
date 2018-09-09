@@ -1,7 +1,11 @@
+* Add another SDL_Rect to Camera to store its bounds and rename the bounds attribute (viewport?).
+
+* Add rendering_camera back to Widget?
+
 * Create a struct RenderData (Widget, SDL_Renderer, Camera) to pass to all render related functions.
 	- (DONE) Create a function in Camera to give the Position (or SDL_Rect) relative to it.
 	- (DONE) Remove the rendering_camera field from Widget.
-	- Debug the Label render_copy method.
+	- (DONE) Debug the Label render_copy method.
 	- Border.bounds now will have the same value as widget local bounds.
 	- Border.draw will work like the render_copy of TWidgets.
 
