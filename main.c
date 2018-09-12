@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]){
     Window *window = new_Window("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789", new_rect(0, 0, 800, 600), WINDOW_DEFAULT_FLAGS);
 
-	int i, n = 2;
+	int i, n = 3;
 	ScrollableContainer c = new_ScrollableContainer_max_widgets(n * 5);
 	window_add_container(window, &c);
 	container_set_bounds(&c, new_rect(30, 30, 1200, 500));
@@ -20,7 +20,7 @@ int main(int argc, char *argv[]){
 	for(i = 0; i < n; i++){
 		lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(420, 70 * i + 10, 250, 50));
 		//lbl[i] = new_Label_with_position("./Resources/Images/img.png", new_Position(300 * i, 10));
-		//container_add_widget(&c, &lbl[i]);
+		container_add_widget(&c, &lbl[i]);
 		widget_set_border(lbl + i, new_Border_dynamic(5, COLOR_GREEN, widget_get_bounds_global(lbl + i)));
 	}
 	label_set_font(&lbl[0], "calibri");
@@ -28,16 +28,21 @@ int main(int argc, char *argv[]){
 	label_set_center(&lbl[0], SDL_TRUE);
 	label_set_center(&lbl[1], SDL_TRUE);
 	label_set_color(&lbl[1], COLOR_RED);
-	//label_set_font_size(&lbl[2], 24);
+	label_set_font_size(&lbl[2], 24);
     
     Button btn = new_Button_with_bounds("Botãó", NULL, new_rect(100, 100, 200, 50));
-	//container_add_widget(&c, &btn);
+	container_add_widget(&c, &btn);
 
 	while(!window->quit_requested){
 		if(SDL_WaitEvent(&window->event)){
 			window_process_events(window);
 
 			window_draw(window);
+			
+			printR(widget_get_bounds_global(imgs + 2));
+			printf("%d + %d = %d\n", c.camera.position.y, c.camera.bounds.h, c.camera.position.y + c.camera.bounds.h);
+			printR(c.camera.limit);
+			printf("\n");
 		}else{
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), window->sdlwindow);
 			return 1;

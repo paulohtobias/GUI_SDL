@@ -1,21 +1,21 @@
 #include "camera.h"
 
-Camera new_Camera(SDL_Rect limit){
+Camera new_Camera(SDL_Rect bounds){
 	Camera camera;
 
-	camera.bounds = camera.limit = limit;
+	camera.bounds = camera.limit = bounds;
+	camera.position = camera.speed = new_Vector2(0, 0);
 	camera.mov_speed = default_camera_speed;
-	camera.speed = new_Vector2(0, 0);
 
 	return camera;
 }
 
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
 	if (camera != NULL) {
-		bounds.x -= (camera->bounds.x - camera->limit.x);
-		bounds.y -= (camera->bounds.y - camera->limit.y);
+		bounds.x -= camera->position.x;
+		bounds.y -= camera->position.y;
 	}
-	
+
 	return bounds;
 }
 
@@ -40,8 +40,8 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 
 
 		//Down and Right
-		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->limit));
-		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->limit));	
+		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->bounds));
+		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->bounds));	
 		
 		draw_area.w -= w_offset;
 		draw_area.h -= h_offset;
@@ -137,37 +137,39 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 	
 	int bry = rect_reach_y(bounds);
 	int lry = rect_reach_y(camera->limit);
-	if(bry > lry + camera_offset){
-		camera->limit.h += bry - lry;
+	if(bry > lry){
+		camera->limit.h += (bry - lry);
 	}
 }
 
 void camera_process_events(Camera *camera, SDL_Event event){
-	switch(event.type){
-		case SDL_MOUSEWHEEL:
-			camera->speed.y -= event.wheel.y * camera->mov_speed;
-			camera->speed.x += event.wheel.x * camera->mov_speed;
-			break;
-		case SDL_KEYDOWN:
-			switch(event.key.keysym.sym){
-				case SDLK_UP:
-					camera->speed.y -= camera->mov_speed;
-					break;
-				case SDLK_DOWN:
-					camera->speed.y += camera->mov_speed;
-					break;
-				case SDLK_END:
-					camera->speed.y = (camera->limit.h - camera->bounds.h) - camera->bounds.y;
-					break;
-				case SDLK_HOME:
-					camera->speed.y = camera->limit.y - camera->bounds.y;
-					break;
-			}
-			break;
-		default:
-			camera->speed.x = 0;
-			camera->speed.y = 0;
-			break;
+	if (mouse_over_rect(camera->bounds)) {
+		switch(event.type){
+			case SDL_MOUSEWHEEL:
+				camera->speed.y -= event.wheel.y * camera->mov_speed;
+				camera->speed.x += event.wheel.x * camera->mov_speed;
+				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym){
+					case SDLK_UP:
+						camera->speed.y -= camera->mov_speed;
+						break;
+					case SDLK_DOWN:
+						camera->speed.y += camera->mov_speed;
+						break;
+					case SDLK_END:
+						camera->speed.y = (camera->limit.h - camera->bounds.h) - camera->bounds.y;
+						break;
+					case SDLK_HOME:
+						camera->speed.y = camera->limit.y - camera->bounds.y;
+						break;
+				}
+				break;
+			default:
+				camera->speed.x = 0;
+				camera->speed.y = 0;
+				break;
+		}
 	}
 }
 
@@ -184,24 +186,24 @@ void camera_set_speed(Camera *camera, Vector2 speed){
 }
 
 void camera_move(Camera *camera){
-	camera->bounds.x += camera->speed.x;
-	camera->bounds.y += camera->speed.y;
+	camera->position.x += camera->speed.x;
+	camera->position.y += camera->speed.y;
 
 	camera->speed = new_Vector2(0, 0);
 
 	//Checking if position is out of bounds (upper-left).
-	if(camera->bounds.x < camera->limit.x){
-		camera->bounds.x = camera->limit.x;
+	if(camera->position.x < camera->limit.x){
+		camera->position.x = camera->limit.x;
 	}
-	if(camera->bounds.y < camera->limit.y){
-		camera->bounds.y = camera->limit.y;
+	if(camera->position.y < camera->limit.y){
+		camera->position.y = camera->limit.y;
 	}
 
 	//Checking if position is out of bounds (bottom-right).
-	if(rect_reach_x(camera->bounds) > rect_reach_x(camera->limit)){
-		camera->bounds.x = rect_reach_x(camera->limit) - camera->bounds.w;
+	if((camera->position.x + camera->bounds.w) > rect_reach_x(camera->limit)){
+		camera->position.x = rect_reach_x(camera->limit) - camera->bounds.w;
 	}
-	if(rect_reach_y(camera->bounds) > rect_reach_y(camera->limit)){
-		camera->bounds.y = rect_reach_y(camera->limit) - camera->bounds.h;
+	if((camera->position.y + camera->bounds.h) > rect_reach_y(camera->limit)){
+		camera->position.y = rect_reach_y(camera->limit) - camera->bounds.h;
 	}
 }

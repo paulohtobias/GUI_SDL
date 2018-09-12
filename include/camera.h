@@ -9,20 +9,37 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <basic/bounds.h>
+#include "basic/mouse.h"
 
 //Default values for the camera.
 #ifndef default_camera_speed
-#define default_camera_speed 5
+#define default_camera_speed 20
 #endif
 #ifndef camera_offset
 #define camera_offset 20
 #endif
 
 typedef struct Camera{
-	///Relative to window's origin.
+	/**
+	 * Region that cover all widgets that are 'watched' by the camera. Relative
+	 * to window's origin.
+	 */
 	SDL_Rect limit;
+	
+	///Internal
+	SDL_Rect _limit2;
+	
+	/**
+	 * Region on the screen where the widgets are rendered. Relative to window's
+	 * origin.
+	 */
 	SDL_Rect bounds;
+	
+	/**
+	 * Indicates wich region of <code>limit</code> is being rendered. The size
+	 * of this region is given by the <code>bounds</code> attribute.
+	 */
+	Position position;
 
 	//Speed and movement.
 	int mov_speed;
@@ -32,6 +49,10 @@ typedef struct Camera{
 	//TO-DO: mark which events can be processed by the camera.
 } Camera;
 
+///Only one camera can be 'scrolled' at a time. This will be it.
+Camera *active_camera;
+
+
 /**
  * Creates a new Camera.
  * 
@@ -40,6 +61,12 @@ typedef struct Camera{
  */
 Camera new_Camera(SDL_Rect limit);
 
+/**
+ * COMMENT
+ * @param camera
+ * @param bounds
+ * @return 
+ */
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds);
 
 /**
