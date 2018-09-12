@@ -84,6 +84,8 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 	if(rect_reach_y(camera->bounds) > rect_reach_y(camera->limit)){
 		camera->limit.h = rect_reach_y(camera->bounds);
 	}
+
+	camera->position = new_Position(0, 0);
 }
 
 void camera_set_limit(Camera *camera, SDL_Rect limit){
@@ -118,6 +120,8 @@ void camera_set_limit(Camera *camera, SDL_Rect limit){
 	if(rect_reach_x(camera->limit) < rect_reach_x(camera->bounds)){
 		camera->bounds.h = camera->limit.h - camera->bounds.y;
 	}
+
+	camera->position = new_Position(0, 0);
 }
 
 void camera_update_limit(Camera *camera, SDL_Rect bounds){
@@ -131,7 +135,7 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 	
 	int brx = rect_reach_x(bounds);
 	int lrx = rect_reach_x(camera->limit);
-	if(brx > lrx + camera_offset){
+	if(brx > lrx){
 		camera->limit.w += brx - lrx;
 	}
 	
@@ -140,6 +144,8 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 	if(bry > lry){
 		camera->limit.h += (bry - lry);
 	}
+
+	camera->position = new_Position(0, 0);
 }
 
 void camera_process_events(Camera *camera, SDL_Event event){
@@ -192,18 +198,18 @@ void camera_move(Camera *camera){
 	camera->speed = new_Vector2(0, 0);
 
 	//Checking if position is out of bounds (upper-left).
-	if(camera->position.x < camera->limit.x){
-		camera->position.x = camera->limit.x;
+	if(camera->position.x < 0){
+		camera->position.x = 0;
 	}
-	if(camera->position.y < camera->limit.y){
-		camera->position.y = camera->limit.y;
+	if(camera->position.y < 0){
+		camera->position.y = 0;
 	}
 
 	//Checking if position is out of bounds (bottom-right).
-	if((camera->position.x + camera->bounds.w) > rect_reach_x(camera->limit)){
-		camera->position.x = rect_reach_x(camera->limit) - camera->bounds.w;
+	if((camera->position.x + camera->bounds.w) > camera->limit.w){
+		camera->position.x = camera->limit.w - camera->bounds.w;
 	}
-	if((camera->position.y + camera->bounds.h) > rect_reach_y(camera->limit)){
-		camera->position.y = rect_reach_y(camera->limit) - camera->bounds.h;
+	if((camera->position.y + camera->bounds.h) > camera->limit.h){
+		camera->position.y = camera->limit.h - camera->bounds.h;
 	}
 }

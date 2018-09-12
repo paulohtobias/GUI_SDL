@@ -92,7 +92,7 @@ SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
 	}
 
 	return rect_intersects_rect(
-	    widget_get_bounds_global(widget),
+	    widget_get_bounds_camera(widget, camera),
 		camera->bounds
 	);
 }
