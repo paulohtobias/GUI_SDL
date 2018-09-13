@@ -151,6 +151,7 @@ void window_process_events(Window *window){
 		}
 	}
 
+	camera_active = NULL;
 	int i;
 	for(i = 0; i < window->layers; i++){
 		if(window->container[i] != NULL){

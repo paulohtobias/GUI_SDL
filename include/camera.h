@@ -25,9 +25,9 @@ typedef struct Camera{
 	 * to window's origin.
 	 */
 	SDL_Rect limit;
-	
-	///Internal
-	SDL_Rect _limit2;
+
+	///Internal.
+	SDL_bool __update_limit;
 	
 	/**
 	 * Region on the screen where the widgets are rendered. Relative to window's
@@ -50,7 +50,7 @@ typedef struct Camera{
 } Camera;
 
 ///Only one camera can be 'scrolled' at a time. This will be it.
-Camera *active_camera;
+Camera *camera_active;
 
 
 /**
@@ -91,17 +91,6 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds);
  * @param bounds the new bounds of the camera.
  */
 void camera_set_bounds(Camera *camera, SDL_Rect bounds);
-
-/**
- * Sets a new limit for the camera.
- * 
- * If the new limit is smaller than camera bounds, then its bounds will shrink
- * to match the new limit.
- * 
- * @param camera the camera that will be updated.
- * @param limit the new limit of the camera.
- */
-void camera_set_limit(Camera *camera, SDL_Rect limit);
 
 /**
  * Resize the camera's limit if bounds is not inside it.
