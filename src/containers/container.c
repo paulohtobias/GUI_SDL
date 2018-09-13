@@ -7,6 +7,7 @@ void __container_vt_init(Container *container){
 		__gcontainer_widget_vt = __gwidget_vt;
 		__gcontainer_widget_vt.free = __container_free;
 		__gcontainer_widget_vt.set_bounds = __container_set_bounds;
+		__gcontainer_widget_vt.update_global_position = __container_update_global_position;
 		__gcontainer_widget_vt.process_events = __container_process_events;
 		__gcontainer_widget_vt.draw = __container_draw;
 
@@ -110,6 +111,16 @@ void __container_set_bounds(void *__container, SDL_Rect bounds){
 	}
 }
 
+void __container_update_global_position(void *__container, Position offset) {
+	Container *container = __container;
+
+	__widget_update_global_position(container, offset);
+	int i;
+	for(i = 0; i < container->widget_list->size; i++){
+		widget_update_global_position(list_get_index(container->widget_list, i), offset);
+	}
+}
+
 void __container_process_events(void *__container, SDL_Event event, Mouse mouse){
 	Container *container = __container;
 
@@ -135,17 +146,12 @@ void __container_draw(void *__container, RenderData *data){
 
 void __container_add_widget(void *__container, void *__widget){
 	Container *container = __container;
-	Widget *widget = __widget;
-	
-	Position container_position_global = widget_get_bounds(container).global;
-	SDL_Rect widget_bounds = widget_get_bounds_local(widget);
-	
-	//Updates the widget's global position.
-	widget_bounds.x += container_position_global.x;
-	widget_bounds.y += container_position_global.y;
-	widget_set_bounds(widget, widget_bounds);
 
-	list_insert_last(container->widget_list, widget);
+	//Updates the widget's global position.
+	Position container_position_global = widget_get_bounds(container).global;
+	widget_update_global_position(__widget, container_position_global);
+
+	list_insert_last(container->widget_list, __widget);
 }
 
 void* __container_remove_widget(void *__container){

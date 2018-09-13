@@ -50,6 +50,8 @@ void __container_free(void *__container);
 
 void __container_set_bounds(void *__container, SDL_Rect bounds);
 
+void __container_update_global_position(void *__container, Position offset);
+
 void __container_process_events(void *__container, SDL_Event event, Mouse mouse);
 
 void __container_draw(void *__container, RenderData *data);

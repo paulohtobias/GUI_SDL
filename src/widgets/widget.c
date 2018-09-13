@@ -16,6 +16,7 @@ void __widget_vt_init(Widget *widget){
 		__gwidget_vt.get_bounds = __widget_get_bounds;
 		__gwidget_vt.set_bounds = __widget_set_bounds;
 		__gwidget_vt.set_border =__widget_set_border;
+		__gwidget_vt.update_global_position = __widget_update_global_position;
 		__gwidget_vt.process_events = __widget_process_events;
 		__gwidget_vt.draw = NULL;
 		
@@ -77,6 +78,10 @@ void widget_set_bounds(void *widget, SDL_Rect bounds){
 	((Widget *) widget)->functions->set_bounds(widget, bounds);
 }
 
+void widget_update_global_position(void *widget, Position offset){
+	((Widget *) widget)->functions->update_global_position(widget, offset);
+}
+
 void widget_set_border(void *widget, void *border){
 	((Widget *) widget)->functions->set_border(widget, border);
 }
@@ -122,6 +127,13 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 	border_set_bounds(widget->border, widget_get_bounds_global(widget));
 
 	__camera_set_update_limit(widget->rendering_camera, SDL_TRUE);
+}
+
+void __widget_update_global_position(void *__widget, Position offset) {
+	Widget *widget = __widget;
+
+	widget->bounds.global.x += offset.x;
+	widget->bounds.global.y += offset.y;
 }
 
 void __widget_set_border(void *__widget, void *border){

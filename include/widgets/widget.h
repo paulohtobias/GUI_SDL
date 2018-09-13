@@ -19,6 +19,7 @@
  * <code>get_bounds</code><br>
  * <code>set_bounds</code><br>
  * <code>set_border</code><br>
+ * <code>update_global_position</code><br>
  * <code>process_events</code><br>
  * <code>draw</code><br>
  */
@@ -26,6 +27,7 @@ typedef struct VT_Widget{
 	void (*free)(void *);
 	Bounds (*get_bounds)(void *);
 	void (*set_bounds)(void *, SDL_Rect);
+	void (*update_global_position)(void *, Position);
 	void (*set_border)(void *, void *);
 
 	void (*process_events)(void *, SDL_Event, Mouse);
@@ -74,6 +76,8 @@ Bounds widget_get_bounds(void *widget);
 
 void widget_set_bounds(void *widget, SDL_Rect bounds);
 
+void widget_update_global_position(void *widget, Position offset);
+
 void widget_set_border(void *widget, void *border);
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
@@ -88,6 +92,8 @@ void __widget_free(void *__widget);
 Bounds __widget_get_bounds(void *__widget);
 
 void __widget_set_bounds(void *__widget, SDL_Rect bounds);
+
+void __widget_update_global_position(void *__widget, Position offset);
 
 void __widget_set_border(void *__widget, void *border);
 
