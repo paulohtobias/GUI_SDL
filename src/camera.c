@@ -6,6 +6,7 @@ Camera new_Camera(SDL_Rect bounds){
 	camera.bounds = camera.limit = bounds;
 	camera.position = camera.speed = new_Vector2(0, 0);
 	camera.mov_speed = default_camera_speed;
+	camera.__update_limit = SDL_FALSE;
 
 	return camera;
 }
@@ -52,6 +53,12 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 	return draw_area;
 }
 
+void __camera_set_update_limit(Camera *camera, SDL_bool update_limit) {
+	if (camera != NULL) {
+		camera->__update_limit = update_limit;
+	}
+}
+
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 	//Setting the X position.
 	camera->bounds = bounds;
@@ -87,6 +94,7 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 }
 
 void camera_process_events(Camera *camera, SDL_Event event){
+	//TO-DO: A way to process key events from the active camera even if mouse_over == false
 	if (mouse_over_rect(camera->bounds) && camera_active == NULL) {
 		//Set the active camera.
 		camera_active = camera;

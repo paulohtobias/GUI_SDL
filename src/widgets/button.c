@@ -73,6 +73,7 @@ void __button_set_bounds(void *__button, SDL_Rect bounds){
     }
     
     set_bounds_from_SDL_Rect(&button->container.widget.bounds, bounds);
+	__camera_set_update_limit(button->container.widget.rendering_camera, SDL_TRUE);
 }
 
 void __button_process_events(void *__button, SDL_Event event, Mouse mouse){

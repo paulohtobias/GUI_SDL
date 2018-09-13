@@ -81,6 +81,8 @@ SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds);
  */
 SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds);
 
+void __camera_set_update_limit(Camera *camera, SDL_bool update_limit);
+
 /**
  * Sets a new position and size for the camera.
  * 

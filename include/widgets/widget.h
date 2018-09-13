@@ -52,6 +52,8 @@ typedef struct Widget{
 	
 	Border *border;
 
+	Camera *rendering_camera;
+
 	//Functions
 	VT_Widget *functions;
 } Widget;
@@ -66,7 +68,7 @@ SDL_Rect widget_get_bounds_local(void *widget);
 
 SDL_Rect widget_get_bounds_global(void *widget);
 
-SDL_Rect widget_get_bounds_camera(void *widget, Camera *camera);
+SDL_Rect widget_get_bounds_camera(void *widget);
 
 Bounds widget_get_bounds(void *widget);
 
@@ -76,9 +78,9 @@ void widget_set_border(void *widget, void *border);
 
 void widget_process_events(void *widget, SDL_Event event, Mouse mouse);
 
-SDL_bool widget_is_inside_camera(void *__widget, Camera *camera);
+SDL_bool widget_is_inside_camera(void *__widget);
 
-void widget_draw(void *__widget, RenderData *data);
+void widget_draw(void *widget, RenderData *data);
 
 
 void __widget_free(void *__widget);

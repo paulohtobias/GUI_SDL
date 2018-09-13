@@ -1,6 +1,6 @@
 #Main Makefile
 CC = gcc
-CFLAGS = -g -Wall -MMD
+CFLAGS = -Wall -MMD -g
 
 #Binary
 ifeq ($(OS),Windows_NT)

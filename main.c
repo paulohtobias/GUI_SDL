@@ -37,12 +37,24 @@ int main(int argc, char *argv[]){
 		if(SDL_WaitEvent(&window->event)){
 			window_process_events(window);
 
+			if (lbl[1].t_widget.widget.state.mouse_over == SDL_TRUE) {
+				window->background_color = COLOR_BLUE;
+			} else {
+				window->background_color = COLOR_GREY(240);
+			}
+
 			window_draw(window);
-			
-			printR(widget_get_bounds_global(imgs + 2));
-			printf("%d + %d = %d\n", c.camera.position.y, c.camera.bounds.h, c.camera.position.y + c.camera.bounds.h);
-			printR(c.camera.limit);
+
+			printR(widget_get_bounds_global(&btn));
+			printR(widget_get_bounds_camera(&btn));
+
 			printf("\n");
+
+			printR(widget_get_bounds_global(&btn));
+			printR(widget_get_bounds_camera(&btn));
+
+			Position mp = mouse_get_position();
+			printf("Mouse: %d, %d\n\n\n",mp.x, mp.y);
 		}else{
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), window->sdlwindow);
 			return 1;

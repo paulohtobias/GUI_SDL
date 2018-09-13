@@ -47,8 +47,10 @@ void rectangle_set_color(void *__rectangle, Color color){
 
 
 void __rectangle_set_bounds(void *__rectangle, SDL_Rect bounds){
-	__widget_set_bounds(__rectangle, bounds);
-	texture_widget_set_changed(__rectangle, SDL_TRUE);
+	Rectangle *rectangle = __rectangle;
+	__widget_set_bounds(rectangle, bounds);
+	texture_widget_set_changed(rectangle, SDL_TRUE);
+	__camera_set_update_limit(rectangle->t_widget.widget.rendering_camera, SDL_TRUE);
 }
 
 void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){

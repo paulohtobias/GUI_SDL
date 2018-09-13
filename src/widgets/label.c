@@ -175,12 +175,13 @@ void __label_set_bounds(void *__label, SDL_Rect bounds){
 
 	set_bounds_from_SDL_Rect(&label->t_widget.widget.bounds, bounds);
 	border_set_bounds(label->t_widget.widget.border, widget_get_bounds_global(label));
+	__camera_set_update_limit(label->t_widget.widget.rendering_camera, SDL_TRUE);
 }
 
 void __label_render_copy(void *__label, RenderData *data){
 	Label *label = __label;
 
-	SDL_Rect bounds = widget_get_bounds_camera(label, data->camera);
+	SDL_Rect bounds = widget_get_bounds_camera(label);
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
 	SDL_Rect dst_bounds = bounds;
 

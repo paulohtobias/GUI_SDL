@@ -90,6 +90,7 @@ void __container_set_bounds(void *__container, SDL_Rect bounds){
 	SDL_Rect container_bounds_old = container_get_bounds_local(container);
 	
 	set_bounds_from_SDL_Rect(&container->widget.bounds, bounds);
+	__camera_set_update_limit(container->widget.rendering_camera, SDL_TRUE);
 	
 	SDL_Rect container_bounds_new = container_get_bounds_local(container);
 
@@ -122,8 +123,10 @@ void __container_process_events(void *__container, SDL_Event event, Mouse mouse)
 void __container_draw(void *__container, RenderData *data){
 	Container *container = __container;
 
+	container->widget.rendering_camera = data->camera;
+
 	border_draw(container->widget.border, data);
-	
+
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
 		widget_draw(list_get_index(container->widget_list, i), data);
@@ -135,13 +138,12 @@ void __container_add_widget(void *__container, void *__widget){
 	Widget *widget = __widget;
 	
 	Position container_position_global = widget_get_bounds(container).global;
-	Position widget_position_local = widget_get_bounds(widget).local;
+	SDL_Rect widget_bounds = widget_get_bounds_local(widget);
 	
 	//Updates the widget's global position.
-	widget->bounds.global = position_add(
-	    container_position_global,
-	    widget_position_local
-	);
+	widget_bounds.x += container_position_global.x;
+	widget_bounds.y += container_position_global.y;
+	widget_set_bounds(widget, widget_bounds);
 
 	list_insert_last(container->widget_list, widget);
 }

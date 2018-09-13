@@ -114,6 +114,7 @@ void window_add_container_layer(Window *window, void *container, int layer){
 	if(window->container[layer] == NULL){
 		container_set_bounds(container, window_get_bounds(window));
 		window->container[layer] = container;
+		((Widget*) container)->rendering_camera = window->render_data->camera;
 	}else{
 		//Overwrite or print a warning?
 	}

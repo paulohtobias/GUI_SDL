@@ -96,6 +96,7 @@ void __image_set_bounds(void *__image, SDL_Rect bounds){
 
 	set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
 	border_set_bounds(image->t_widget.widget.border, widget_get_bounds_global(image));
+	__camera_set_update_limit(image->t_widget.widget.rendering_camera, SDL_TRUE);
 }
 
 void __image_update(void *__image, SDL_Renderer *renderer){
