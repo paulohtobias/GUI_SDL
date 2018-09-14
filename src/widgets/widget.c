@@ -134,6 +134,8 @@ void __widget_update_global_position(void *__widget, Position offset) {
 
 	widget->bounds.global.x += offset.x;
 	widget->bounds.global.y += offset.y;
+
+	border_set_bounds(widget->border, widget_get_bounds_global(widget));
 }
 
 void __widget_set_border(void *__widget, void *border){

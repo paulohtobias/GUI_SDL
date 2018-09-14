@@ -7,6 +7,7 @@ void __scontainer_vt_init(ScrollableContainer *container){
 		__gscontainer_widget_vt = __gcontainer_widget_vt;
 		__gscontainer_widget_vt.free = __scrollable_container_free;
 		__gscontainer_widget_vt.set_bounds = __scrollable_container_set_bounds;
+		__gscontainer_widget_vt.update_global_position = __scrollable_container_update_global_position;
 		__gscontainer_widget_vt.process_events = __scrollable_container_process_events;
 		__gscontainer_widget_vt.draw = __scrollable_container_draw;
 		__gscontainer_container_vt.add_widget = __scrollable_container_add_widget;
@@ -48,13 +49,22 @@ void __scrollable_container_set_bounds(void *__container, SDL_Rect bounds){
 	container->camera.limit = container->camera.bounds = container_get_bounds_global(container);
 }
 
+void __scrollable_container_update_global_position(void *__container, Position offset) {
+	ScrollableContainer *container = __container;
+
+	__container_update_global_position(container, offset);
+
+	container->camera.limit.x += offset.x;
+	container->camera.limit.y += offset.y;
+	
+	container->camera.bounds.x += offset.x;
+	container->camera.bounds.y += offset.y;
+}
+
 void __scrollable_container_process_events(void *__container, SDL_Event event, Mouse mouse){
 	ScrollableContainer *container = __container;
 	
 	__widget_process_events(container, event, mouse);
-
-	camera_process_events(&container->camera, event);
-	camera_move(&container->camera);
 
 	if (container->camera.__update_limit == SDL_TRUE) {
 		container->camera.limit = container->camera.bounds;
@@ -70,6 +80,9 @@ void __scrollable_container_process_events(void *__container, SDL_Event event, M
 		}
 	}
 
+	camera_process_events(&container->camera, event);
+	camera_move(&container->camera);
+
 	container->camera.__update_limit = SDL_FALSE;
 }
 
@@ -77,6 +90,16 @@ void __scrollable_container_draw(void *__container, RenderData *data){
 	ScrollableContainer *container = __container;
 
 	container->container.widget.rendering_camera = data->camera;
+
+	container->camera.bounds = camera_get_relative_bounds(data->camera, container_get_bounds_global(container));
+	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &container->camera.bounds);
+	printR(draw_area);
+	if (draw_area.x > 0) {
+		container->camera.position.x = draw_area.x;
+	}
+	if (draw_area.y > 0) {
+		container->camera.position.y = draw_area.y;
+	}
 
 	int i;
 	RenderData new_data = *data;

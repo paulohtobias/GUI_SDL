@@ -13,8 +13,8 @@ Camera new_Camera(SDL_Rect bounds){
 
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
 	if (camera != NULL) {
-		bounds.x -= camera->position.x;
-		bounds.y -= camera->position.y;
+		bounds.x = camera->bounds.x + (bounds.x - camera->limit.x) - camera->position.x;
+		bounds.y = camera->bounds.y + (bounds.y - camera->limit.y) - camera->position.y;
 	}
 
 	return bounds;
@@ -26,8 +26,8 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 	
 	if (camera != NULL) {
 		//Up and Left
-		int x_offset = MAX(0, camera->limit.x - dst_bounds->x);
-		int y_offset = MAX(0, camera->limit.y - dst_bounds->y);
+		int x_offset = MAX(0, camera->bounds.x - dst_bounds->x);
+		int y_offset = MAX(0, camera->bounds.y - dst_bounds->y);
 		
 		draw_area.x = x_offset;
 		draw_area.y = y_offset;
@@ -41,6 +41,7 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 
 
 		//Down and Right
+		int rcx, rcy;
 		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->bounds));
 		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->bounds));	
 		
@@ -60,7 +61,6 @@ void __camera_set_update_limit(Camera *camera, SDL_bool update_limit) {
 }
 
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
-	//Setting the X position.
 	camera->bounds = bounds;
 	
 	//Checking if the new bounds is greater than the limit.
@@ -102,7 +102,7 @@ void camera_process_events(Camera *camera, SDL_Event event){
 		switch(event.type){
 			case SDL_MOUSEWHEEL:
 				camera->speed.y -= event.wheel.y * camera->mov_speed;
-				camera->speed.x += event.wheel.x * camera->mov_speed;
+				camera->speed.x -= event.wheel.x * camera->mov_speed;
 				break;
 			case SDL_KEYDOWN:
 				switch(event.key.keysym.sym){
