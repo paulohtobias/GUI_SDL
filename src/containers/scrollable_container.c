@@ -91,15 +91,10 @@ void __scrollable_container_draw(void *__container, RenderData *data){
 
 	container->container.widget.rendering_camera = data->camera;
 
-	container->camera.bounds = camera_get_relative_bounds(data->camera, container_get_bounds_global(container));
-	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &container->camera.bounds);
-	printR(draw_area);
-	if (draw_area.x > 0) {
-		container->camera.position.x = draw_area.x;
-	}
-	if (draw_area.y > 0) {
-		container->camera.position.y = draw_area.y;
-	}
+	container->camera.viewport = camera_get_relative_bounds(data->camera, container->camera.bounds);
+	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &container->camera.viewport);
+
+	printR(container->camera.viewport);
 
 	int i;
 	RenderData new_data = *data;

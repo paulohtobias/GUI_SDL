@@ -3,7 +3,7 @@
 Camera new_Camera(SDL_Rect bounds){
 	Camera camera;
 
-	camera.bounds = camera.limit = bounds;
+	camera.viewport = camera.bounds = camera.limit = bounds;
 	camera.position = camera.speed = new_Vector2(0, 0);
 	camera.mov_speed = default_camera_speed;
 	camera.__update_limit = SDL_FALSE;
@@ -13,8 +13,10 @@ Camera new_Camera(SDL_Rect bounds){
 
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
 	if (camera != NULL) {
-		bounds.x = camera->bounds.x + (bounds.x - camera->limit.x) - camera->position.x;
-		bounds.y = camera->bounds.y + (bounds.y - camera->limit.y) - camera->position.y;
+		int px = camera->position.x + (camera->bounds.w - camera->viewport.w);
+		int py = camera->position.y + (camera->bounds.h - camera->viewport.h);
+		bounds.x = camera->viewport.x + (bounds.x - camera->limit.x) - px;
+		bounds.y = camera->viewport.y + (bounds.y - camera->limit.y) - py;
 	}
 
 	return bounds;
@@ -26,8 +28,8 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 	
 	if (camera != NULL) {
 		//Up and Left
-		int x_offset = MAX(0, camera->bounds.x - dst_bounds->x);
-		int y_offset = MAX(0, camera->bounds.y - dst_bounds->y);
+		int x_offset = MAX(0, camera->viewport.x - dst_bounds->x);
+		int y_offset = MAX(0, camera->viewport.y - dst_bounds->y);
 		
 		draw_area.x = x_offset;
 		draw_area.y = y_offset;
@@ -42,8 +44,8 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 
 		//Down and Right
 		int rcx, rcy;
-		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->bounds));
-		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->bounds));	
+		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->viewport));
+		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->viewport));	
 		
 		draw_area.w -= w_offset;
 		draw_area.h -= h_offset;
@@ -61,7 +63,7 @@ void __camera_set_update_limit(Camera *camera, SDL_bool update_limit) {
 }
 
 void camera_set_bounds(Camera *camera, SDL_Rect bounds){
-	camera->bounds = bounds;
+	camera->viewport = camera->bounds = bounds;
 	
 	//Checking if the new bounds is greater than the limit.
 	camera_update_limit(camera, camera->bounds);
@@ -95,7 +97,7 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 
 void camera_process_events(Camera *camera, SDL_Event event){
 	//TO-DO: A way to process key events from the active camera even if mouse_over == false
-	if (mouse_over_rect(camera->bounds) && camera_active == NULL) {
+	if (mouse_over_rect(camera->viewport) && camera_active == NULL) {
 		//Set the active camera.
 		camera_active = camera;
 		

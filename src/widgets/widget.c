@@ -101,7 +101,7 @@ SDL_bool widget_is_inside_camera(void *__widget){
 
 	return rect_intersects_rect(
 	    widget_get_bounds_camera(widget),
-		camera->bounds
+		camera->viewport
 	);
 }
 
@@ -114,6 +114,8 @@ void __widget_free(void *__widget){
 }
 
 Bounds __widget_get_bounds(void *__widget){
+	Widget *widget = __widget;
+
 	return ((Widget *) __widget)->bounds;
 }
 

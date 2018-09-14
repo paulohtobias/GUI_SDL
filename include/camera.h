@@ -28,12 +28,15 @@ typedef struct Camera{
 
 	///Internal.
 	SDL_bool __update_limit;
-	
-	/**
-	 * Region on the screen where the widgets are rendered. Relative to window's
-	 * origin.
-	 */
+
+	///Fixed region of the camera. Relative to window's origin.
 	SDL_Rect bounds;
+
+	/**
+	 * Region on the screen where the widgets are rendered. Relative to the camera
+	 * that is rendering it. Size can be different to bounds size too.
+	 */
+	SDL_Rect viewport;
 	
 	/**
 	 * Indicates wich region of <code>limit</code> is being rendered. The size
