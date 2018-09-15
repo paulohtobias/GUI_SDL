@@ -60,20 +60,23 @@ Window *new_Window_layers(char *title, SDL_Rect bounds, Uint32 flags, int layers
 		window->container[i] = NULL;
 	}
 
+	window->draw_thread = SDL_CreateThread(window_draw, "window_draw", window);
+
 	return window;
 }
 
 void free_Window(Window *window){
 	int i;
 
+	//Closing the threads.
+	window->quit_requested = SDL_TRUE;
+	SDL_WaitThread(window->draw_thread, NULL);
+
 	free(window->title);
+	//window_empty_containers(window);
+	
 	SDL_DestroyRenderer(window->render_data->renderer);
 	SDL_DestroyWindow(window->sdlwindow);
-
-	//This should be replaced with window_emptyList
-	for(i = 0; i < window->layers; i++){
-		container_free(window->container[i]);
-	}
 
 	free(window);
 }
@@ -165,16 +168,22 @@ void window_process_events(Window *window){
 	}
 }
 
-void window_draw(Window *window){
-	set_renderer_draw_color(window->render_data->renderer, window->background_color);
-	SDL_RenderClear(window->render_data->renderer);
+int window_draw(void *__window) {
+	Window *window = __window;
 
-	int i;
-	for(i = 0; i < window->layers; i++){
-		if(window->container[i] != NULL){
-			container_draw(window->container[i], window->render_data);
+	while(!window->quit_requested){
+		set_renderer_draw_color(window->render_data->renderer, window->background_color);
+		SDL_RenderClear(window->render_data->renderer);
+
+		int i;
+		for(i = 0; i < window->layers; i++){
+			if(window->container[i] != NULL){
+				container_draw(window->container[i], window->render_data);
+			}
 		}
+
+		SDL_RenderPresent(window->render_data->renderer);
 	}
 
-	SDL_RenderPresent(window->render_data->renderer);
+	return 0;
 }

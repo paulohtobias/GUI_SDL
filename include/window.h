@@ -24,6 +24,9 @@ typedef struct{
 	int layers;
 	//Container layers.
 	void **container;
+
+	//Thread
+	SDL_Thread *draw_thread;
 } Window;
 
 Window *new_Window(char *title, SDL_Rect bounds, Uint32 flags);
@@ -42,6 +45,6 @@ void window_add_container_layer(Window *window, void *container, int layer);
 
 void window_process_events(Window *window);
 
-void window_draw(Window *window);
+int window_draw(void *__window);
 
 #endif //WINDOW_H

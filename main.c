@@ -3,7 +3,7 @@
 int main(int argc, char *argv[]){
     Window *window = new_Window_layers("abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789abcdefghijklmnopqrstuvwxyz0123456789", new_rect(0, 0, 800, 600), WINDOW_DEFAULT_FLAGS, 2);
 
-	int i, n = 3;
+	int i, n = 300;
 	ScrollableContainer c = new_ScrollableContainer_max_widgets(n * 5);
 	window_add_container(window, &c);
 	container_set_bounds(&c, new_rect(30, 50, 1200, 500));
@@ -38,16 +38,16 @@ int main(int argc, char *argv[]){
 	container_add_widget(&c, &btn);
 
 	container_add_widget(&c, &c2);
-
+	
 	while(!window->quit_requested){
 		if(SDL_WaitEvent(&window->event)){
 			window_process_events(window);
-
-			window_draw(window);
 		}else{
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), window->sdlwindow);
 			return 1;
 		}
 	}
+
+	free_Window(window);
 	return 0;
 }
