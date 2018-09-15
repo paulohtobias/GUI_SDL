@@ -43,6 +43,9 @@ typedef struct Camera{
 	 * of this region is given by the <code>bounds</code> attribute.
 	 */
 	Position position;
+	
+	///Internal.
+	Position __position;
 
 	//Speed and movement.
 	int mov_speed;

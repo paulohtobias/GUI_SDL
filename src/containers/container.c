@@ -95,7 +95,7 @@ void __container_set_bounds(void *__container, SDL_Rect bounds){
 	
 	SDL_Rect container_bounds_new = container_get_bounds_local(container);
 
-	border_set_bounds(container->widget.border, widget_get_bounds_global(container));
+	border_set_bounds(container->widget.border, get_bounds_global(container->widget.bounds));
 	
 	Position container_offset;
 	container_offset = new_Position(

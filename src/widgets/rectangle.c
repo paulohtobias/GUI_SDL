@@ -65,7 +65,7 @@ void __rectangle_update(void *__rectangle, SDL_Renderer *renderer){
 		rectangle->t_widget.texture = NULL;
 	}
 
-	Size size = rectangle->t_widget.widget.bounds.size;
+	Size size = widget_get_bounds(rectangle).size;
 	if(size.w == 0 || size.h == 0){
 		return;
 	}

@@ -11,7 +11,7 @@ int main(int argc, char *argv[]){
 
 	ScrollableContainer c2 = new_ScrollableContainer_max_widgets(n * 5);
 	widget_set_border(&c2, new_Border_dynamic(2, COLOR_BLUE, container_get_bounds_global(&c2)));
-	container_set_bounds(&c2, new_rect(300, 300, 300, 150));
+	container_set_bounds(&c2, new_rect(300, 550, 300, 150));
 
 	Image imgs[n];
 	for(i = 0; i < n; i++){
@@ -22,8 +22,8 @@ int main(int argc, char *argv[]){
 
 	Label lbl[n];
 	for(i = 0; i < n; i++){
-		lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(10, 70 * i + 10, 200, 50));
-		//lbl[i] = new_Label_with_position("./Resources/Images/img.png", new_Position(300 * i, 10));
+		//lbl[i] = new_Label_with_bounds("./Resources/Images/img.png", new_rect(10, 70 * i + 10, 200, 50));
+		lbl[i] = new_Label_with_position("./Resources/Images/img.png", new_Position(10, 70 * i + 10));
 		container_add_widget(&c2, &lbl[i]);
 		widget_set_border(lbl + i, new_Border_dynamic(5, COLOR_GREEN, widget_get_bounds_global(lbl + i)));
 	}
@@ -44,8 +44,6 @@ int main(int argc, char *argv[]){
 			window_process_events(window);
 
 			window_draw(window);
-
-			printR(c2.camera.bounds);
 		}else{
 			SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error", SDL_GetError(), window->sdlwindow);
 			return 1;

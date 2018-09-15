@@ -76,7 +76,7 @@ void __scrollable_container_process_events(void *__container, SDL_Event event, M
 		widget_process_events(widget, event, mouse);
 
 		if (container->camera.__update_limit == SDL_TRUE) {
-			camera_update_limit(&container->camera, widget_get_bounds_global(widget));
+			camera_update_limit(&container->camera, get_bounds_global(widget_get_bounds_border(widget)));
 		}
 	}
 
@@ -93,8 +93,8 @@ void __scrollable_container_draw(void *__container, RenderData *data){
 
 	container->camera.viewport = camera_get_relative_bounds(data->camera, container->camera.bounds);
 	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &container->camera.viewport);
-
-	printR(container->camera.viewport);
+	container->camera.__position.x = draw_area.x;
+	container->camera.__position.y = draw_area.y;
 
 	int i;
 	RenderData new_data = *data;
@@ -119,7 +119,7 @@ void __scrollable_container_add_widget(void *__container, void *__widget){
 	
 	//Checking to see if the widget is 'out of bounds' in order to update its
 	//camera limits.
-	camera_update_limit(&container->camera, widget_get_bounds_global(widget));
+	camera_update_limit(&container->camera, get_bounds_global(widget_get_bounds_border(widget)));
 }
 
 void *__scrollable_container_remove_widget(void *__container){

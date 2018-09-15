@@ -174,7 +174,7 @@ void __label_set_bounds(void *__label, SDL_Rect bounds){
 	}
 
 	set_bounds_from_SDL_Rect(&label->t_widget.widget.bounds, bounds);
-	border_set_bounds(label->t_widget.widget.border, widget_get_bounds_global(label));
+	border_set_bounds(label->t_widget.widget.border, get_bounds_global(label->t_widget.widget.bounds));
 	__camera_set_update_limit(label->t_widget.widget.rendering_camera, SDL_TRUE);
 }
 
@@ -242,13 +242,22 @@ void __label_update(void *__label, SDL_Renderer *renderer){
 	}
 	label_update_size_table(label, ttf_font);
 	Size real_size = label_get_original_size(*label, strlen(label->text) - 1);
+	Size label_size = widget_get_bounds(label).size;
+
+	//If the label's size is automatic, then its bounds size needs to be updated here.
+	if (label->t_widget.widget.state.auto_size == SDL_TRUE &&
+	   (real_size.w != label_size.w || real_size.h != label_size.h)) {
+
+		bounds_set_size(&label->t_widget.widget.bounds, real_size);
+		__camera_set_update_limit(label->t_widget.widget.rendering_camera, SDL_TRUE);
+	}
 
 	//Creating the Surface.
 	SDL_Surface *surface = NULL;
 	if(!label_get_wrap(label)){
 		surface = TTF_RenderUTF8_Blended(ttf_font, label->text, label_get_color(label));
 	}else{
-		int label_width = widget_get_bounds_local(label).w;
+		int label_width = widget_get_bounds(label).size.w;
 		int max_width = MIN(label_width, real_size.w);
 
 		surface = TTF_RenderUTF8_Blended_Wrapped(ttf_font, label->text, label_get_color(label), max_width);
@@ -289,7 +298,7 @@ void __label_update(void *__label, SDL_Renderer *renderer){
 
 	if(label->t_widget.widget.state.auto_size == SDL_TRUE){
 		bounds_set_size(&label->t_widget.widget.bounds, real_size);
-		border_set_bounds(label->t_widget.widget.border, widget_get_bounds_global(label));
+		border_set_bounds(label->t_widget.widget.border, get_bounds_global(label->t_widget.widget.bounds));
 	}
 	label->t_widget.functions->set_changed(__label, SDL_FALSE);
 }

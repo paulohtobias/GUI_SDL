@@ -74,6 +74,8 @@ SDL_Rect widget_get_bounds_camera(void *widget);
 
 Bounds widget_get_bounds(void *widget);
 
+Bounds widget_get_bounds_border(void *__widget);
+
 void widget_set_bounds(void *widget, SDL_Rect bounds);
 
 void widget_update_global_position(void *widget, Position offset);

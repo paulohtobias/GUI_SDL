@@ -95,7 +95,7 @@ void __image_set_bounds(void *__image, SDL_Rect bounds){
 	}
 
 	set_bounds_from_SDL_Rect(&image->t_widget.widget.bounds, bounds);
-	border_set_bounds(image->t_widget.widget.border, widget_get_bounds_global(image));
+	border_set_bounds(image->t_widget.widget.border, get_bounds_global(image->t_widget.widget.bounds));
 	__camera_set_update_limit(image->t_widget.widget.rendering_camera, SDL_TRUE);
 }
 
@@ -113,6 +113,17 @@ void __image_update(void *__image, SDL_Renderer *renderer){
 		//SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Error opening image", IMG_GetError(), NULL);
 		printf("image_update: Error Opening Image <%s>: %s\n", image->file, IMG_GetError());
 		exit(1);
+	}
+
+	Size real_size = new_Size(surface->w, surface->h);
+	Size image_size = widget_get_bounds(image).size;
+
+	//If the image's size is automatic, then its bounds size needs to be updated here.
+	if (image->t_widget.widget.state.auto_size == SDL_TRUE &&
+	   (real_size.w != image_size.w || real_size.h != image_size.h)) {
+
+		bounds_set_size(&image->t_widget.widget.bounds, real_size);
+		__camera_set_update_limit(image->t_widget.widget.rendering_camera, SDL_TRUE);
 	}
 
 	// load the image data into the graphics hardware's memory

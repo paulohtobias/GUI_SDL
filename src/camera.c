@@ -4,7 +4,7 @@ Camera new_Camera(SDL_Rect bounds){
 	Camera camera;
 
 	camera.viewport = camera.bounds = camera.limit = bounds;
-	camera.position = camera.speed = new_Vector2(0, 0);
+	camera.__position = camera.position = camera.speed = new_Vector2(0, 0);
 	camera.mov_speed = default_camera_speed;
 	camera.__update_limit = SDL_FALSE;
 
@@ -13,8 +13,8 @@ Camera new_Camera(SDL_Rect bounds){
 
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
 	if (camera != NULL) {
-		int px = camera->position.x + (camera->bounds.w - camera->viewport.w);
-		int py = camera->position.y + (camera->bounds.h - camera->viewport.h);
+		int px = camera->position.x + camera->__position.x;
+		int py = camera->position.y + camera->__position.y;
 		bounds.x = camera->viewport.x + (bounds.x - camera->limit.x) - px;
 		bounds.y = camera->viewport.y + (bounds.y - camera->limit.y) - py;
 	}
@@ -68,7 +68,7 @@ void camera_set_bounds(Camera *camera, SDL_Rect bounds){
 	//Checking if the new bounds is greater than the limit.
 	camera_update_limit(camera, camera->bounds);
 
-	camera->position = new_Position(0, 0);
+	camera->__position = camera->position = new_Position(0, 0);
 }
 
 void camera_update_limit(Camera *camera, SDL_Rect bounds){
@@ -92,7 +92,7 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 		camera->limit.h += (bry - lry);
 	}
 
-	camera->position = new_Position(0, 0);
+	//camera->position = new_Position(0, 0);
 }
 
 void camera_process_events(Camera *camera, SDL_Event event){
