@@ -16,6 +16,7 @@ void __widget_vt_init(Widget *widget){
 		__gwidget_vt.get_bounds = __widget_get_bounds;
 		__gwidget_vt.set_bounds = __widget_set_bounds;
 		__gwidget_vt.set_border =__widget_set_border;
+		__gwidget_vt.update_global_position = __widget_update_global_position;
 		__gwidget_vt.process_events = __widget_process_events;
 		__gwidget_vt.draw = NULL;
 		
@@ -47,6 +48,7 @@ Widget new_Widget(){
 	widget.state = new_WidgetState();
 	widget.bounds = new_Bounds_from_integer(0, 0, 0, 0);
 	widget.border = NULL;
+	widget.rendering_camera = NULL;
 
 	return widget;
 }
@@ -63,16 +65,39 @@ SDL_Rect widget_get_bounds_global(void *widget){
 	return get_bounds_global(widget_get_bounds(widget));
 }
 
-SDL_Rect widget_get_bounds_camera(void *__widget, Camera *camera){
-	return camera_get_relative_bounds(camera, widget_get_bounds_global(__widget));
+SDL_Rect widget_get_bounds_camera(void *__widget){
+	Widget *widget = __widget;
+	return camera_get_relative_bounds(widget->rendering_camera, widget_get_bounds_global(__widget));
 }
 
 Bounds widget_get_bounds(void *widget){
 	return ((Widget *) widget)->functions->get_bounds(widget);
 }
 
+Bounds widget_get_bounds_border(void *__widget) {
+	Widget *widget = __widget;
+
+	Bounds bounds = widget->bounds;
+
+	if (widget->border != NULL) {
+		bounds.global.x -= widget->border->size_left;
+		bounds.global.y -= widget->border->size_up;
+		bounds.local.x -= widget->border->size_left;
+		bounds.local.y -= widget->border->size_up;
+
+		bounds.size.w += widget->border->size_left + widget->border->size_right;
+		bounds.size.h += widget->border->size_up + widget->border->size_down;
+	}
+
+	return bounds;
+}
+
 void widget_set_bounds(void *widget, SDL_Rect bounds){
 	((Widget *) widget)->functions->set_bounds(widget, bounds);
+}
+
+void widget_update_global_position(void *widget, Position offset){
+	((Widget *) widget)->functions->update_global_position(widget, offset);
 }
 
 void widget_set_border(void *widget, void *border){
@@ -83,25 +108,23 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
 	((Widget *) widget)->functions->process_events(widget, event, mouse);
 }
 
-SDL_bool widget_is_inside_camera(void *__widget, Camera *camera){
+SDL_bool widget_is_inside_camera(void *__widget){
 	Widget *widget = __widget;
 
 	//TO-DO:? Maybe pass an SDL_Window to the function to expand this if
+	Camera *camera = widget->rendering_camera;
 	if (camera == NULL) {
 		return SDL_TRUE;
 	}
 
 	return rect_intersects_rect(
-	    widget_get_bounds_global(widget),
-		camera->bounds
+	    widget_get_bounds_camera(widget),
+		camera->viewport
 	);
 }
 
-void widget_draw(void *__widget, RenderData *data){
-	//widget_update_camera_position(__widget, camera);
-
-	Widget *widget = __widget;
-	widget->functions->draw(__widget, data);
+void widget_draw(void *widget, RenderData *data){
+	((Widget *) widget)->functions->draw(widget, data);
 }
 
 
@@ -119,13 +142,25 @@ void __widget_set_bounds(void *__widget, SDL_Rect bounds){
 		widget->state.auto_size = SDL_FALSE;
 	}
 	set_bounds_from_SDL_Rect(&widget->bounds, bounds);
-	border_set_bounds(widget->border, widget_get_bounds_global(widget));
+	border_set_bounds(widget->border, get_bounds_global(widget->bounds));
+
+	__camera_set_update_limit(widget->rendering_camera, SDL_TRUE);
+}
+
+void __widget_update_global_position(void *__widget, Position offset) {
+	Widget *widget = __widget;
+
+	widget->bounds.global.x += offset.x;
+	widget->bounds.global.y += offset.y;
+
+	border_set_bounds(widget->border, get_bounds_global(widget->bounds));
 }
 
 void __widget_set_border(void *__widget, void *border){
 	Widget *widget = __widget;
 	
-	border_set_bounds(border, widget_get_bounds_global(widget));
+	border_set_bounds(border, get_bounds_global(widget->bounds));
+	__camera_set_update_limit(widget->rendering_camera, SDL_TRUE);
 	widget->border = border;
 }
 
@@ -137,7 +172,7 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 	widget->state.dragged = SDL_FALSE;
 
 	//TO-DO: check this!!
-	if(mouse_over(widget->bounds)){
+	if(mouse_over_rect(widget_get_bounds_camera(widget))){
 		widget->state.mouse_over = SDL_TRUE;
 		widget->state.focus = SDL_TRUE;
 

@@ -1,21 +1,24 @@
 #include "camera.h"
 
-Camera new_Camera(SDL_Rect limit){
+Camera new_Camera(SDL_Rect bounds){
 	Camera camera;
 
-	camera.bounds = camera.limit = limit;
+	camera.viewport = camera.bounds = camera.limit = bounds;
+	camera.__position = camera.position = camera.speed = new_Vector2(0, 0);
 	camera.mov_speed = default_camera_speed;
-	camera.speed = new_Vector2(0, 0);
+	camera.__update_limit = SDL_FALSE;
 
 	return camera;
 }
 
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds){
 	if (camera != NULL) {
-		bounds.x -= (camera->bounds.x - camera->limit.x);
-		bounds.y -= (camera->bounds.y - camera->limit.y);
+		int px = camera->position.x + camera->__position.x;
+		int py = camera->position.y + camera->__position.y;
+		bounds.x = camera->viewport.x + (bounds.x - camera->limit.x) - px;
+		bounds.y = camera->viewport.y + (bounds.y - camera->limit.y) - py;
 	}
-	
+
 	return bounds;
 }
 
@@ -24,86 +27,48 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 	draw_area.x = draw_area.y = 0;
 	
 	if (camera != NULL) {
-		draw_area.x = MAX(0, camera->limit.x - dst_bounds->x);
-		draw_area.y = MAX(0, camera->limit.y - dst_bounds->y);
-		draw_area.w -= draw_area.x;
-		draw_area.h -= draw_area.y;
+		//Up and Left
+		int x_offset = MAX(0, camera->viewport.x - dst_bounds->x);
+		int y_offset = MAX(0, camera->viewport.y - dst_bounds->y);
+		
+		draw_area.x = x_offset;
+		draw_area.y = y_offset;
+		draw_area.w -= x_offset;
+		draw_area.h -= y_offset;
 
-		dst_bounds->x += draw_area.x;
-		dst_bounds->y += draw_area.y;
+		dst_bounds->x += x_offset;
+		dst_bounds->y += y_offset;
 		dst_bounds->w = MAX(0, dst_bounds->w - draw_area.x);
 		dst_bounds->h = MAX(0, dst_bounds->h - draw_area.y);
+
+
+		//Down and Right
+		int rcx, rcy;
+		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->viewport));
+		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->viewport));	
+		
+		draw_area.w -= w_offset;
+		draw_area.h -= h_offset;
+		dst_bounds->w = MAX(0, dst_bounds->w - w_offset);
+		dst_bounds->h = MAX(0, dst_bounds->h - h_offset);
 	}
 
 	return draw_area;
 }
 
-void camera_set_bounds(Camera *camera, SDL_Rect bounds){
-	//Setting the X position.
-	camera->bounds.x = bounds.x;
-	//Checking if the new bounds is greater than the limit.
-	if(camera->bounds.x < camera->limit.x){
-		camera->limit.x = camera->bounds.x;
-	}
-
-	//Setting the Y position.
-	camera->bounds.y = bounds.y;
-	//Checking if the new bounds is greater than the limit.
-	if(camera->bounds.y < camera->limit.y){
-		camera->limit.y = camera->bounds.y;
-	}
-
-	//Setting the width.
-	if(bounds.w > 0){
-		camera->bounds.w = bounds.w;
-	}
-	//Checking if the new bounds is greater than the limit.
-	if(rect_reach_x(camera->bounds) > rect_reach_x(camera->limit)){
-		camera->limit.w = rect_reach_x(camera->bounds);
-	}
-
-	//Setting the height.
-	if(bounds.h > 0){
-		camera->bounds.h = bounds.h;
-	}
-	//Checking if the new bounds is greater than the limit.
-	if(rect_reach_y(camera->bounds) > rect_reach_y(camera->limit)){
-		camera->limit.h = rect_reach_y(camera->bounds);
+void __camera_set_update_limit(Camera *camera, SDL_bool update_limit) {
+	if (camera != NULL) {
+		camera->__update_limit = update_limit;
 	}
 }
 
-void camera_set_limit(Camera *camera, SDL_Rect limit){
-	//Setting the X position.
-	camera->limit.x = limit.x;
-	//Checking if the new limit is smaller than the bounds.
-	if(camera->limit.x > camera->bounds.x){
-		camera->bounds.x = camera->limit.x;
-	}
+void camera_set_bounds(Camera *camera, SDL_Rect bounds){
+	camera->viewport = camera->bounds = bounds;
+	
+	//Checking if the new bounds is greater than the limit.
+	camera_update_limit(camera, camera->bounds);
 
-	//Setting the Y position.
-	camera->limit.y = limit.y;
-	//Checking if the new limit is smaller than the bounds.
-	if(camera->limit.y > camera->bounds.y){
-		camera->bounds.y = camera->limit.y;
-	}
-
-	//Setting the width.
-	if(limit.w > 0){
-		camera->limit.w = limit.w;
-	}
-	//Checking if the new limit is smaller than the bounds.
-	if(rect_reach_x(camera->limit) < rect_reach_x(camera->bounds)){
-		camera->bounds.w = camera->limit.w - camera->bounds.x;
-	}
-
-	//Setting the height.
-	if(limit.h > 0){
-		camera->limit.h = limit.h;
-	}
-	//Checking if the new limit is smaller than the bounds.
-	if(rect_reach_x(camera->limit) < rect_reach_x(camera->bounds)){
-		camera->bounds.h = camera->limit.h - camera->bounds.y;
-	}
+	camera->__position = camera->position = new_Position(0, 0);
 }
 
 void camera_update_limit(Camera *camera, SDL_Rect bounds){
@@ -117,43 +82,57 @@ void camera_update_limit(Camera *camera, SDL_Rect bounds){
 	
 	int brx = rect_reach_x(bounds);
 	int lrx = rect_reach_x(camera->limit);
-	if(brx > lrx + camera_offset){
+	if(brx > lrx){
 		camera->limit.w += brx - lrx;
 	}
 	
 	int bry = rect_reach_y(bounds);
 	int lry = rect_reach_y(camera->limit);
-	if(bry > lry + camera_offset){
-		camera->limit.h += bry - lry;
+	if(bry > lry){
+		camera->limit.h += (bry - lry);
 	}
+
+	//camera->position = new_Position(0, 0);
 }
 
 void camera_process_events(Camera *camera, SDL_Event event){
-	switch(event.type){
-		case SDL_MOUSEWHEEL:
-			camera->speed.y -= event.wheel.y * camera->mov_speed;
-			camera->speed.x += event.wheel.x * camera->mov_speed;
-			break;
-		case SDL_KEYDOWN:
-			switch(event.key.keysym.sym){
-				case SDLK_UP:
-					camera->speed.y -= camera->mov_speed;
-					break;
-				case SDLK_DOWN:
-					camera->speed.y += camera->mov_speed;
-					break;
-				case SDLK_END:
-					camera->speed.y = (camera->limit.h - camera->bounds.h) - camera->bounds.y;
-					break;
-				case SDLK_HOME:
-					camera->speed.y = camera->limit.y - camera->bounds.y;
-					break;
-			}
-			break;
-		default:
-			camera->speed.x = 0;
-			camera->speed.y = 0;
-			break;
+	//TO-DO: A way to process key events from the active camera even if mouse_over == false
+	if (mouse_over_rect(camera->viewport) && camera_active == NULL) {
+		//Set the active camera.
+		camera_active = camera;
+		
+		switch(event.type){
+			case SDL_MOUSEWHEEL:
+				camera->speed.y -= event.wheel.y * camera->mov_speed;
+				camera->speed.x -= event.wheel.x * camera->mov_speed;
+				break;
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym){
+					case SDLK_UP:
+						camera->speed.y -= camera->mov_speed;
+						break;
+					case SDLK_DOWN:
+						camera->speed.y += camera->mov_speed;
+						break;
+					case SDLK_HOME:
+						camera->speed.y = -camera->position.y;
+						break;
+					case SDLK_END:
+						camera->speed.y = camera->limit.h - (camera->position.y + camera->bounds.h);
+						break;
+					case SDLK_PAGEUP:
+						camera->speed.y = -camera->bounds.h;
+						break;
+					case SDLK_PAGEDOWN:
+						camera->speed.y = camera->bounds.h;
+						break;
+				}
+				break;
+			default:
+				camera->speed.x = 0;
+				camera->speed.y = 0;
+				break;
+		}
 	}
 }
 
@@ -170,24 +149,24 @@ void camera_set_speed(Camera *camera, Vector2 speed){
 }
 
 void camera_move(Camera *camera){
-	camera->bounds.x += camera->speed.x;
-	camera->bounds.y += camera->speed.y;
+	camera->position.x += camera->speed.x;
+	camera->position.y += camera->speed.y;
 
 	camera->speed = new_Vector2(0, 0);
 
 	//Checking if position is out of bounds (upper-left).
-	if(camera->bounds.x < camera->limit.x){
-		camera->bounds.x = camera->limit.x;
+	if(camera->position.x < 0){
+		camera->position.x = 0;
 	}
-	if(camera->bounds.y < camera->limit.y){
-		camera->bounds.y = camera->limit.y;
+	if(camera->position.y < 0){
+		camera->position.y = 0;
 	}
 
 	//Checking if position is out of bounds (bottom-right).
-	if(rect_reach_x(camera->bounds) > rect_reach_x(camera->limit)){
-		camera->bounds.x = rect_reach_x(camera->limit) - camera->bounds.w;
+	if((camera->position.x + camera->bounds.w) > camera->limit.w){
+		camera->position.x = camera->limit.w - camera->bounds.w;
 	}
-	if(rect_reach_y(camera->bounds) > rect_reach_y(camera->limit)){
-		camera->bounds.y = rect_reach_y(camera->limit) - camera->bounds.h;
+	if((camera->position.y + camera->bounds.h) > camera->limit.h){
+		camera->position.y = camera->limit.h - camera->bounds.h;
 	}
 }

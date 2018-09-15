@@ -60,7 +60,7 @@ void __texture_widget_render_copy(void *__widget, RenderData *data){
 		return;
 	}
 
-	SDL_Rect bounds = widget_get_bounds_camera(t_widget, data->camera);
+	SDL_Rect bounds = widget_get_bounds_camera(t_widget);
 	SDL_Rect draw_area = camera_get_drawable_area(data->camera, &bounds);
 
 	border_draw(t_widget->widget.border, data);
@@ -70,10 +70,12 @@ void __texture_widget_render_copy(void *__widget, RenderData *data){
 void __texture_widget_draw(void *__texture_widget, RenderData *data){
 	TextureWidget *t_widget = __texture_widget;
 
-	if(widget_is_inside_camera(__texture_widget, data->camera)){
+	if(widget_is_inside_camera(__texture_widget)){
 		if(t_widget->widget.state.entered_camera == SDL_FALSE){
 			t_widget->widget.state.entered_camera = SDL_TRUE;
 		}
+
+		t_widget->widget.rendering_camera = data->camera;
 
 		t_widget->functions->update(__texture_widget, data->renderer);
 

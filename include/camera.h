@@ -9,7 +9,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <basic/bounds.h>
+#include "basic/mouse.h"
 
 //Default values for the camera.
 #ifndef default_camera_speed
@@ -20,9 +20,32 @@
 #endif
 
 typedef struct Camera{
-	///Relative to window's origin.
+	/**
+	 * Region that cover all widgets that are 'watched' by the camera. Relative
+	 * to window's origin.
+	 */
 	SDL_Rect limit;
+
+	///Internal.
+	SDL_bool __update_limit;
+
+	///Fixed region of the camera. Relative to window's origin.
 	SDL_Rect bounds;
+
+	/**
+	 * Region on the screen where the widgets are rendered. Relative to the camera
+	 * that is rendering it. Size can be different to bounds size too.
+	 */
+	SDL_Rect viewport;
+	
+	/**
+	 * Indicates wich region of <code>limit</code> is being rendered. The size
+	 * of this region is given by the <code>bounds</code> attribute.
+	 */
+	Position position;
+	
+	///Internal.
+	Position __position;
 
 	//Speed and movement.
 	int mov_speed;
@@ -32,6 +55,10 @@ typedef struct Camera{
 	//TO-DO: mark which events can be processed by the camera.
 } Camera;
 
+///Only one camera can be 'scrolled' at a time. This will be it.
+Camera *camera_active;
+
+
 /**
  * Creates a new Camera.
  * 
@@ -40,6 +67,12 @@ typedef struct Camera{
  */
 Camera new_Camera(SDL_Rect limit);
 
+/**
+ * COMMENT
+ * @param camera
+ * @param bounds
+ * @return 
+ */
 SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds);
 
 /**
@@ -54,6 +87,8 @@ SDL_Rect camera_get_relative_bounds(Camera *camera, SDL_Rect bounds);
  */
 SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds);
 
+void __camera_set_update_limit(Camera *camera, SDL_bool update_limit);
+
 /**
  * Sets a new position and size for the camera.
  * 
@@ -64,17 +99,6 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds);
  * @param bounds the new bounds of the camera.
  */
 void camera_set_bounds(Camera *camera, SDL_Rect bounds);
-
-/**
- * Sets a new limit for the camera.
- * 
- * If the new limit is smaller than camera bounds, then its bounds will shrink
- * to match the new limit.
- * 
- * @param camera the camera that will be updated.
- * @param limit the new limit of the camera.
- */
-void camera_set_limit(Camera *camera, SDL_Rect limit);
 
 /**
  * Resize the camera's limit if bounds is not inside it.
