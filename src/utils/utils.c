@@ -23,3 +23,23 @@ void string_change(char **dst, const char *src){
 	}
 	strcpy(*dst, src);
 }
+
+char *str_from_file(const char *file_name){
+	char *str = NULL;
+    FILE *in = fopen(file_name, "r");
+    if(in == NULL){
+        return NULL;
+	}
+
+    fseek(in, 0, SEEK_END);
+    int size = ftell(in) + 1;
+    rewind(in);
+    str = malloc(size);
+	if(str == NULL){
+		return NULL;
+	}
+    fread(str, 1, size, in);
+    fclose(in);
+
+    return str;
+}

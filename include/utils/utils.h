@@ -15,5 +15,7 @@ char *string_format(const char *format, ...);
 
 void string_change(char **dst, const char *src);
 
+char *str_from_file(const char *file_name);
+
 #endif //UTILS_H
 

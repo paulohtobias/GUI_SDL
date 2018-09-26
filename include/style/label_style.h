@@ -1,6 +1,8 @@
 #ifndef LABEL_STYLE_H
 #define LABEL_STYLE_H
 
+#include <SDL2/SDL_ttf.h>
+#include "utils/utils.h"
 #include "basic/color.h"
 
 #define label_default_color COLOR_BLACK
@@ -10,7 +12,7 @@
 
 typedef struct LabelStyle{
 	Color color;
-	char font[60]; //TO-DO: change to char *
+	char *font;
 	int size;
 	SDL_bool center;
 	SDL_bool wrap;
@@ -19,5 +21,7 @@ typedef struct LabelStyle{
 LabelStyle label_default_style;
 
 void init_look_and_feel_label();
+
+TTF_Font *label_style_set_font(LabelStyle *style, const char *font);
 
 #endif /* LABEL_STYLE_H */

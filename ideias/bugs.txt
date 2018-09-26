@@ -1,1 +1,0 @@
-#1 [FIXED] - camera_updateWidgetPosition doesn't update the inner widgets of a "complex" widget.

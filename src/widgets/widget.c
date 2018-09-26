@@ -111,7 +111,6 @@ void widget_process_events(void *widget, SDL_Event event, Mouse mouse){
 SDL_bool widget_is_inside_camera(void *__widget){
 	Widget *widget = __widget;
 
-	//TO-DO:? Maybe pass an SDL_Window to the function to expand this if
 	Camera *camera = widget->rendering_camera;
 	if (camera == NULL) {
 		return SDL_TRUE;
@@ -170,8 +169,7 @@ void __widget_process_events(void *__widget, SDL_Event event, Mouse mouse){
 	widget->state.mouse_over = SDL_FALSE;
 	widget->state.mouse_state = MOUSE_IDLE;
 	widget->state.dragged = SDL_FALSE;
-
-	//TO-DO: check this!!
+	
 	if(mouse_over_rect(widget_get_bounds_camera(widget))){
 		widget->state.mouse_over = SDL_TRUE;
 		widget->state.focus = SDL_TRUE;

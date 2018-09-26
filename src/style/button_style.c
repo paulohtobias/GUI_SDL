@@ -2,7 +2,7 @@
 
 void __init_button_style(ButtonStyle *button_style, Color border_color, Color bg_color, Color text_color){
 	button_style->bg_color = bg_color;
-	button_style->border = new_Border_dynamic(button_default_border_size, border_color, new_rect(0, 0, 0, 0)); //TO-DO: create a new border here and make the button border point to it at creation.
+	button_style->border = new_Border_dynamic(button_default_border_size, border_color, new_rect(0, 0, 0, 0));
 	button_style->label_style = malloc(sizeof(LabelStyle));
     *button_style->label_style = label_default_style;
 	button_style->label_style->color = text_color;

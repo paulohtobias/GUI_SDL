@@ -73,6 +73,7 @@ void __scrollable_container_process_events(void *__container, SDL_Event event, M
 	int i;
 	for (i = 0; i < container->container.widget_list->size; i++) {
 		Widget *widget = list_get_index(container->container.widget_list, i);
+
 		widget_process_events(widget, event, mouse);
 
 		if (container->camera.__update_limit == SDL_TRUE) {

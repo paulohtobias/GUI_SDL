@@ -1,13 +1,6 @@
-./include/camera.h:32:	//TO-DO: mark which events can be processed by the camera.
+./include/camera.h:55:	//TO-DO: mark which events can be processed by the camera.
 ./include/containers/scrollable_container.h:14:	//TO-DO: ScrollBar
-./include/style/border.h:23:	//TO-DO: a value to draw only the border or the whole rectangle
-./include/style/border.h:52://TO-DO: create a border draw function that draws only the border.
-./include/style/button_style.h:18://TO-DO: fix button style
-./include/style/label_style.h:13:	char font[60]; //TO-DO: change to char *
-./include/widgets/widget.h:41:///TO-DO: change this to a enum and each state is a bit to use less memory.
-./include/widgets/widget.h:105://TO-DO: delete this and set the default to NULL ?
-./src/containers/scrollable_container.c:40:	//TO-DO: free the scrollbar
-./src/style/button_style.c:5:	button_style->border = new_Border_dynamic(button_default_border_size, border_color, new_rect(0, 0, 0, 0)); //TO-DO: create a new border here and make the button border point to it at creation.
+./include/widgets/widget.h:40:///TO-DO: change this to a enum and each state is a bit to use less memory.
+./src/camera.c:98:	//TO-DO: A way to process key events from the active camera even if mouse_over == false
+./src/containers/scrollable_container.c:41:	//TO-DO: free the scrollbar
 ./src/utils/array_list.c:127:	//TO-DO
-./src/widgets/widget.c:100:	//TO-DO:? Maybe pass an SDL_Window to the function to expand this if
-./src/widgets/widget.c:124:		//TO-DO:!!! SET THE SIZE TOO !!!

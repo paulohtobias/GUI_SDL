@@ -15,7 +15,6 @@
 #define button_default_border_color_pressed COLOR_RGB(0, 84, 153)
 #define button_default_border_color_disabled COLOR_GREY(191)
 
-//TO-DO: fix button style
 typedef struct ButtonStyle{
 	Color bg_color;
 	Border *border; ///A pointer to the button widget border style.

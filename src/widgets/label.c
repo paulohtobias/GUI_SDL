@@ -105,8 +105,14 @@ char *label_get_font(Label* label){
 
 void label_set_font(Label *label, const char *font){
 	__label_new_style(label);
-	//TO-DO: change this hardcoded font path to a dir list and make it that the user can edit it.
-	snprintf(label->style->font, 60, "./Resources/Fonts/%s.ttf", font);
+
+	TTF_Font *ttf_font = label_style_set_font(label->style, font);
+
+	if(ttf_font == NULL) {
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: __label_update", TTF_GetError(), NULL);
+		exit(1);
+	}
+
 	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 

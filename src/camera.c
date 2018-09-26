@@ -43,7 +43,6 @@ SDL_Rect camera_get_drawable_area(Camera *camera, SDL_Rect *dst_bounds){
 
 
 		//Down and Right
-		int rcx, rcy;
 		int w_offset = MAX(0, rect_reach_x(*dst_bounds) - rect_reach_x(camera->viewport));
 		int h_offset = MAX(0, rect_reach_y(*dst_bounds) - rect_reach_y(camera->viewport));	
 		

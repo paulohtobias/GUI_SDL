@@ -1,16 +1,21 @@
-* Add another SDL_Rect to Camera to store its bounds and rename the bounds attribute (viewport?).
+* Create a struct EventData to be passed to the process_events functions.
 
-* Add rendering_camera back to Widget?
+* (DONE) Camera:
+	* (DONE) limit é a área que cobre todos os widgets.
+	* (DONE) viewport é a porção de limit que está sendo mostrado.
+	* (DONE) bounds posição e tamanho na tela onde vai ser renderizado.
+	
+	* (DONE) debugar os campos acima.
 
-* Create a struct RenderData (Widget, SDL_Renderer, Camera) to pass to all render related functions.
+	* Para atualizar o limite:
+		* (DONE) Add rendering_camera back to Widget
+		Nova solução:
+			* (DONE) botar um boolean na camera pra saber se o widget foi alterado.
+			* (DONE) no set_bounds dele, setar esse bool pra true.
+			* (DONE) no container_process_events, verificar esse boolean da camera
+				* (DONE) se for true, então seta o limite pra 0 e chama o update_limit depois do process_events dele.
+
+* (DONE) Create a struct RenderData (Widget, SDL_Renderer, Camera) to pass to all render related functions.
 	- (DONE) Create a function in Camera to give the Position (or SDL_Rect) relative to it.
 	- (DONE) Remove the rendering_camera field from Widget.
 	- (DONE) Debug the Label render_copy method.
-	- Border.bounds now will have the same value as widget local bounds.
-	- Border.draw will work like the render_copy of TWidgets.
-
-* Create a struct EventData to be passed to the process_events functions.
-
-* (DONE) Add a get_bounds function at the default widget functions struct.
-	- This is needed in case the widget have borders and want to pass the border bounds instead of its own bounds
-

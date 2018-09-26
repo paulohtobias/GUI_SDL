@@ -125,6 +125,7 @@ void __container_process_events(void *__container, SDL_Event event, Mouse mouse)
 	Container *container = __container;
 
 	__widget_process_events(container, event, mouse);
+
 	int i;
 	for(i = 0; i < container->widget_list->size; i++){
 		widget_process_events(list_get_index(container->widget_list, i), event, mouse);
