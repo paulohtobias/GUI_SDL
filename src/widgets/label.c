@@ -79,6 +79,7 @@ Size label_get_original_size(Label label, int index){
 void label_set_text(Label *label, const char *text){
 	string_change(&label->text, text);
 	label_update_size_table(label, NULL);
+	label->t_widget.functions->set_changed(label, SDL_TRUE);
 }
 
 ///Internal function used when changing a label's style.
