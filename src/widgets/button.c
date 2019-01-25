@@ -34,7 +34,11 @@ Button new_Button_with_bounds(const char *text, SDL_Rect bounds){
 	button.style_focused = &button_default_style_focused;
 	button.style_pressed = &button_default_style_pressed;
 	button.style_disabled = &button_default_style_disabled;
-	
+
+	button.rectangle = malloc(sizeof(Rectangle));
+	*button.rectangle = new_Rectangle_with_bounds(button_default_style_idle.bg_color, bounds);
+	container_add_widget(&button, button.rectangle);
+
 	button.label = NULL;
 	if(text != NULL){
 		button.label = malloc(sizeof(Label));
@@ -42,10 +46,6 @@ Button new_Button_with_bounds(const char *text, SDL_Rect bounds){
 		label_set_style(button.label, button_default_style_idle.label_style);
 		container_add_widget(&button, button.label);
 	}
-
-	button.rectangle = malloc(sizeof(Rectangle));
-	*button.rectangle = new_Rectangle_with_bounds(button_default_style_idle.bg_color, bounds);
-	container_add_widget(&button, button.rectangle);
 
 	widget_set_bounds(&button, bounds);
 
@@ -55,31 +55,42 @@ Button new_Button_with_bounds(const char *text, SDL_Rect bounds){
 
 void __button_set_bounds(void *__button, SDL_Rect bounds){
     Button *button = __button;
-    
-    widget_set_bounds(button->rectangle, bounds);
+
+	if (bounds.w > 0 || bounds.h > 0) {
+		button->container.widget.state.auto_size = SDL_FALSE;
+	}
+
     if(button->label != NULL){
         widget_set_bounds(button->label, bounds);
     }
-    
+
+	if (button->container.widget.state.auto_size == SDL_TRUE) {
+		Size label_size = widget_get_bounds(button->label).size;
+		bounds.w = label_size.w;
+		bounds.h = label_size.h;
+	}
+
+    widget_set_bounds(button->rectangle, bounds);
+
     set_bounds_from_SDL_Rect(&button->container.widget.bounds, bounds);
 	__camera_set_update_limit(button->container.widget.rendering_camera, SDL_TRUE);
 }
 
 void __button_process_events(void *__button, SDL_Event event, Mouse mouse){
 	Button *button = __button;
-	
+
 	__container_process_events(__button, event, mouse);
-	
+
 	ButtonStyle *current_style = button->style_idle;
 	if(button->container.widget.state.mouse_state == MOUSE_LEFT_PRESSED){
 		current_style = button->style_pressed;
 	}else if(button->container.widget.state.mouse_over){
 		current_style = button->style_focused;
 	}
-	
+
 	rectangle_set_color(button->rectangle, current_style->bg_color);
 	widget_set_border(button->rectangle, current_style->border);
-	
+
 	if(button->label != NULL){
 		label_set_style(button->label, current_style->label_style);
 	}
