@@ -34,7 +34,8 @@ int main(int argc, char *argv[]){
 	label_set_color(&lbl[1], COLOR_RED);
 	label_set_font_size(&lbl[2], 24);
     
-    Button btn = new_Button_with_bounds("Botãó", NULL, new_rect(100, 100, 200, 50));
+    //Button btn = new_Button_with_bounds("Botãó", new_rect(100, 100, 200, 50));
+	Button btn = new_Button_with_position("Botãó", new_Position(100, 100));
 	container_add_widget(&c, &btn);
 
 	container_add_widget(&c, &c2);

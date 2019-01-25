@@ -4,7 +4,6 @@
 #include "containers/container.h"
 #include "rectangle.h"
 #include "label.h"
-#include "image.h"
 #include "style/button_style.h"
 
 ///Global virtual tables.
@@ -16,7 +15,6 @@ typedef struct Button{
 
 	Rectangle *rectangle;
 	Label *label;
-	Image *image;
 
 	ButtonStyle *style_idle;
 	ButtonStyle *style_focused;
@@ -24,11 +22,11 @@ typedef struct Button{
 	ButtonStyle *style_disabled;
 } Button;
 
-Button new_Button(const char *text, const char *image);
+Button new_Button(const char *text);
 
-Button new_Button_with_position(const char *text, const char *image, Position position);
+Button new_Button_with_position(const char *text, Position position);
 
-Button new_Button_with_bounds(const char *text, const char *image, SDL_Rect bounds);
+Button new_Button_with_bounds(const char *text, SDL_Rect bounds);
 
 
 void __button_set_bounds(void *__button, SDL_Rect bounds);

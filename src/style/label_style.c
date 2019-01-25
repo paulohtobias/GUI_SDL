@@ -10,20 +10,26 @@ void init_look_and_feel_label(){
 
 TTF_Font *label_style_set_font(LabelStyle *style, const char *font) {
 	TTF_Font *ttf_font = NULL;
-	char *font_path = strtok(str_from_file(".config/fonts"), ";");
+	char *file = str_from_file(".config/fonts");
+	char *font_path = strtok(file, ";");
 	size_t font_len = strlen(font);
 	while (font_path != NULL) {
 		style->font = malloc(strlen(font_path) + font_len + 6);
 		sprintf(style->font, "%s/%s.ttf", font_path, font);
-		
+
+		printf("Loading %s\n", style->font);
 		ttf_font = TTF_OpenFont(style->font, style->size);
 
 		if (ttf_font != NULL) {
 			break;
 		}
 
+		free(style->font);
+
 		font_path = strtok(NULL, ";");
 	}
+
+	free(file);
 
 	return ttf_font;
 }

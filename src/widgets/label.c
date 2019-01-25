@@ -110,7 +110,7 @@ void label_set_font(Label *label, const char *font){
 	TTF_Font *ttf_font = label_style_set_font(label->style, font);
 
 	if(ttf_font == NULL) {
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: __label_update", TTF_GetError(), NULL);
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "Font Error: label_set_font", TTF_GetError(), NULL);
 		exit(1);
 	}
 
